@@ -14,6 +14,9 @@ public class PainMod implements Proxy {
     @SidedProxy(clientSide = Tags.ROOT_PKG + ".Proxy$Client", serverSide = Tags.ROOT_PKG + ".Proxy$Server")
     public static Proxy proxy;
 
+    @Mod.Instance("painmod")
+    public static PainMod INSTANCE;
+
     @Override
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

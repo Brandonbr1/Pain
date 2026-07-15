@@ -11,7 +11,7 @@ minecraft_fp {
     // If you want to use modern java
     java {
 //        //Valid values: legacy, jvmDowngrader, modern
-          compatibility = jvmDowngrader                               //Convention: legacy
+          compatibility = legacy                               //Convention: legacy
 //        version       = JavaVersion.VERSION_XYZ              //Convention, determined by compatibility
 //        vendor = JvmVendorSpec.ADOPTIUM                      //Convention
 //        modernRuntimeVersion = JavaVersion.VERSION_XYZ       //Convention, determined by compatibility

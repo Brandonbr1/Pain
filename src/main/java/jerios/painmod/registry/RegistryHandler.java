@@ -6,11 +6,15 @@ public class RegistryHandler {
         ModItemBlocks.register();
         ModMobs.register();
         ModPacketHandler.register();
-        //registerDispenserBehaviour();
+        registerDispenserBehaviour();
     }
 
     public static void registerInit() {
-      //  ModAchievments.register();
+       ModAchievements.register();
+    }
+
+    private static void registerDispenserBehaviour() {
+
     }
 
 
