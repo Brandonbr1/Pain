@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "${modId}",
+    "name": "${modName}",
+    "description": "Learn your history and of a civilisation long long ago. Learn, see their suffering and pain.",
+    "version": "${modVersion}",
+    "mcversion": "${minecraftVersion}",
+    "url": "https://github.com/Brandonbr1/Pain",
+    "updateUrl": "",
+    "authorList": [ "Jerios" ],
+    "credits": "Pit Icarus for much help",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
