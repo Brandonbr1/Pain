@@ -1,7 +1,12 @@
 package jerios.painmod.registry;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
+import jerios.painmod.PainConstants;
 import jerios.painmod.PainMod;
+import jerios.painmod.entity.PainCreeper;
+import jerios.painmod.entity.PainSkeleton;
+import jerios.painmod.entity.PainZombie;
+import jerios.painmod.items.ItemPainSpawnEgg;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
@@ -10,13 +15,15 @@ import net.minecraft.world.biome.BiomeGenBase;
 public class ModMobs {
 
     public static void register() {
-
+        registerEntityWithEgg(PainZombie.class, "painZombie", 128, 1,true, 5,5);
+        registerEntityWithEgg(PainSkeleton.class, "PainSkeleton", 128, 1,true, 5,5);
+        registerEntityWithEgg(PainCreeper.class, "PainCreeper", 128, 1,true, 5,5);
     }
 
     static int id = 1;
 
     public static void registerEntity(Class<? extends Entity> entityClass, String entityName, int trackingRange,
-                                      int updateFrequency, boolean sendsVelocityUpdates, int spot1, int spot2) {
+                                      int updateFrequency, boolean sendsVelocityUpdates) {
         EntityRegistry.registerModEntity(
                 entityClass,
                 entityName,
@@ -37,7 +44,7 @@ public class ModMobs {
                 trackingRange,
                 updateFrequency,
                 sendsVelocityUpdates);
-        //TODO: ADD SPAWN EGG
+        ItemPainSpawnEgg.addSpawnEgg(id++, entityClass, PainConstants.MOD_ID_DOT + entityName, spot1, spot2);
 
     }
 
