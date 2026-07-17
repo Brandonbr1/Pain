@@ -5,6 +5,7 @@ import jerios.painmod.PainConstants;
 import jerios.painmod.PainMod;
 import jerios.painmod.entity.PainCreeper;
 import jerios.painmod.entity.PainSkeleton;
+import jerios.painmod.entity.PainSpider;
 import jerios.painmod.entity.PainZombie;
 import jerios.painmod.items.ItemPainSpawnEgg;
 import net.minecraft.entity.Entity;
@@ -18,16 +19,17 @@ public class ModMobs {
         registerEntityWithEgg(PainZombie.class, "painZombie", 128, 1,true, 5,5);
         registerEntityWithEgg(PainSkeleton.class, "PainSkeleton", 128, 1,true, 5,5);
         registerEntityWithEgg(PainCreeper.class, "PainCreeper", 128, 1,true, 5,5);
+        registerEntityWithEgg(PainSpider.class, "PainSpider", 128, 1,true, 5,5);
     }
 
-    static int id = 1;
+    static int mobID = 1;
 
     public static void registerEntity(Class<? extends Entity> entityClass, String entityName, int trackingRange,
                                       int updateFrequency, boolean sendsVelocityUpdates) {
         EntityRegistry.registerModEntity(
                 entityClass,
                 entityName,
-                id++,
+                getModID(),
                 PainMod.INSTANCE,
                 trackingRange,
                 updateFrequency,
@@ -36,16 +38,21 @@ public class ModMobs {
 
     public static void registerEntityWithEgg(Class<? extends Entity> entityClass, String entityName, int trackingRange,
                                              int updateFrequency, boolean sendsVelocityUpdates, int spot1, int spot2) {
+        int mobId = getModID();
         EntityRegistry.registerModEntity(
                 entityClass,
                 entityName,
-                id++,
+                mobId,
                 PainMod.INSTANCE,
                 trackingRange,
                 updateFrequency,
                 sendsVelocityUpdates);
-        ItemPainSpawnEgg.addSpawnEgg(id++, entityClass, PainConstants.MOD_ID_DOT + entityName, spot1, spot2);
+        ItemPainSpawnEgg.addSpawnEgg(mobId, entityClass, PainConstants.MOD_ID_DOT + entityName, spot1, spot2);
 
+    }
+
+    private static int getModID() {
+        return mobID++;
     }
 
     private static void addBiomes(Class<? extends EntityLiving> entityClass, int weightedProb, int min, int max,

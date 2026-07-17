@@ -37,8 +37,8 @@ minecraft_fp {
 
 
     core {
-             coreModClass                   = "asm.CoreLoadingPlugin"      //optional
-         //   accessTransformerFile          = "pain_at.cfg" //optional
+        coreModClass                   = "asm.CoreLoadingPlugin"
+        accessTransformerFile          = "painmod_at.cfg"
     }
 
 

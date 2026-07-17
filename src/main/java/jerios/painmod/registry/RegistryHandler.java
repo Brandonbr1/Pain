@@ -10,6 +10,7 @@ public class RegistryHandler {
     }
 
     public static void registerInit() {
+        ModPotions.register();
        ModAchievements.register();
     }
 

@@ -10,6 +10,8 @@ import jerios.painmod.proxy.CommonProxy;
 import jerios.painmod.proxy.IProxy;
 import jerios.painmod.registry.GameRulesRegistry;
 import jerios.painmod.registry.RegistryHandler;
+import jerios.painmod.utils.PainFakePlayerFactory;
+import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid = Tags.MOD_ID,
         name = Tags.MOD_NAME,
@@ -22,7 +24,7 @@ public class PainMod {
     @Mod.Instance(Tags.MOD_ID)
     public static PainMod INSTANCE;
 
-    public static final String MODID = "painmod";
+    public static final String MODID = Tags.MOD_ID;
 
 
     @Mod.EventHandler
@@ -30,6 +32,7 @@ public class PainMod {
         RegistryHandler.registerPreInit();
         proxy.clientOnly();
         proxy.serverOnly();
+        MinecraftForge.EVENT_BUS.register(new PainFakePlayerFactory());
     }
 
     @Mod.EventHandler

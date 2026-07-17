@@ -12,13 +12,7 @@ public enum MixinsList implements IMixins {
             .addCommonMixins("MixinEntityZombie")),
     UNBURNING_SKELETONS(new MixinBuilder()
             .setPhase(Phase.EARLY)
-            .addCommonMixins("MixinEntitySkeleton")),
-    CREEPER_INVOKER(new MixinBuilder()
-            .setPhase(Phase.EARLY)
-            .addCommonMixins("ICreeperAccess")),
-    STRONGER_CREEPERS(new MixinBuilder()
-            .setPhase(Phase.EARLY)
-            .addCommonMixins("MixinEntityCreeper")),
+            .addCommonMixins("MixinEntitySkeleton"));
 
     ;
 
