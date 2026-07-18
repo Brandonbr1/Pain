@@ -5,6 +5,7 @@ import jerios.painmod.utils.PainFakePlayer;
 import jerios.painmod.utils.PainFakePlayerFactory;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldServer;
@@ -23,6 +24,19 @@ public class SinEffectGluttony {
             if (stack.getItem() != item) {
                 return;
             }
+
+            ItemStack actualStack = player.inventory.mainInventory[index];
+            Item actualItem = actualStack.getItem();
+
+            if (actualStack != stack) {
+                return;
+            }
+
+            if (actualItem != item) {
+                return;
+            }
+
+
 
 
             if (stack.stackSize >= 1) {

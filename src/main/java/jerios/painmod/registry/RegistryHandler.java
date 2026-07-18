@@ -8,11 +8,12 @@ public class RegistryHandler {
         ModPacketHandler.register();
         registerDispenserBehaviour();
         ModGenerator.register();
+        ModPotions.register();
+        ModAchievements.register();
     }
 
     public static void registerInit() {
-        ModPotions.register();
-       ModAchievements.register();
+
     }
 
     private static void registerDispenserBehaviour() {

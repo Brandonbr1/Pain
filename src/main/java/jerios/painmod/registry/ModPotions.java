@@ -17,9 +17,9 @@ public class ModPotions {
 
     public static void register() {
         increasePotionArray();
-        gluttony  = new PotionEffectUnnecessaryEating(PainConfig.glutID, 421).setPotionName("potion.superHunger");
-        malnourishment = new PotionMalnourishment(PainConfig.malnourishment, 4221).setPotionName("potion.malnourishment");
-        deadlyPoison = new DeadlyPoision(PainConfig.deadlyPoison, 6678).setPotionName("potion.deadlyPosion");
+        gluttony  = new PotionEffectUnnecessaryEating(PainConfig.glutID, 14270531).setPotionName("potion.superHunger");
+        malnourishment = new PotionMalnourishment(PainConfig.malnourishment, 14270531).setPotionName("potion.malnourishment");
+        deadlyPoison = new DeadlyPoision(PainConfig.deadlyPoison, 14270531).setPotionName("potion.deadlyPosion");
     }
 
     public static void increasePotionArray()  {
