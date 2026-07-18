@@ -51,8 +51,8 @@ public class PainEvents {
                 int currentPlayerHeal = playerStats.getFoodLevel();
                 float currentPlayerSat = playerStats.getSaturationLevel();
 
-                int finalHeal = currentPlayerHeal - (foodHeal / 2);
-                float finalSat = currentPlayerSat - (foodSat / 2);
+                int finalHeal = (int) (currentPlayerHeal - (foodHeal * 0.5));
+                float finalSat = currentPlayerSat - (foodSat * 0.5f);
 
                 player.getFoodStats().setFoodLevel(finalHeal);
                 player.getFoodStats().setFoodSaturationLevel(finalSat);
@@ -78,7 +78,7 @@ public class PainEvents {
                     if (potionPotency > 1) {
                         potionPotency -= 1;
                     }
-                    durationTimer = durationTimer / 2;
+                    durationTimer = (int) (durationTimer * 0.5D);
                     // line 1222 of EntityLivingBase
                     //    i = (this.getActivePotionEffect(Potion.resistance).getAmplifier() + 1) * 5;
 
@@ -99,6 +99,8 @@ public class PainEvents {
                     player.removePotionEffect(currentPotion.getPotionID());
 
                     //TODO: REAPPLY POTION EFFECTS
+
+
 
                 }
 
