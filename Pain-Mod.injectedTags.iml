@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="Pain-Mod:injectedTags" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$" external.system.id="GRADLE" external.system.module.group="jerios" external.system.module.type="sourceSet" external.system.module.version="" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/build/generated/sources/annotationProcessor/java/injectedTags">
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/sources/annotationProcessor/java/injectedTags" isTestSource="false" generated="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/build/generated/sources/injectTags">
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/sources/injectTags" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/src/injectedTags" />
+    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.projectlombok:lombok:1.18.42" level="project" />
+  </component>
+</module>

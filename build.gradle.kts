@@ -31,7 +31,7 @@ minecraft_fp {
     }
 
     mixin {
-        pkg = "mixins"
+      //  pkg = "mixins"
        }
 
 

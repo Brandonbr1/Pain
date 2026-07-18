@@ -1,18 +1,11 @@
 package jerios.painmod.mixins;
 
 
-import com.gtnewhorizon.gtnhmixins.builders.IMixins;
-import com.gtnewhorizon.gtnhmixins.builders.MixinBuilder;
 
-import javax.annotation.Nonnull;
-
-public enum MixinsList implements IMixins {
-    UNBURNING_ZOMBIES(new MixinBuilder()
+public enum MixinsList /**implements IMixins **/{
+  /**  UNBURNING_ZOMBIES(new MixinBuilder()
             .setPhase(Phase.EARLY)
-            .addCommonMixins("MixinEntityZombie")),
-    UNBURNING_SKELETONS(new MixinBuilder()
-            .setPhase(Phase.EARLY)
-            .addCommonMixins("MixinEntitySkeleton"));
+            .addCommonMixins("MixinEntityZombie"));
 
     ;
 
@@ -29,6 +22,7 @@ public enum MixinsList implements IMixins {
     public MixinBuilder getBuilder() {
         return builder;
     }
+    **/
 
 
 

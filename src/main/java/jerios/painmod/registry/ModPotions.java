@@ -1,29 +1,29 @@
 package jerios.painmod.registry;
 
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import jerios.painmod.effects.potion.PotionEffectUnecessaryEating;
-import jerios.painmod.effects.potion.PotionMalnurishment;
+import jerios.painmod.config.PainConfig;
+import jerios.painmod.effects.potion.DeadlyPoision;
+import jerios.painmod.effects.potion.PotionEffectUnnecessaryEating;
+import jerios.painmod.effects.potion.PotionMalnourishment;
 import net.minecraft.potion.Potion;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 
 public class ModPotions {
 
     public static Potion gluttony;
-    public static Potion malnurishment;
+    public static Potion malnourishment;
+    public static Potion deadlyPoison;
 
     public static void register() {
         increasePotionArray();
-        gluttony  = new PotionEffectUnecessaryEating(100, 421);
-        malnurishment = new PotionMalnurishment(101, 4221);
+        gluttony  = new PotionEffectUnnecessaryEating(PainConfig.glutID, 421).setPotionName("potion.superHunger");
+        malnourishment = new PotionMalnourishment(PainConfig.malnourishment, 4221).setPotionName("potion.malnourishment");
+        deadlyPoison = new DeadlyPoision(PainConfig.deadlyPoison, 6678).setPotionName("potion.deadlyPosion");
     }
 
     public static void increasePotionArray()  {
-        if (Potion.potionTypes.length > 128) {
+        if (Potion.potionTypes.length > 32) {
             return;
         }
 
@@ -42,7 +42,7 @@ public class ModPotions {
                     modfield.setInt(potions, potions.getModifiers() & ~Modifier.FINAL);
                 }
 
-                Potion[] extendedPotionArray = new Potion[256];
+                Potion[] extendedPotionArray = new Potion[128];
 
                 System.arraycopy(Potion.potionTypes, 0, extendedPotionArray,0,Potion.potionTypes.length);
                 potions.set(null, extendedPotionArray);

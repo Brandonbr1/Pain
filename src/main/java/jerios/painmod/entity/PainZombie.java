@@ -5,6 +5,7 @@ import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeModContainer;
 
@@ -24,5 +25,11 @@ public class PainZombie extends EntityZombie {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3.0D);
         this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(40.0D);
+    }
+
+    @Override
+    public float getBrightness(float partialTicks)
+    {
+        return 0.0F;
     }
 }

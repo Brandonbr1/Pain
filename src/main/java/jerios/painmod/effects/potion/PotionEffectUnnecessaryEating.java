@@ -1,21 +1,14 @@
 package jerios.painmod.effects.potion;
 
-import com.mojang.authlib.GameProfile;
-import jerios.painmod.utils.PainFakePlayer;
-import jerios.painmod.utils.PainFakePlayerFactory;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
-import net.minecraft.world.WorldServer;
 
-import java.util.UUID;
+public class PotionEffectUnnecessaryEating extends Potion {
 
-public class PotionEffectUnecessaryEating extends Potion {
-
-    public PotionEffectUnecessaryEating(int id, int color) {
+    public PotionEffectUnnecessaryEating(int id, int color) {
         super(id, true, color);
     }
 

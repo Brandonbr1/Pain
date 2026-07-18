@@ -7,6 +7,7 @@ public class RegistryHandler {
         ModMobs.register();
         ModPacketHandler.register();
         registerDispenserBehaviour();
+        ModGenerator.register();
     }
 
     public static void registerInit() {
