@@ -157,53 +157,51 @@ public class PainEvents {
                 player.getFoodStats().setFoodLevel(finalHeal);
                 player.getFoodStats().setFoodSaturationLevel(finalSat);
             }
-        }
 
-        if (item instanceof ItemPotion) {
-            ItemPotion potion = (ItemPotion) item;
-            List<PotionEffect> potionList = potion.getEffects(itemStack);
-            for (int i = 0; i < potionList.size(); i++) {
-                PotionEffect currentEffect = potionList.get(i);
-                Potion currentPotion = Potion.potionTypes[currentEffect.getPotionID()];
-                if (!currentPotion.isBadEffect()) {
-                    System.out.println("I am NOT bad effect lol");
+
+            if (item instanceof ItemPotion) {
+                ItemPotion potion = (ItemPotion) item;
+                List<PotionEffect> potionList = potion.getEffects(itemStack);
+                Iterator<PotionEffect> iter = potionList.iterator();
+
+                while (iter.hasNext()) {
+                    PotionEffect currentEffect = iter.next();
+                    Potion currentPotion = Potion.potionTypes[currentEffect.getPotionID()];
+
+                    if (!currentPotion.isBadEffect()) {
+                        System.out.println("I am NOT bad effect lol");
+                    }
+
+                    int potionID = currentEffect.getPotionID();
+                    int potionPotency = currentEffect.getAmplifier();
+                    int durationTimer = currentEffect.getDuration();
+                    boolean isAmb = currentEffect.getIsAmbient();
+
+                    player.removePotionEffect(potionID);
+                    if (potionPotency > 1) {
+                        potionPotency -= 1;
+                    }
+                    durationTimer = (int) (durationTimer * 0.5D);
+                    player.addPotionEffect(new PotionEffect(potionID, potionPotency, durationTimer, isAmb));
                 }
-
-
-                int potionID = currentEffect.getPotionID();
-                int potionPotency = currentEffect.getAmplifier();
-                int durationTimer = currentEffect.getDuration();
-                boolean isAmb = currentEffect.getIsAmbient();
-
-                //TODO: REDUCE POTENCY, MAKE IT LAST SHORTER, MAKE IT APPLY FOR CURRENT EXISTING POTION EFFECTS
-                player.removePotionEffect(potionID);
-                if (potionPotency > 1) {
-                    potionPotency -= 1;
-                }
-                durationTimer = (int) (durationTimer * 0.5D);
-                // line 1222 of EntityLivingBase
-                //    i = (this.getActivePotionEffect(Potion.resistance).getAmplifier() + 1) * 5;
-
-                player.addPotionEffect(new PotionEffect(potionID, potionPotency, durationTimer, isAmb));
-
             }
-        }
-        if (item instanceof ItemBucketMilk) {
-            ItemBucketMilk milk = (ItemBucketMilk) item;
-            Collection<PotionEffect> eff = player.getActivePotionEffects();
 
-            for (PotionEffect currentPotion : eff) {
+
+        }
+
+        if (item instanceof ItemBucketMilk) {
+            Collection<PotionEffect> eff = player.getActivePotionEffects();
+            Iterator<PotionEffect> iter = eff.iterator();
+
+            while (iter.hasNext()) {
+                PotionEffect currentPotion = iter.next();
+
                 int potionID = currentPotion.getPotionID();
                 int potionPotency = currentPotion.getAmplifier();
                 int durationTimer = currentPotion.getDuration();
                 boolean isAmb = currentPotion.getIsAmbient();
 
                 player.removePotionEffect(currentPotion.getPotionID());
-
-                //TODO: REAPPLY POTION EFFECTS
-
-
-
             }
 
         }
@@ -220,9 +218,7 @@ public class PainEvents {
         if (player.isPotionActive(ModPotions.malnourishment))
         {
             if (item instanceof ItemBow) {
-                if (player.ticksExisted % 15 == 0) {
-                    event.duration += 13;
-                }
+                    event.duration += 5;
             }
 
         }
