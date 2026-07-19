@@ -8,12 +8,14 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import jerios.painmod.config.PainConfig;
+import jerios.painmod.damageSource.RagePainSource;
 import jerios.painmod.events.PainEvents;
 import jerios.painmod.proxy.CommonProxy;
 import jerios.painmod.proxy.IProxy;
 import jerios.painmod.registry.GameRulesRegistry;
 import jerios.painmod.registry.RegistryHandler;
 import jerios.painmod.utils.PainFakePlayerFactory;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
@@ -30,6 +32,10 @@ public class PainMod {
 
     public static final String MODID = Tags.MOD_ID;
 
+    public static final DamageSource RAGE = new RagePainSource();
+
+    // jealously makes your pets mad at you
+    // pride purposely makes you act overconfident(throws away your stuff and replaces with worse armor caue 'you are too good)
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

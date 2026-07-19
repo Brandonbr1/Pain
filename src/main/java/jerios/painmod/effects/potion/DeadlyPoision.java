@@ -16,8 +16,16 @@ public class DeadlyPoision extends Potion {
     public void performEffect(EntityLivingBase entityLivingBase, int amplifier) {
         if (entityLivingBase.getHealth() > 1.0F)
         {
-            entityLivingBase.attackEntityFrom(DamageSource.magic, 2.0F + amplifier + GRUtils.getScaledDifficulty(entityLivingBase.worldObj, entityLivingBase.worldObj.getGameRules()));
+            entityLivingBase.attackEntityFrom(DamageSource.magic, 1.0F + amplifier + GRUtils.getScaledDifficulty(entityLivingBase.worldObj, entityLivingBase.worldObj.getGameRules()));
         }
+    }
+
+    @Override
+    public boolean isReady(int duration, int amplifier)
+    {
+        int k;
+        k = 25 >> amplifier;
+        return k > 0 ? duration % k == 0 : true;
     }
 
 }

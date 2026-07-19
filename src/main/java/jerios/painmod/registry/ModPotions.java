@@ -2,8 +2,11 @@ package jerios.painmod.registry;
 
 import jerios.painmod.config.PainConfig;
 import jerios.painmod.effects.potion.DeadlyPoision;
-import jerios.painmod.effects.potion.PotionEffectUnnecessaryEating;
-import jerios.painmod.effects.potion.PotionMalnourishment;
+import jerios.painmod.effects.potion.PlaugeEffect;
+import jerios.painmod.effects.potion.UnnecessaryEatingEffect;
+import jerios.painmod.effects.potion.MalnourishmentEffect;
+import jerios.painmod.effects.potion.RageEffect;
+import jerios.painmod.effects.potion.SlothEffect;
 import net.minecraft.potion.Potion;
 
 import java.lang.reflect.Field;
@@ -14,12 +17,18 @@ public class ModPotions {
     public static Potion gluttony;
     public static Potion malnourishment;
     public static Potion deadlyPoison;
+    public static Potion plaugeEffect;
+    public static Potion rageEffect;
+    public static Potion sloth;
 
     public static void register() {
         increasePotionArray();
-        gluttony  = new PotionEffectUnnecessaryEating(PainConfig.glutID, 14270531).setPotionName("potion.superHunger");
-        malnourishment = new PotionMalnourishment(PainConfig.malnourishment, 14270531).setPotionName("potion.malnourishment");
+        gluttony  = new UnnecessaryEatingEffect(PainConfig.glutID, 14270531).setPotionName("potion.superHunger");
+        malnourishment = new MalnourishmentEffect(PainConfig.malnourishment, 14270531).setPotionName("potion.malnourishment");
         deadlyPoison = new DeadlyPoision(PainConfig.deadlyPoison, 14270531).setPotionName("potion.deadlyPosion");
+        plaugeEffect = new PlaugeEffect(PainConfig.plaugeEffect, 14270531).setPotionName("potion.plauge");
+        rageEffect = new RageEffect(PainConfig.rageEffect, 14270531).setPotionName("potion.wrath");
+        sloth = new SlothEffect(PainConfig.slothEffect, 14270531).setPotionName("potion.sloth");
     }
 
     public static void increasePotionArray()  {

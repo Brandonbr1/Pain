@@ -1,10 +1,17 @@
 package jerios.painmod.events;
 
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import jerios.painmod.PainMod;
 import jerios.painmod.config.PainConfig;
 import jerios.painmod.registry.ModPotions;
 import jerios.painmod.utils.Translations;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiControls;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
@@ -15,7 +22,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
+import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 
 import java.util.Collection;
@@ -31,6 +46,92 @@ public class PainEvents {
             player.addChatMessage(new ChatComponentTranslation("painmod.enterDim"));
         } else if (event.fromDim == PainConfig.painDimensionID && event.toDim != PainConfig.painDimensionID) {
             player.addChatMessage(new ChatComponentTranslation("painmod.ahhFinallyFree"));
+        }
+    }
+
+    @SubscribeEvent
+    public void onJump(LivingEvent.LivingJumpEvent event) {
+        if (event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
+            if (player.isPotionActive(ModPotions.sloth)) {
+            player.motionY -= 0.8D;
+            }
+        }
+
+    }
+
+
+    @SubscribeEvent
+    public void onFall(LivingFallEvent event) {
+        if (!event.entityLiving.handleWaterMovement() && event.entityLiving.onGround) {
+            if (event.entityLiving instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) event.entityLiving;
+                if (player.isPotionActive(ModPotions.sloth)) {
+                    player.motionY += 0.8D;
+                }
+            }
+        }
+    }
+    // PlayerInteractEvent onPlayerInteract
+
+    @SubscribeEvent
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.entityPlayer.isPotionActive(ModPotions.sloth)) {
+            event.setCanceled(true);
+        }
+
+    }
+
+   /** @SubscribeEvent
+    public void onAttackSloth(AttackEntityEvent event) {
+        if (event.entityPlayer.isPotionActive(ModPotions.sloth))
+        {
+            event.setCanceled(true);
+        }
+    }
+    **/
+
+    @SubscribeEvent
+    public void onHurt(LivingHurtEvent event) {
+        DamageSource source = event.source;
+        Entity attacker = source.getEntity();
+
+        if (attacker instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) attacker;
+
+            if (player.isPotionActive(ModPotions.rageEffect)) {
+                player.attackEntityFrom(PainMod.RAGE, event.ammount * 0.5f);
+                player.addExhaustion(event.ammount * 0.8f);
+                ItemStack stack = player.inventory.getCurrentItem();
+
+               if (stack != null) {
+                   Item item = stack.getItem();
+                   if (item != null) {
+                       if (item.isDamageable()) {
+                           stack.damageItem((int) (event.ammount * Math.max(event.ammount, 3)), player);
+                       }
+                    }
+                   }
+
+               }
+
+        }
+
+
+        // if player gets hurt.
+        if (event.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) event.entityLiving;
+            float damage = 1.0f;
+            if (player.isPotionActive(ModPotions.malnourishment)) {
+                damage += 0.6F;
+            }
+            if (player.isPotionActive(ModPotions.deadlyPoison)) {
+                damage += 0.2F;
+            }
+            if (player.isPotionActive(ModPotions.plaugeEffect)) {
+                damage += 0.4F;
+            }
+            event.ammount = damage;
         }
     }
 

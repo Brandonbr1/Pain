@@ -1,2 +1,9 @@
 {
+ "Cough":{
+    "category": "hostile",
+    "sounds":[
+      {"name":"cough", "stream":false}
+    ]
+  },
+
 }
