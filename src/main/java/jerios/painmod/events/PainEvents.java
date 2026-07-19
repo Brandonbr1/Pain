@@ -72,7 +72,6 @@ public class PainEvents {
             }
         }
     }
-    // PlayerInteractEvent onPlayerInteract
 
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event) {

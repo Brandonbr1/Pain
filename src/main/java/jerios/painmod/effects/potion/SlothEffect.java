@@ -17,7 +17,7 @@ public class SlothEffect extends Potion {
 
     @Override
     public String getName() {
-        return "TEST";
+        return "potion.sloth";
     }
 
     @Override
