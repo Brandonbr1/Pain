@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 
-public class PlaugeEffect extends Potion {
+public class PlaugeEffect extends BasePotion {
 
     public PlaugeEffect(int id, int color) {
         super(id, true, color);

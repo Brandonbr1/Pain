@@ -400,7 +400,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
             k1 = k + this.rand.nextInt(16) + 8;
             l1 = this.rand.nextInt(256);
             i2 = l + this.rand.nextInt(16) + 8;
-            (new WorldGenLakes(Blocks.water)).generate(this.worldObj, this.rand, k1, l1, i2);
+            (new WorldGenLakes(Blocks.air)).generate(this.worldObj, this.rand, k1, l1, i2);
         }
 
         if (TerrainGen.populate(chunkProvider, worldObj, rand, x, z, flag, LAVA) && !flag && this.rand.nextInt(8) == 0)
@@ -506,7 +506,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
     public ChunkPosition func_147416_a(World world, String featureName, int startX, int startY, int startZ)
     {
-        return "Stronghold".equals(featureName) && this.strongholdGenerator != null ? this.strongholdGenerator.func_151545_a(world, startX, startY, startZ) : null;
+        return null;
     }
 
     public int getLoadedChunkCount()

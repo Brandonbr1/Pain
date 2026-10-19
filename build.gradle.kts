@@ -55,6 +55,7 @@ repositories {
     //Add repositories here
     //You can use maven("reponame", "https://example.com/") as a shortcut for maven repositories.
 
+    jitpack()
     /*
      * Built-in maven repository convenience shortcuts:
      *
@@ -69,6 +70,7 @@ repositories {
 }
 
 dependencies {
+    devOnlyNonPublishable(project.files("staticLibs/BaublesExpanded-2.2.1-dev.jar")); // the maven for JSS was not working?? Can redistribute the libs jar file just fine, but it is weird....
     /*
      * Add your dependencies here. Supported configurations:
      *  - api("group:name:version:classifier"): if you use the types from this dependency in the public API of this mod
@@ -120,4 +122,6 @@ dependencies {
      *
      * For more details, see https://docs.gradle.org/8.14.2/userguide/java_library_plugin.html#sec:java_library_configurations_graph
      */
+
+
 }

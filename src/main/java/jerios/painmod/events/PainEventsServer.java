@@ -1,17 +1,14 @@
 package jerios.painmod.events;
 
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import jerios.painmod.PainConstants;
 import jerios.painmod.PainMod;
 import jerios.painmod.config.PainConfig;
 import jerios.painmod.registry.ModPotions;
-import jerios.painmod.utils.Translations;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiControls;
+import jerios.painmod.utils.SidedCheckers;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
@@ -24,20 +21,21 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
-import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
+import org.lwjgl.Sys;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
-public class PainEvents {
+public class PainEventsServer {
     
     @SubscribeEvent
     public void actuallySayText(PlayerEvent.PlayerChangedDimensionEvent event) {
@@ -74,21 +72,24 @@ public class PainEvents {
     }
 
     @SubscribeEvent
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.entityPlayer.isPotionActive(ModPotions.sloth)) {
-            event.setCanceled(true);
+    public void onAttack(AttackEntityEvent event) {
+        EntityPlayer player = event.entityPlayer;
+        World world = player.worldObj;
+        if (SidedCheckers.isServer(world)) {
+            if (player.isPotionActive(ModPotions.sloth)) {
+                boolean rand = PainConstants.rand.nextBoolean();
+                boolean rand2 = PainConstants.rand.nextBoolean();
+
+
+                if (rand && !rand2)
+                {
+                    event.setCanceled(true);
+                }
+            }
+
         }
 
     }
-
-   /** @SubscribeEvent
-    public void onAttackSloth(AttackEntityEvent event) {
-        if (event.entityPlayer.isPotionActive(ModPotions.sloth))
-        {
-            event.setCanceled(true);
-        }
-    }
-    **/
 
     @SubscribeEvent
     public void onHurt(LivingHurtEvent event) {
@@ -158,54 +159,7 @@ public class PainEvents {
                 player.getFoodStats().setFoodSaturationLevel(finalSat);
             }
 
-
-            if (item instanceof ItemPotion) {
-                ItemPotion potion = (ItemPotion) item;
-                List<PotionEffect> potionList = potion.getEffects(itemStack);
-                Iterator<PotionEffect> iter = potionList.iterator();
-
-                while (iter.hasNext()) {
-                    PotionEffect currentEffect = iter.next();
-                    Potion currentPotion = Potion.potionTypes[currentEffect.getPotionID()];
-
-                    if (!currentPotion.isBadEffect()) {
-                        System.out.println("I am NOT bad effect lol");
-                    }
-
-                    int potionID = currentEffect.getPotionID();
-                    int potionPotency = currentEffect.getAmplifier();
-                    int durationTimer = currentEffect.getDuration();
-                    boolean isAmb = currentEffect.getIsAmbient();
-
-                    player.removePotionEffect(potionID);
-                    if (potionPotency > 1) {
-                        potionPotency -= 1;
-                    }
-                    durationTimer = (int) (durationTimer * 0.5D);
-                    player.addPotionEffect(new PotionEffect(potionID, potionPotency, durationTimer, isAmb));
-                }
-            }
-
-
         }
-
-        if (item instanceof ItemBucketMilk) {
-            Collection<PotionEffect> eff = player.getActivePotionEffects();
-            Iterator<PotionEffect> iter = eff.iterator();
-
-            while (iter.hasNext()) {
-                PotionEffect currentPotion = iter.next();
-
-                int potionID = currentPotion.getPotionID();
-                int potionPotency = currentPotion.getAmplifier();
-                int durationTimer = currentPotion.getDuration();
-                boolean isAmb = currentPotion.getIsAmbient();
-
-                player.removePotionEffect(currentPotion.getPotionID());
-            }
-
-        }
-
 
     }
 
@@ -218,21 +172,27 @@ public class PainEvents {
         if (player.isPotionActive(ModPotions.malnourishment))
         {
             if (item instanceof ItemBow) {
-                    event.duration += 5;
+                    event.duration += 15;
             }
 
         }
+
     }
 
     @SubscribeEvent
     public void onItemUse(PlayerUseItemEvent.Tick event) {
      EntityPlayer player= event.entityPlayer;
+     ItemStack itemStack = event.item;
+     Item item = itemStack.getItem();
+     int duration = event.duration;
 
      if (player.isPotionActive(ModPotions.malnourishment)) {
          if (player.ticksExisted % 15 == 0) {
              event.duration += 13;
          }
      }
+
+
 
     }
 

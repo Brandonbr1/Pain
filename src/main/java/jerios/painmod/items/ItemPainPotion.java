@@ -9,7 +9,10 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import java.util.LinkedHashMap;
@@ -18,7 +21,7 @@ import java.util.Map;
 
 public class ItemPainPotion extends ItemPotion {
 
-  public static Map<Integer,PotionsProps> integerPotionsPropsMap = new LinkedHashMap<>();
+  public static Map<Integer,PotionEffect> integerPotionsPropsMap = new LinkedHashMap<>();
 
 
     public ItemPainPotion()
@@ -36,8 +39,8 @@ public class ItemPainPotion extends ItemPotion {
 
         if (!world.isRemote)
         {
-                PotionsProps props = integerPotionsPropsMap.get(stack.getItemDamage());
-                entityLiving.addPotionEffect(props.effect);
+                PotionEffect props = integerPotionsPropsMap.get(stack.getItemDamage());
+                entityLiving.addPotionEffect(props);
         }
 
         if (!entityLiving.capabilities.isCreativeMode)
@@ -58,26 +61,6 @@ public class ItemPainPotion extends ItemPotion {
     {
             player.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
             return itemStackIn;
-
-    }
-
-    @Override
-    public int getMaxItemUseDuration(ItemStack stack)
-    {
-        return 32;
-    }
-
-
-    @Override
-    public EnumAction getItemUseAction(ItemStack stack)
-    {
-        return EnumAction.drink;
-    }
-
-    @Override
-    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float subX, float subY, float subZ)
-    {
-        return false;
     }
 
 
@@ -91,18 +74,41 @@ public class ItemPainPotion extends ItemPotion {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer world, List<String> tooltip, boolean flag)
     {
-            PotionsProps props = integerPotionsPropsMap.get(stack.getItemDamage());
-            if (props != null) {
-                tooltip.add(props.potionName + " Potency: " + props.potency + "Duration In Ticks: " + props.duration);
+        if (stack.getItemDamage() != 0)
+        {
+            PotionEffect potioneffect = integerPotionsPropsMap.get(stack.getItemDamage());
+            String s1 = StatCollector.translateToLocal(potioneffect.getEffectName()).trim();
+
+            Potion potion = Potion.potionTypes[potioneffect.getPotionID()];
+            if (potioneffect.getAmplifier() > 0)
+            {
+                s1 = s1 + " " + StatCollector.translateToLocal("potion.potency." + potioneffect.getAmplifier()).trim();
             }
+
+            if (potioneffect.getDuration() > 20)
+            {
+                s1 = s1 + " (" + Potion.getDurationString(potioneffect) + ")";
+            }
+
+            if (potion.isBadEffect())
+            {
+                tooltip.add(EnumChatFormatting.RED + s1);
+            }
+            else
+            {
+                tooltip.add(EnumChatFormatting.GRAY + s1);
+
+            }
+        }
+
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack stack)
     {
-        PotionsProps props = integerPotionsPropsMap.get(stack.getItemDamage());
+        PotionEffect props = integerPotionsPropsMap.get(stack.getItemDamage());
         if (props != null) {
-            return props.potionName;
+            return StatCollector.translateToLocal(props.getEffectName());
         }
         return "";
     }
@@ -110,29 +116,24 @@ public class ItemPainPotion extends ItemPotion {
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item tab, CreativeTabs items, List<ItemStack> subItems)
     {
-        for (PotionsProps props : integerPotionsPropsMap.values()) {
-            subItems.add(new ItemStack(tab, 1, props.potionID));
+        for (PotionEffect props : integerPotionsPropsMap.values()) {
+            subItems.add(new ItemStack(tab, 1, props.getPotionID()));
         }
-
     }
 
     public static class PotionsProps{
-        public String potionName;
-        public int color1;
-        public int duration;
-        public int potency;
         public PotionEffect effect;
-        public int potionID;
-
-        public PotionsProps(String potionName, int color1, int duration, int potency, int id) {
-            this.potionName =potionName;
-            this.color1 = color1;
-            this.duration = duration;
-            this.potency = potency;
-            this.potionID = id;
+        public int throwablePotionID;
+        public PotionsProps(int potionID, int duration, int potency) {
             this.effect = new PotionEffect(potionID, duration, potency);
         }
+
+        public PotionsProps(int potionID, int duration, int potency, int throwablePotionID) {
+            this.effect = new PotionEffect(potionID, duration, potency);
+            this.throwablePotionID = potionID + 400;
+        }
     }
+
 
 
 }

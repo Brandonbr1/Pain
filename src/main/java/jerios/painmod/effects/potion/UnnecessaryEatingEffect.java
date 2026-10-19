@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
-public class UnnecessaryEatingEffect extends Potion {
+public class UnnecessaryEatingEffect extends BasePotion {
 
     public UnnecessaryEatingEffect(int id, int color) {
         super(id, true, color);
@@ -23,6 +23,7 @@ public class UnnecessaryEatingEffect extends Potion {
 
         ItemStack actualStack = player.inventory.mainInventory[index];
         Item actualItem = actualStack.getItem();
+
 
         if (actualStack != stack) {
             return;
@@ -60,17 +61,12 @@ public class UnnecessaryEatingEffect extends Potion {
         if (entityLivingBase instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entityLivingBase;
 
-            if (!player.isPotionActive(Potion.hunger))
-            {
-               PotionEffect pot = player.getActivePotionEffect(ModPotions.gluttony);
-               player.addPotionEffect(new PotionEffect(Potion.hunger.id, pot.getDuration() + 90, pot.getAmplifier()));
-            }
 
             if (player.getFoodStats().getSaturationLevel() > 1) {
                 player.getFoodStats().setFoodSaturationLevel(0);
             }
 
-            float eatFactor = 3.0F;
+            float eatFactor = 1.0F;
             if (player.isPotionActive(ModPotions.malnourishment)){
                 eatFactor += 0.8F;
             }

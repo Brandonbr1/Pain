@@ -1,6 +1,10 @@
 package jerios.painmod;
 
+import java.util.Random;
+
 public class PainConstants {
+
+    public static final Random rand = new Random();
 
     public static final String MOD_ID_DOT = PainMod.MODID + ".";
     public static final String MODID_PREFIX = PainMod.MODID + ":";

@@ -25,31 +25,24 @@ public class PainFakePlayerFactory {
         return fakePlayers.get(username);
     }
 
-    // clear HashMap when not needed
-    public static void removeFakePlayer(GameProfile profile, PainFakePlayer player) {
-        fakePlayers.remove(profile, player);
-    }
 
 
     @SubscribeEvent
     public void unloadWorld(WorldEvent.Unload event)
     {
         if (event.world instanceof WorldServer) {
-        //    WorldServer world = (WorldServer) event.world;
-         //   Iterator<Map.Entry<GameProfile, PainFakePlayer>> itr = fakePlayers.entrySet().iterator();
-         //   while (itr.hasNext())
-          //  {
-             //   Map.Entry<GameProfile, PainFakePlayer> entry = itr.next();
-              //  if (entry.getValue().worldObj == world)
-             //   {
-                   // itr.remove();
+               WorldServer world = (WorldServer) event.world;
+              Iterator<Map.Entry<GameProfile, PainFakePlayer>> itr = fakePlayers.entrySet().iterator();
+              while (itr.hasNext())
+              {
+               Map.Entry<GameProfile, PainFakePlayer> entry = itr.next();
+              if (entry.getValue().worldObj == world)
+               {
+             itr.remove();
 
-                    fakePlayers.clear();
-               // }
-          //  }
+            }
+             }
         }
 
     }
-
-
 }

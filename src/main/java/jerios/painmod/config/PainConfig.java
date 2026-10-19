@@ -18,6 +18,8 @@ public class PainConfig {
 
      static String POTION_CAT = "POTIONS";
 
+     public static String[] blacklistedPotionsHarmfulEssence;
+
     public static void syncConfig(Configuration con) {
             glutID = potionConfig(con, "Gluttony ", 24);
             malnourishment = potionConfig(con, "malnourishment ", 25);
@@ -27,7 +29,11 @@ public class PainConfig {
             slothEffect = potionConfig(con, "Sloth ", 29);
 
 
-        painDimensionID = con.getInt("Pain Dimension ID", "DIMENSION", freeID, Integer.MIN_VALUE, Integer.MAX_VALUE, "The Pain Dimension ID", "config.PainDimension");
+            painDimensionID = con.getInt("Pain Dimension ID", "DIMENSION", freeID, Integer.MIN_VALUE, Integer.MAX_VALUE, "The Pain Dimension ID", "config.PainDimension");
+
+
+            blacklistedPotionsHarmfulEssence = con.getStringList("Blacklisted Potions", "Blacklist", new String[]{}, "Potions name which is blacklisted from applying on Harmful essence. Instant damage is excluded automatically");
+
 
         if (con.hasChanged()) {
             con.save();

@@ -1,12 +1,10 @@
 package jerios.painmod.effects.potion;
 
-import jerios.painmod.utils.GRUtils;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 
 // given to by pain spiders if it's a rare version.
-public class DeadlyPoision extends Potion {
+public class DeadlyPoision extends BasePotion {
 
     public DeadlyPoision(int id, int color) {
         super(id, true, color);
@@ -14,9 +12,9 @@ public class DeadlyPoision extends Potion {
 
     @Override
     public void performEffect(EntityLivingBase entityLivingBase, int amplifier) {
-        if (entityLivingBase.getHealth() > 1.0F)
+        if (entityLivingBase.getHealth() > 3.0F - amplifier)
         {
-            entityLivingBase.attackEntityFrom(DamageSource.magic, 1.0F + amplifier + GRUtils.getScaledDifficulty(entityLivingBase.worldObj, entityLivingBase.worldObj.getGameRules()));
+            entityLivingBase.attackEntityFrom(DamageSource.magic, 1.0F);
         }
     }
 

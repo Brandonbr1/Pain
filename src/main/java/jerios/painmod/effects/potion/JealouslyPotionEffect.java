@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class JealouslyPotionEffect extends Potion {
+public class JealouslyPotionEffect extends BasePotion {
     public JealouslyPotionEffect(int id, int color) {
         super(id, false, color);
     }

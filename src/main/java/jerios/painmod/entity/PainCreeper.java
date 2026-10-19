@@ -91,6 +91,7 @@ public class PainCreeper extends EntityCreeper implements IPainMobs{
     @Override
     public void writeEntityToNBT(NBTTagCompound tagCompound) {
         super.writeEntityToNBT(tagCompound);
+
         tagCompound.setInteger(PainConstants.MOD_ID_DOT + "ExplosionTimes", explosionCount);
         tagCompound.setBoolean(PainConstants.MOD_ID_DOT + "EffectType", effectType);
     }

@@ -2,6 +2,7 @@ package jerios.painmod.world;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import jerios.painmod.config.PainConfig;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.WorldProvider;
@@ -16,6 +17,7 @@ public class PainProvider extends WorldProvider {
     @Override
     protected void registerWorldChunkManager() {
         this.worldChunkMgr = new PainChunkManager(worldObj);
+        this.dimensionId = PainConfig.painDimensionID;
     }
 
     @Override

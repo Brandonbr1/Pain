@@ -9,15 +9,20 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import jerios.painmod.config.PainConfig;
 import jerios.painmod.damageSource.RagePainSource;
-import jerios.painmod.events.PainEvents;
-import jerios.painmod.proxy.CommonProxy;
+import jerios.painmod.events.PainEventsClient;
+import jerios.painmod.events.PainEventsServer;
+import jerios.painmod.props.PainProps;
 import jerios.painmod.proxy.IProxy;
 import jerios.painmod.registry.GameRulesRegistry;
 import jerios.painmod.registry.RegistryHandler;
 import jerios.painmod.utils.PainFakePlayerFactory;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod(modid = Tags.MOD_ID,
         name = Tags.MOD_NAME,
@@ -34,6 +39,10 @@ public class PainMod {
 
     public static final DamageSource RAGE = new RagePainSource();
 
+    public static final List<Potion> tempBadPotionEffects = new ArrayList<>();
+    public static Potion[] badPotionEffectsA;
+
+
     // jealously makes your pets mad at you
     // pride purposely makes you act overconfident(throws away your stuff and replaces with worse armor caue 'you are too good)
 
@@ -43,9 +52,22 @@ public class PainMod {
         RegistryHandler.registerPreInit();
         proxy.clientOnly();
         proxy.serverOnly();
-        MinecraftForge.EVENT_BUS.register(new PainFakePlayerFactory());
-        MinecraftForge.EVENT_BUS.register(new PainEvents());
-        FMLCommonHandler.instance().bus().register(new PainEvents());
+        registerForgeEvent(new PainFakePlayerFactory());
+        registerBothEvents(new PainEventsServer());
+        registerForgeEvent(new PainEventsClient());
+        new PainProps();
+    }
+
+    public void registerBothEvents(Object o){
+        registerForgeEvent(o);
+        registerFMLEvent(o);
+    }
+
+    public void registerForgeEvent(Object object) {
+        MinecraftForge.EVENT_BUS.register(object);
+    }
+    public void registerFMLEvent(Object object) {
+        FMLCommonHandler.instance().bus().register(object);
     }
 
     @Mod.EventHandler
@@ -55,10 +77,12 @@ public class PainMod {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        RegistryHandler.postInit();
     }
 
     @Mod.EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-        GameRulesRegistry.register(event.getServer().getEntityWorld().getGameRules());
+        RegistryHandler.onServerStart(event);
+
     }
 }
