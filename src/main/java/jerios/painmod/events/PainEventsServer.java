@@ -131,7 +131,7 @@ public class PainEventsServer {
             if (player.isPotionActive(ModPotions.plaugeEffect)) {
                 damage += 0.4F;
             }
-            event.ammount = damage;
+            event.ammount += damage;
         }
     }
 

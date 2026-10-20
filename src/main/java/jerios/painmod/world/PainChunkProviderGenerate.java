@@ -17,7 +17,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.MapGenCaves;
 import net.minecraft.world.gen.MapGenRavine;
-import net.minecraft.world.gen.NoiseGenerator;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
@@ -34,22 +33,21 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 import java.util.List;
 import java.util.Random;
 
-import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.*;
-import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.MINESHAFT;
-import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.RAVINE;
-import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.SCATTERED_FEATURE;
 import static net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.*;
 
 public class PainChunkProviderGenerate implements IChunkProvider {
 
     private Random rand;
-    private NoiseGeneratorOctaves noiseGen;
     private NoiseGeneratorOctaves noiseGen1;
     private NoiseGeneratorOctaves noiseGen2;
-    private NoiseGeneratorPerlin noiseGen3;
-    public NoiseGeneratorOctaves noiseGen4;
+    private NoiseGeneratorOctaves noiseGen3;
+    private NoiseGeneratorPerlin noiseGen4;
     public NoiseGeneratorOctaves noiseGen5;
+    public NoiseGeneratorOctaves noiseGen6;
     public NoiseGeneratorOctaves mobSpawnerNoise;
+
+    public NoiseGeneratorOctaves stoneStack;
+
     private World worldObj;
     private final boolean mapFeaturesEnabled;
     private WorldType worldType;
@@ -74,13 +72,14 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         this.mapFeaturesEnabled = p_i2006_4_;
         this.worldType = p_i2006_1_.getWorldInfo().getTerrainType();
         this.rand = new Random(p_i2006_2_);
-        this.noiseGen = new NoiseGeneratorOctaves(this.rand, 16);
         this.noiseGen1 = new NoiseGeneratorOctaves(this.rand, 16);
-        this.noiseGen2 = new NoiseGeneratorOctaves(this.rand, 8);
-        this.noiseGen3 = new NoiseGeneratorPerlin(this.rand, 4);
-        this.noiseGen4 = new NoiseGeneratorOctaves(this.rand, 10);
-        this.noiseGen5 = new NoiseGeneratorOctaves(this.rand, 16);
+        this.noiseGen2 = new NoiseGeneratorOctaves(this.rand, 16);
+        this.noiseGen3 = new NoiseGeneratorOctaves(this.rand, 8);
+        this.noiseGen4 = new NoiseGeneratorPerlin(this.rand, 4);
+        this.noiseGen5 = new NoiseGeneratorOctaves(this.rand, 10);
+        this.noiseGen6 = new NoiseGeneratorOctaves(this.rand, 16);
         this.mobSpawnerNoise = new NoiseGeneratorOctaves(this.rand, 8);
+        this.stoneStack = new NoiseGeneratorOctaves(rand, 4);
         this.noiseStackXZ = new double[825];
         this.parabolicField = new float[25];
 
@@ -179,7 +178,11 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         if (event.getResult() == Event.Result.DENY) return;
 
         double d0 = 0.03125D;
-        this.stoneNoise = this.noiseGen3.func_151599_a(this.stoneNoise, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
+
+        this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, chunkX * 16, chunkZ * 16, 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
+
+     //  this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, chunkX * 16, chunkZ * 16, 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
+
 
         for (int k = 0; k < 16; ++k)
         {
@@ -241,10 +244,10 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         double d1 = 684.412D;
         double d2 = 512.0D;
         double d3 = 512.0D;
-        this.noiseStackOctaves5 = this.noiseGen5.generateNoiseOctaves(this.noiseStackOctaves5, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
-        this.noiseStackOctaves2 = this.noiseGen2.generateNoiseOctaves(this.noiseStackOctaves2, x, y, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
-        this.noiseStackOctaves = this.noiseGen.generateNoiseOctaves(this.noiseStackOctaves, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
-        this.noiseStackOctaves1 = this.noiseGen1.generateNoiseOctaves(this.noiseStackOctaves1, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
+        this.noiseStackOctaves5 = this.noiseGen6.generateNoiseOctaves(this.noiseStackOctaves5, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
+        this.noiseStackOctaves2 = this.noiseGen3.generateNoiseOctaves(this.noiseStackOctaves2, x, y, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
+        this.noiseStackOctaves = this.noiseGen1.generateNoiseOctaves(this.noiseStackOctaves, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
+        this.noiseStackOctaves1 = this.noiseGen2.generateNoiseOctaves(this.noiseStackOctaves1, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
         boolean flag1 = false;
         boolean flag = false;
         int l = 0;

@@ -47,11 +47,10 @@ public class ModPotions {
 
 
 
-    public static void increasePotionArray()  {
+    public static void increasePotionArray() {
         if (Potion.potionTypes.length > 32) {
             Potion.potionTypes = new Potion[256];
         }
-        }
-
+      }
 
     }

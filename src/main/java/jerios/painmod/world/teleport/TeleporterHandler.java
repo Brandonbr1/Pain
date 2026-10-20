@@ -3,6 +3,8 @@ package jerios.painmod.world.teleport;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
@@ -25,7 +27,6 @@ public class TeleporterHandler {
         playerMP.lastExperience = -1;
         playerMP.lastHealth = -1.0F;
         playerMP.lastFoodLevel = -1;
-
     }
 
     /**
@@ -90,12 +91,18 @@ public class TeleporterHandler {
 
     public static void travelToDimension(EntityItem ent, int dimensionId, Teleporter teleporter)
     {
-        travelToDimension((Entity)ent, dimensionId, teleporter);
+        travelToDimension(ent, dimensionId, teleporter);
 
         if (!ent.worldObj.isRemote)
         {
            ent.searchForOtherItemsNearby();
         }
+    }
+
+    public static void travelToDimension(EntityMinecartContainer entityMinecartContainer, int dimID, Teleporter teleporter)
+    {
+        travelToDimension(entityMinecartContainer, dimID, teleporter);
+        entityMinecartContainer.dropContentsWhenDead = true;
     }
 
 }

@@ -2,6 +2,7 @@ package jerios.painmod.world;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import jerios.painmod.world.layer.PainGenLayer;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
@@ -48,7 +49,7 @@ public class PainChunkManager extends WorldChunkManager {
     public PainChunkManager(long p_i1975_1_, WorldType p_i1975_3_)
     {
         this();
-        GenLayer[] agenlayer = GenLayer.initializeAllBiomeGenerators(p_i1975_1_, p_i1975_3_);
+        GenLayer[] agenlayer = PainGenLayer.initializeAllBiomeGenerators(p_i1975_1_, p_i1975_3_);
         agenlayer = getModdedBiomeGenerators(p_i1975_3_, p_i1975_1_, agenlayer);
         this.genBiomes = agenlayer[0];
         this.biomeIndexLayer = agenlayer[1];

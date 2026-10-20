@@ -22,6 +22,7 @@ public class RegistryHandler {
         ModGenerator.register();
         ModPotions.register();
         ModAchievements.register();
+        ModBiomes.registerBiomes();
     }
 
     public static void registerInit() {

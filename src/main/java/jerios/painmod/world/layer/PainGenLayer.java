@@ -5,13 +5,14 @@ import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.WorldTypeEvent;
 
 import java.util.concurrent.Callable;
 
-public abstract class PainGenLayer
+public abstract class PainGenLayer extends GenLayer
 {
     /** seed from World#getWorldSeed that is used in the LCG prng */
     private long worldGenSeed;
@@ -103,6 +104,7 @@ public abstract class PainGenLayer
 
     public PainGenLayer(long p_i2125_1_)
     {
+        super(p_i2125_1_);
         this.baseSeed = p_i2125_1_;
         this.baseSeed *= this.baseSeed * 6364136223846793005L + 1442695040888963407L;
         this.baseSeed += p_i2125_1_;

@@ -17,8 +17,12 @@ public class PainConfig {
     public static int painDimensionID = freeID;
 
      static String POTION_CAT = "POTIONS";
+     static String BIOME_ID = "BIOME IDS";
 
      public static String[] blacklistedPotionsHarmfulEssence;
+
+
+     public static int painBiomeID;
 
     public static void syncConfig(Configuration con) {
             glutID = potionConfig(con, "Gluttony ", 24);
@@ -33,6 +37,8 @@ public class PainConfig {
 
 
             blacklistedPotionsHarmfulEssence = con.getStringList("Blacklisted Potions", "Blacklist", new String[]{}, "Potions name which is blacklisted from applying on Harmful essence. Instant damage is excluded automatically");
+
+            painBiomeID = con.getInt("Pain Plains Biome ID", BIOME_ID, 80, 0, Integer.MAX_VALUE, "The Biome ID of the pain plains");
 
 
         if (con.hasChanged()) {

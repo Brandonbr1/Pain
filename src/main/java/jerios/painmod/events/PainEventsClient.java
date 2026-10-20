@@ -5,6 +5,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 public class PainEventsClient {
 
@@ -15,5 +16,7 @@ public class PainEventsClient {
         //leftClickCounter
         // rightClickTimer set high when we have the potion effect active
     }
+
+
 
 }

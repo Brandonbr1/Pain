@@ -3,11 +3,14 @@ package jerios.painmod.registry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import jerios.painmod.block.BlockCorruptedDarknessBlock;
 import jerios.painmod.block.BlockPainPortal;
+import jerios.painmod.block.PainBlock;
+import jerios.painmod.block.PainGrass;
 import jerios.painmod.items.ItemPainPotion;
 import jerios.painmod.items.ItemPainSpawnEgg;
 import jerios.painmod.items.essence.ItemHarmfulEssence;
 import jerios.painmod.items.weapons.ItemBowOfCursing;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 
 public class ModItemBlocks {
@@ -21,6 +24,9 @@ public class ModItemBlocks {
 
 
     public static Block corruptedBlock;
+
+
+    public static Block painDirt;
 
     public static void register() {
         spawnEgg = new ItemPainSpawnEgg().setCreativeTab(TabsRegistry.SPAWN_EGG_TAB);
@@ -44,6 +50,9 @@ public class ModItemBlocks {
 
         corruptedBlock = new BlockCorruptedDarknessBlock();
         registerBlock(corruptedBlock, "CorruptedDarknessBlock");
+
+        painDirt = new PainGrass("painDirt");
+        registerBlock(painDirt, "Pain Dirt");
 
 
     }

@@ -1,5 +1,6 @@
 package jerios.painmod.world.layer;
 
+import jerios.painmod.registry.ModBiomes;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -13,6 +14,9 @@ import java.util.List;
 public class PainGenLayerBiome extends PainGenLayer
 {
     private List<BiomeEntry>[] biomes = new ArrayList[BiomeManager.BiomeType.values().length];
+
+
+
 
     public PainGenLayerBiome(long p_i2122_1_, PainGenLayer p_i2122_3_, WorldType p_i2122_4_)
     {
@@ -37,14 +41,14 @@ public class PainGenLayerBiome extends PainGenLayer
             biomes[desertIdx].add(new BiomeEntry(BiomeGenBase.forest, 10));
             biomes[desertIdx].add(new BiomeEntry(BiomeGenBase.extremeHills, 10));
             biomes[desertIdx].add(new BiomeEntry(BiomeGenBase.swampland, 10));
-            biomes[desertIdx].add(new BiomeEntry(BiomeGenBase.plains, 10));
+            biomes[desertIdx].add(new BiomeEntry(ModBiomes.painPlains, 10));
             biomes[desertIdx].add(new BiomeEntry(BiomeGenBase.taiga, 10));
         }
         else
         {
             biomes[desertIdx].add(new BiomeEntry(BiomeGenBase.desert, 30));
             biomes[desertIdx].add(new BiomeEntry(BiomeGenBase.savanna, 20));
-            biomes[desertIdx].add(new BiomeEntry(BiomeGenBase.plains, 10));
+            biomes[desertIdx].add(new BiomeEntry(ModBiomes.painPlains, 10));
         }
     }
 
@@ -89,7 +93,7 @@ public class PainGenLayerBiome extends PainGenLayer
                     }
                     else
                     {
-                        aint1[j1 + i1 * areaWidth] = getWeightedBiomeEntry(BiomeManager.BiomeType.DESERT).biome.biomeID;
+                        aint1[j1 + i1 * areaWidth] = ModBiomes.painPlains.biomeID; //getWeightedBiomeEntry(BiomeManager.BiomeType.DESERT).biome.biomeID;
                     }
                 }
                 else if (k1 == 2)
@@ -100,7 +104,7 @@ public class PainGenLayerBiome extends PainGenLayer
                     }
                     else
                     {
-                        aint1[j1 + i1 * areaWidth] = getWeightedBiomeEntry(BiomeManager.BiomeType.WARM).biome.biomeID;
+                        aint1[j1 + i1 * areaWidth] =  ModBiomes.painPlains.biomeID; //getWeightedBiomeEntry(BiomeManager.BiomeType.WARM).biome.biomeID;
                     }
                 }
                 else if (k1 == 3)
@@ -111,16 +115,16 @@ public class PainGenLayerBiome extends PainGenLayer
                     }
                     else
                     {
-                        aint1[j1 + i1 * areaWidth] = getWeightedBiomeEntry(BiomeManager.BiomeType.COOL).biome.biomeID;
+                        aint1[j1 + i1 * areaWidth] =  ModBiomes.painPlains.biomeID; //getWeightedBiomeEntry(BiomeManager.BiomeType.COOL).biome.biomeID;
                     }
                 }
                 else if (k1 == 4)
                 {
-                    aint1[j1 + i1 * areaWidth] = getWeightedBiomeEntry(BiomeManager.BiomeType.ICY).biome.biomeID;
+                    aint1[j1 + i1 * areaWidth] =  ModBiomes.painPlains.biomeID; //getWeightedBiomeEntry(BiomeManager.BiomeType.ICY).biome.biomeID;
                 }
                 else
                 {
-                    aint1[j1 + i1 * areaWidth] = BiomeGenBase.mushroomIsland.biomeID;
+                    aint1[j1 + i1 * areaWidth] =  ModBiomes.painPlains.biomeID; //BiomeGenBase.mushroomIsland.biomeID;
                 }
             }
         }

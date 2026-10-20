@@ -3,7 +3,9 @@ package jerios.painmod.block;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jerios.painmod.config.PainConfig;
+import jerios.painmod.registry.ModItemBlocks;
 import jerios.painmod.registry.TabsRegistry;
+import jerios.painmod.world.teleport.PainTeleporter;
 import jerios.painmod.world.teleport.TeleporterHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPortal;
@@ -11,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -222,17 +225,24 @@ public class BlockPainPortal extends BlockPortal {
         if (entityIn.ridingEntity == null && entityIn.riddenByEntity == null)
         {
             final int dim = PainConfig.painDimensionID;
-            if (entityIn instanceof EntityPlayerMP) {
-                EntityPlayerMP playerMP = (EntityPlayerMP) entityIn;
-                WorldServer ws = playerMP.mcServer.worldServerForDimension(dim);
-                Teleporter teleporter = new Teleporter(ws);
-                TeleporterHandler.travelToDimension(playerMP, dim,teleporter );
-            } else if (entityIn instanceof EntityItem) {
-                EntityItem entityItem = (EntityItem) entityIn;
-                WorldServer ws = MinecraftServer.getServer().worldServerForDimension(dim);
-                TeleporterHandler.travelToDimension(entityItem, dim, new Teleporter(ws));
-            } else if (entityIn instanceof EntityMinecart) {
-
+            if (entityIn.dimension != dim) {
+                if (entityIn instanceof EntityPlayerMP) {
+                    EntityPlayerMP playerMP = (EntityPlayerMP) entityIn;
+                    if (playerMP.timeUntilPortal-- <= 10) {
+                        playerMP.timeUntilPortal = 80;
+                        WorldServer ws = playerMP.mcServer.worldServerForDimension(dim);
+                        Teleporter teleporter = new PainTeleporter(ws);
+                        TeleporterHandler.travelToDimension(playerMP, dim, teleporter);
+                    }
+                } else if (entityIn instanceof EntityItem) {
+                    EntityItem entityItem = (EntityItem) entityIn;
+                    WorldServer ws = MinecraftServer.getServer().worldServerForDimension(dim);
+                    TeleporterHandler.travelToDimension(entityItem, dim, new PainTeleporter(ws));
+                } else if (entityIn instanceof EntityMinecartContainer) {
+                    EntityMinecartContainer container = (EntityMinecartContainer) entityIn;
+                    WorldServer ws = MinecraftServer.getServer().worldServerForDimension(dim);
+                    TeleporterHandler.travelToDimension(container, dim, new PainTeleporter(ws));
+                }
             }
 
         }
@@ -362,14 +372,14 @@ public class BlockPainPortal extends BlockPortal {
 
                 Block block1 = this.field_150867_a.getBlock(p_150853_1_ + j1 * i1, p_150853_2_ - 1, p_150853_3_ + k1 * i1);
 
-                if (block1 != Blocks.obsidian)
+                if (block1 != ModItemBlocks.corruptedBlock)
                 {
                     break;
                 }
             }
 
             block = this.field_150867_a.getBlock(p_150853_1_ + j1 * i1, p_150853_2_, p_150853_3_ + k1 * i1);
-            return block == Blocks.obsidian ? i1 : 0;
+            return block == ModItemBlocks.corruptedBlock ? i1 : 0;
         }
 
         protected int func_150858_a()
@@ -395,7 +405,7 @@ public class BlockPainPortal extends BlockPortal {
                         break label56;
                     }
 
-                    if (block == Blocks.portal)
+                    if (block == ModItemBlocks.painPortal)
                     {
                         ++this.field_150864_e;
                     }
@@ -404,7 +414,7 @@ public class BlockPainPortal extends BlockPortal {
                     {
                         block = this.field_150867_a.getBlock(k + Direction.offsetX[BlockPortal.field_150001_a[this.field_150865_b][0]], i, l + Direction.offsetZ[BlockPortal.field_150001_a[this.field_150865_b][0]]);
 
-                        if (block != Blocks.obsidian)
+                        if (block != ModItemBlocks.corruptedBlock)
                         {
                             break label56;
                         }
@@ -413,7 +423,7 @@ public class BlockPainPortal extends BlockPortal {
                     {
                         block = this.field_150867_a.getBlock(k + Direction.offsetX[BlockPortal.field_150001_a[this.field_150865_b][1]], i, l + Direction.offsetZ[BlockPortal.field_150001_a[this.field_150865_b][1]]);
 
-                        if (block != Blocks.obsidian)
+                        if (block != ModItemBlocks.corruptedBlock)
                         {
                             break label56;
                         }
@@ -427,7 +437,7 @@ public class BlockPainPortal extends BlockPortal {
                 k = this.field_150861_f.posY + this.field_150862_g;
                 l = this.field_150861_f.posZ + i * Direction.offsetZ[BlockPortal.field_150001_a[this.field_150865_b][1]];
 
-                if (this.field_150867_a.getBlock(j, k, l) != Blocks.obsidian)
+                if (this.field_150867_a.getBlock(j, k, l) != ModItemBlocks.corruptedBlock)
                 {
                     this.field_150862_g = 0;
                     break;
@@ -449,7 +459,7 @@ public class BlockPainPortal extends BlockPortal {
 
         protected boolean func_150857_a(Block block)
         {
-            return block.getMaterial() == Material.air || block == Blocks.fire || block == Blocks.portal;
+            return block.getMaterial() == Material.air || block == Blocks.fire || block == ModItemBlocks.painPortal;
         }
 
         public boolean func_150860_b()
@@ -467,7 +477,7 @@ public class BlockPainPortal extends BlockPortal {
                 for (int l = 0; l < this.field_150862_g; ++l)
                 {
                     int i1 = this.field_150861_f.posY + l;
-                    this.field_150867_a.setBlock(j, i1, k, Blocks.portal, this.field_150865_b, 2);
+                    this.field_150867_a.setBlock(j, i1, k, ModItemBlocks.painPortal, this.field_150865_b, 2);
                 }
             }
         }
