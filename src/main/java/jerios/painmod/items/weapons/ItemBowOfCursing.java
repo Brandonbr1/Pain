@@ -21,17 +21,15 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 // Make it apply every bad potion effect in the game + high dam
 public class ItemBowOfCursing extends ItemBow {
 
-    public static final String[] bowPullIconNameArray = new String[] {"pulling_0", "pulling_1", "pulling_2"};
-    @SideOnly(Side.CLIENT)
-    private IIcon[] iconArray;
-
     public ItemBowOfCursing()
     {
         super();
         setUnlocalizedName("painBow");
         setTextureName("painmod:painBow");
         setCreativeTab(TabsRegistry.WEAPONS_TAB);
+      //  setFull3D(); // Rcreates thee more bows holding bow incorrectly bug.
     }
+
 
     /**
      * called when the player releases the use item button. Args: itemstack, world, entityplayer, itemInUseCount
@@ -125,27 +123,33 @@ public class ItemBowOfCursing extends ItemBow {
         }
     }
 
-
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister register)
+    public IIcon getItemIcon(ItemStack itemStackIn, int p_70620_2_)
     {
-        this.itemIcon = register.registerIcon(this.getIconString() + "_standby");
-        this.iconArray = new IIcon[bowPullIconNameArray.length];
-
-        for (int i = 0; i < this.iconArray.length; ++i)
-        {
-            this.iconArray[i] = register.registerIcon(this.getIconString() + "_" + bowPullIconNameArray[i]);
-        }
+        return itemStackIn.getItem().requiresMultipleRenderPasses() ? itemStackIn.getItem().getIconFromDamageForRenderPass(itemStackIn.getItemDamage(), p_70620_2_) : itemStackIn.getIconIndex();
     }
 
-    /**
-     * used to cycle through icons based on their used duration, i.e. for the bow
-     */
     @SideOnly(Side.CLIENT)
-    public IIcon getItemIconForUseDuration(int p_94599_1_)
+    public IIcon getIconFromDamageForRenderPass(int p_77618_1_, int p_77618_2_)
     {
-        return this.iconArray[p_94599_1_];
+        return this.getIconFromDamage(p_77618_1_);
     }
 
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconFromDamage(int p_77617_1_)
+    {
+        return this.itemIcon;
+    }
 
+    @Override
+    public IIcon getIcon(ItemStack stack, int pass) {
+        return super.getIcon(stack, pass);
+    }
+
+   /** @SideOnly(Side.CLIENT)
+    public IIcon getIconIndex()
+    {
+        return this.getItem().getIconIndex(this);
+    }
+   **/
 }

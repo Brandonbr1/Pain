@@ -12,13 +12,14 @@ import jerios.painmod.items.weapons.ItemBowOfCursing;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBow;
 
 public class ModItemBlocks {
 
     public static Item spawnEgg;
     public static ItemPainPotion potionPain;
     public static Block painPortal;
-    public static Item cursedBow;
+    public static ItemBow cursedBow;
 
     public static Item harmfulEssence;
 

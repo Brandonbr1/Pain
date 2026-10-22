@@ -22,7 +22,7 @@ import java.util.Random;
 public class PainGrass extends BlockGrass {
 
 
-    private static final String VANILLA_TEXTURE = "minecraft:grass";
+    private static final String VANILLA_TEXTURE = "minecraft:grass"; // getTextureName
 
     public PainGrass(String name) {
         super();
