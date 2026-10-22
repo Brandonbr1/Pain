@@ -10,53 +10,34 @@ public class WorldGenHoles extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 6; i++)
         {
-
-            int flag = random.nextInt(5);
-
-            switch (flag) {
-                case 1:
-                    x -= random.nextInt(6);
-                    z -= random.nextInt(6);
-                    y -= random.nextInt(2);
-                    break;
-                case 2:
-                    x += random.nextInt(6);
-                    z += random.nextInt(6);
-                    y -= random.nextInt(2);
-                    break;
-                case 3:
-                    x -= random.nextInt(6);
-                    z += random.nextInt(6);
-                    y -= random.nextInt(2);
-                    break;
-                case 4:
-                    x += random.nextInt(6);
-                    z -= random.nextInt(6);
-                    y -= random.nextInt(2);
-                    break;
-
-            }
-
-
-            if (world.blockExists(x,y,z) && world.getBlock(x,y,z) != Blocks.air)
+            int py = y - i;
+            for (int j = 0; j < 4; j++)
             {
+                for (int k = 0; k < 4; k++)
+                {
+                    if (random.nextBoolean() && world.blockExists(x + j, py,z + k)) {
+                        world.setBlock(x + j, py,z + k, Blocks.air, 0, 3);
+                    }
+                    if (random.nextBoolean() && world.blockExists(x - j, py, z - k)) {
+                        world.setBlock(x - j, py, z - k, Blocks.air, 0, 3);
+                    }
+                    if (random.nextBoolean() && world.blockExists(x - j, py, z + k)) {
+                        world.setBlock(x - j, py, z + k, Blocks.air, 0, 3);
+                    }
+                    if (random.nextBoolean() && world.blockExists(x + j, py, z - k)) {
+                        world.setBlock(x + j, py, z - k, Blocks.air, 0, 3);
+                    }
+                }
 
-                world.setBlock(x,y,z, Blocks.air, 0, 3);
-
-
-
-
-                return true;
             }
+
 
         }
 
 
 
-
-
-        return false;
+        return true;
     }
 }

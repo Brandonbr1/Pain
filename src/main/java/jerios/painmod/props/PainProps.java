@@ -17,6 +17,8 @@ public class PainProps implements IExtendedEntityProperties {
 
     public static final String PROP_NAME = PainMod.MODID + "_EntityData";
 
+    public boolean escapedDim = false;
+
     public PainProps() {
         MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
@@ -26,6 +28,8 @@ public class PainProps implements IExtendedEntityProperties {
         NBTTagCompound propertyData = new NBTTagCompound();
         // Write data to propertyData
 
+        propertyData.setBoolean("escapedDim", escapedDim);
+
         compound.setTag(PROP_NAME, propertyData);
     }
 
@@ -34,6 +38,7 @@ public class PainProps implements IExtendedEntityProperties {
         if (compound.hasKey(PROP_NAME, Constants.NBT.TAG_COMPOUND)) {
             NBTTagCompound propertyData = compound.getCompoundTag(PROP_NAME);
 
+           this.escapedDim = propertyData.getBoolean("escapedDim");
             // Read data from propertyData
         }
 

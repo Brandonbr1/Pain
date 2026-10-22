@@ -56,8 +56,9 @@ public class RegistryHandler {
 
         for (int i = 0; i < server.length; i++) {
             WorldServer server1 = server[i];
-            server1.customTeleporters.add(new PainTeleporter(server1));
-
+            if (server1 != null) {
+                server1.customTeleporters.add(new PainTeleporter(server1));
+            }
         }
 
 

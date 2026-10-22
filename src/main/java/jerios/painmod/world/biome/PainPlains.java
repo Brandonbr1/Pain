@@ -1,5 +1,6 @@
 package jerios.painmod.world.biome;
 
+import jerios.painmod.registry.ModItemBlocks;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.init.Blocks;
@@ -13,6 +14,7 @@ public class PainPlains extends BiomeGenBase {
 
     public PainPlains(int id) {
         super(id);
+        this.topBlock = ModItemBlocks.painDirt;
         this.setColor(9286496);
         this.setBiomeName("Pain Plains");
         this.setTemperatureRainfall(0.8F, 0.4F);

@@ -1,9 +1,20 @@
 {
  "Cough":{
-    "category": "hostile",
+    "category": "master",
     "sounds":[
-      {"name":"cough", "stream":false}
+      {"name":"effects/Sick", "stream":false}
     ]
   },
-
+  "dig.painDirt":{
+    "category": "master",
+    "sounds":[
+      {"name":"PainGrass_dig", "stream":false}
+    ]
+  },
+  "step.painDirt":{
+    "category": "master",
+    "sounds":[
+      {"name":"PainGrass_step", "stream":false}
+    ]
+  }
 }

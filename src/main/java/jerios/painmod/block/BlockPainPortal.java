@@ -242,6 +242,9 @@ public class BlockPainPortal extends BlockPortal {
                     EntityMinecartContainer container = (EntityMinecartContainer) entityIn;
                     WorldServer ws = MinecraftServer.getServer().worldServerForDimension(dim);
                     TeleporterHandler.travelToDimension(container, dim, new PainTeleporter(ws));
+                } else {
+                    WorldServer ws = MinecraftServer.getServer().worldServerForDimension(dim);
+                    TeleporterHandler.travelToDimension(entityIn, PainConfig.painDimensionID, new PainTeleporter(ws));
                 }
             }
 

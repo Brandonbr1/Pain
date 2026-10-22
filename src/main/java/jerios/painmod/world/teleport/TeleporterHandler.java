@@ -6,6 +6,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.Teleporter;
@@ -27,6 +29,7 @@ public class TeleporterHandler {
         playerMP.lastExperience = -1;
         playerMP.lastHealth = -1.0F;
         playerMP.lastFoodLevel = -1;
+        playerMP.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 240, 0));
     }
 
     /**

@@ -26,8 +26,6 @@ public class BlockCorruptedDarknessBlock extends Block {
             EntityLivingBase base = (EntityLivingBase) entityIn;
 
             base.addPotionEffect(new PotionEffect(Potion.blindness.id, 120, 1));
-
-
         }
     }
 }

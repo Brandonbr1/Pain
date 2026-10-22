@@ -1,6 +1,7 @@
 package jerios.painmod.world;
 
 import cpw.mods.fml.common.eventhandler.Event;
+import jerios.painmod.world.features.WorldGenHoles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -179,9 +180,32 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
         double d0 = 0.03125D;
 
-        this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, chunkX * 16, chunkZ * 16, 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
+      // this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
 
-     //  this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, chunkX * 16, chunkZ * 16, 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
+       /** this.stoneNoise = this.noiseGen4.func_151599_a(
+                this.stoneNoise,
+                chunkX * 16,
+                chunkZ * 16,
+                0,
+                16,
+                16,
+                1,
+                d0 * 2.0D);
+        **/
+
+
+        this.stoneNoise = this.stoneStack.generateNoiseOctaves(
+                this.stoneNoise,
+                chunkX * 16,
+                chunkZ * 16,
+                0,
+                16,
+                16,
+                1,
+                d0 * 2.0D,
+                d0 * 2.0D,
+                d0 * 2.0D);
+
 
 
         for (int k = 0; k < 16; ++k)
@@ -412,10 +436,8 @@ public class PainChunkProviderGenerate implements IChunkProvider {
             l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
             i2 = l + this.rand.nextInt(16) + 8;
 
-            if (l1 < 63 || this.rand.nextInt(10) == 0)
-            {
-                (new WorldGenLakes(Blocks.lava)).generate(this.worldObj, this.rand, k1, l1, i2);
-            }
+            (new WorldGenLakes(Blocks.air)).generate(this.worldObj, this.rand, k1, l1, i2);
+
         }
 
         boolean doGen = TerrainGen.populate(chunkProvider, worldObj, rand, x, z, flag, DUNGEON);
@@ -427,6 +449,16 @@ public class PainChunkProviderGenerate implements IChunkProvider {
             (new WorldGenDungeons()).generate(this.worldObj, this.rand, l1, i2, j2);
         }
 
+        if (rand.nextInt(2) == 0)
+        {
+            l1 = k + this.rand.nextInt(16) + 8;
+
+            int j2 = l + this.rand.nextInt(16) + 8;
+            i2 = worldObj.getTopSolidOrLiquidBlock(l1, j2);
+            (new WorldGenHoles()).generate(this.worldObj, this.rand, l1, i2, j2);
+
+        }
+
         biomegenbase.decorate(this.worldObj, this.rand, k, l);
         if (TerrainGen.populate(chunkProvider, worldObj, rand, x, z, flag, ANIMALS))
         {
@@ -434,6 +466,8 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         }
         k += 8;
         l += 8;
+
+
 
         doGen = TerrainGen.populate(chunkProvider, worldObj, rand, x, z, flag, ICE);
         for (k1 = 0; doGen && k1 < 16; ++k1)

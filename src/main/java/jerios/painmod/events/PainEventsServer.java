@@ -2,40 +2,63 @@ package jerios.painmod.events;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import jerios.painmod.PainConstants;
 import jerios.painmod.PainMod;
+import jerios.painmod.block.BlockPainPortal;
 import jerios.painmod.config.PainConfig;
+import jerios.painmod.props.PainProps;
 import jerios.painmod.registry.ModPotions;
 import jerios.painmod.utils.SidedCheckers;
+import jerios.painmod.world.teleport.PainTeleporter;
+import jerios.painmod.world.teleport.TeleporterHandler;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockPortal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemBucketMilk;
 import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
+import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
-import org.lwjgl.Sys;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import net.minecraftforge.event.world.BlockEvent;
 
 public class PainEventsServer {
+
+    @SubscribeEvent
+    public void startInPainDim(PlayerEvent.PlayerLoggedInEvent joinWorldEvent) {
+        World world = joinWorldEvent.player.worldObj;
+       EntityPlayer entity = joinWorldEvent.player;
+        final int dim = PainConfig.painDimensionID;
+        if (PainConfig.spawnInPainDim && world instanceof WorldServer) {
+            WorldServer server = (WorldServer) world;
+            if (entity instanceof EntityPlayerMP) {
+                EntityPlayerMP playerMP = (EntityPlayerMP) entity;
+                if (playerMP.dimension != PainConfig.painDimensionID) {
+                    PainProps props = PainProps.get(playerMP);
+                    WorldServer ws = server.func_73046_m().worldServerForDimension(dim);
+                    if (ws != null)
+                    {
+                        if (props == null || !props.escapedDim) {
+                            TeleporterHandler.travelToDimension(playerMP, PainConfig.painDimensionID, new PainTeleporter(ws));
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     @SubscribeEvent
     public void actuallySayText(PlayerEvent.PlayerChangedDimensionEvent event) {
@@ -45,6 +68,20 @@ public class PainEventsServer {
         } else if (event.fromDim == PainConfig.painDimensionID && event.toDim != PainConfig.painDimensionID) {
             player.addChatMessage(new ChatComponentTranslation("painmod.ahhFinallyFree"));
         }
+    }
+
+    @SubscribeEvent
+    public void onBlockPlaced(BlockEvent.PlaceEvent placeEvent) {
+        Block block = placeEvent.placedBlock;
+        World world=placeEvent.world;
+        EntityPlayer player = placeEvent.player;
+        if (!world.isRemote && player.dimension == PainConfig.painDimensionID) {
+            if (block instanceof BlockPortal && !(block instanceof BlockPainPortal)) {
+                placeEvent.setCanceled(true);
+                player.timeUntilPortal = 80;
+            }
+        }
+
     }
 
     @SubscribeEvent

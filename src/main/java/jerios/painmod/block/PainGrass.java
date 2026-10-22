@@ -3,23 +3,27 @@ package jerios.painmod.block;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jerios.painmod.registry.ModItemBlocks;
+import jerios.painmod.registry.ModSounds;
 import jerios.painmod.registry.TabsRegistry;
-import net.minecraft.block.BlockGrass;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
-public class PainGrass extends BlockGrass {
+public class PainGrass extends Block {
 
 
-    private String vanillaTexture = "minecraft:grass";
+    private static final String VANILLA_TEXTURE = "minecraft:grass";
 
     public PainGrass(String name) {
-        setBlockName(name);
+        super(Material.grass);
+        setBlockName( name);
         setBlockTextureName("painmod:" + name);
         setCreativeTab(TabsRegistry.BLOCKS_TAB);
+        setHardness(0.6F);
+        setStepSound(ModSounds.dirtSound);
     }
 
     @SideOnly(Side.CLIENT)
@@ -38,20 +42,14 @@ public class PainGrass extends BlockGrass {
         return side == 1 ? this.field_149991_b : (side == 0 ? Blocks.dirt.getBlockTextureFromSide(side) : this.blockIcon);
     }
 
-    @SideOnly(Side.CLIENT)
-    public int getBlockColor()
-    {
-        return 16777215;
-    }
-
 
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg)
     {
         this.blockIcon = reg.registerIcon(this.getTextureName() + "_side");
-        this.field_149991_b = reg.registerIcon(this.getTextureName() + "_top");
-        this.field_149993_M = reg.registerIcon(vanillaTexture + "_side_snowed");
-        this.field_149994_N = reg.registerIcon(vanillaTexture + "_side_overlay");
+        this.field_149991_b = reg.registerIcon(this.getTextureName() + "_top3");
+        this.field_149993_M = reg.registerIcon(VANILLA_TEXTURE + "_side_snowed");
+        this.field_149994_N = reg.registerIcon(VANILLA_TEXTURE + "_side_overlay");
     }
 
 

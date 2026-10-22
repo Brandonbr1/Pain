@@ -10,8 +10,11 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.IRenderHandler;
+
+import java.util.Random;
 
 //TODO: MAKE THE MOON LOOKS CORRUPTED AND BROKEN IF POSSIBLE
 // MAKE STARS LOOKS CORRUPTED
@@ -36,6 +39,17 @@ public class PainProvider extends WorldProvider {
         );
     }
 
+
+    public boolean shouldMapSpin(String entity, double x, double y, double z)
+    {
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public Vec3 getFogColor(float skyAngle, float tickDelta)
+    {
+        return Vec3.createVectorHelper(000.0F, 000.0F, 000.0F);
+    }
 
     @Override
     public boolean isDaytime() {
@@ -109,14 +123,9 @@ public class PainProvider extends WorldProvider {
 
     @Override
     public String getDimensionName() {
-        return "PainDimension";
+        return "PainMod_Dimension";
     }
 
-    @Override
-    public boolean isSurfaceWorld()
-    {
-        return true;
-    }
 
     @SideOnly(Side.CLIENT)
     public boolean getWorldHasVoidParticles()
@@ -141,7 +150,15 @@ public class PainProvider extends WorldProvider {
     @Override
     public int getRespawnDimension(EntityPlayerMP player)
     {
-        return 1;
+        return PainConfig.painDimensionID;
     }
 
+
+    @Override
+    public boolean canDoLightning(Chunk chunk) {
+        if (new Random().nextBoolean()) {
+            return super.canDoLightning(chunk);
+        }
+        return false;
+    }
 }

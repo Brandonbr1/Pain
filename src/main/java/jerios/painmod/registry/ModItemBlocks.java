@@ -25,8 +25,11 @@ public class ModItemBlocks {
 
     public static Block corruptedBlock;
 
+    public static Block painGrass;
 
     public static Block painDirt;
+
+    public static Block painLogs;
 
     public static void register() {
         spawnEgg = new ItemPainSpawnEgg().setCreativeTab(TabsRegistry.SPAWN_EGG_TAB);
@@ -51,9 +54,11 @@ public class ModItemBlocks {
         corruptedBlock = new BlockCorruptedDarknessBlock();
         registerBlock(corruptedBlock, "CorruptedDarknessBlock");
 
-        painDirt = new PainGrass("painDirt");
-        registerBlock(painDirt, "Pain Dirt");
+        painGrass = new PainGrass("painGrass");
+        registerBlock(painGrass, "PainGrass");
 
+        painDirt = new PainBlock(Material.ground, "painDirt");
+        registerBlock(painDirt, "PainDirt");
 
     }
 

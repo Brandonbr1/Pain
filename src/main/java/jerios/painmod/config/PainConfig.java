@@ -24,6 +24,9 @@ public class PainConfig {
 
      public static int painBiomeID;
 
+
+     public static boolean spawnInPainDim;
+
     public static void syncConfig(Configuration con) {
             glutID = potionConfig(con, "Gluttony ", 24);
             malnourishment = potionConfig(con, "malnourishment ", 25);
@@ -40,6 +43,7 @@ public class PainConfig {
 
             painBiomeID = con.getInt("Pain Plains Biome ID", BIOME_ID, 80, 0, Integer.MAX_VALUE, "The Biome ID of the pain plains");
 
+            spawnInPainDim = con.getBoolean("Spawn in Pain Dim?", "Difficulty", true, "Should the player spawn in the dimension and have to escape it?");
 
         if (con.hasChanged()) {
             con.save();
