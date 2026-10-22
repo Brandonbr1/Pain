@@ -35,10 +35,12 @@ public class ItemHarmfulEssence extends Item {
             final Potion[] badPotions = PainMod.badPotionEffectsA;
             final String[] names = PainConfig.blacklistedPotionsHarmfulEssence;
 
-            if (entityIn instanceof EntityPlayer) {
+            if (entityIn instanceof EntityPlayer)
+            {
                 EntityPlayer player = (EntityPlayer) entityIn;
 
-                if (player.ticksExisted % 5 == 0) {
+                if (player.ticksExisted % 5 == 0)
+                {
                     Potion potion = badPotions[PainConstants.rand.nextInt(badPotions.length)];
 
                     if (potion != null)

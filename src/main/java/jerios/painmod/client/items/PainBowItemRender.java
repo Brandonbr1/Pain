@@ -26,7 +26,7 @@ public class PainBowItemRender implements IItemRenderer {
 
         if (itemstack.getItem() == ModItemBlocks.cursedBow && type == ItemRenderType.EQUIPPED)
         {
-           GL11.glPopMatrix();
+            PGL.popMatrix();
 
 
             final EntityLivingBase entity = (EntityLivingBase) data[1];
@@ -38,14 +38,23 @@ public class PainBowItemRender implements IItemRenderer {
             //0.625 + 0.437 = 1.062f scale
             //0.625 + 0.5 = 1.125f scale
             // try 0.1875F next?
-            GL11.glTranslatef(-0.125F, /**-0.437f**/, 0.3125F);
-            GL11.glScalef(1.062f, 1.062f, 1.062f);
+            // 0.1250
+
+        /**    PGL.translate(0.0f, -0.3125F, 0.3125F);
+            PGL.rotate(10.0F, 0.0F, 1.0F, 0.0F);
+            PGL.scale(1,1,1);
+         **/
+
+            f2 = 0.625F;
+            GL11.glTranslatef(0.0F, 0.125F, 0.3125F);
             GL11.glRotatef(20.0F, 0.0F, 1.0F, 0.0F);
+
 
             RenderManager.instance.itemRenderer.renderItem(entity, itemstack, 0, ItemRenderType.ENTITY);
 
+         // x - 0.1875 = 0.125
 
-          /**  f2 = 0.625F;
+          /** bow  f2 = 0.625F;
             GL11.glTranslatef(0.0F, 0.125F, 0.3125F);
             GL11.glRotatef(-20.0F, 0.0F, 1.0F, 0.0F);
             GL11.glScalef(f2, -f2, f2);
@@ -54,6 +63,7 @@ public class PainBowItemRender implements IItemRenderer {
             **/
 
             /**
+             * 3d
             f2 = 0.625F;
             GL11.glTranslatef(0.0F, 0.1875F, 0.0F);
             GL11.glScalef(f2, -f2, f2);

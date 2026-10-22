@@ -28,11 +28,11 @@ public class PGL {
         GL11.glPushMatrix();
     }
 
-    public static void translateF(float x, float y, float z) {
+    public static void translate(float x, float y, float z) {
         GL11.glTranslatef(x,y,z);
     }
 
-    public static void translateD(double x, double y, double z) {
+    public static void translate(double x, double y, double z) {
         GL11.glTranslated(x,y,z);
     }
 
@@ -44,19 +44,19 @@ public class PGL {
         GL11.glMatrixMode(matrixMode);
     }
 
-    public static void setRGBAlphaF(float red, float blue, float green, float alpha) {
+    public static void setRGBAlpha(float red, float blue, float green, float alpha) {
         GL11.glColor4f(red, blue, green, alpha);
     }
 
-    public static void setRGBAlphaD(double red, double blue, double green, double alpha) {
+    public static void setRGBAlpha(double red, double blue, double green, double alpha) {
         GL11.glColor4d(red, blue, green, alpha);
     }
 
-    public static void scaleF(float x, float y, float z) {
+    public static void scale(float x, float y, float z) {
         GL11.glScalef(x,y,z);
     }
 
-    public static void scaleD(double x, double y, double z) {
+    public static void scale(double x, double y, double z) {
         GL11.glScaled(x,y,z);
     }
 
@@ -74,6 +74,13 @@ public class PGL {
     }
 
 
+    public static void rotate(float angle, float x, float y, float z) {
+        GL11.glRotatef(angle, x,y,z);
+    }
+
+    public static void rotate(double angle, double x, double y, double z) {
+        GL11.glRotated(angle, x,y,z);
+    }
 
 
 }

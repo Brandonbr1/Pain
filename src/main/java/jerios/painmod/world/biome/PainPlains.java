@@ -13,7 +13,7 @@ public class PainPlains extends BiomeGenBase {
     boolean sunflower = false;
 
     public PainPlains(int id) {
-        super(id);
+        super(id, true);
         this.topBlock = ModItemBlocks.painGrass;
         this.fillerBlock = ModItemBlocks.painDirt;
         this.setColor(9286496);
