@@ -1,2 +1,3 @@
-Anything under the jerios.painmod are available under the license in "LICENSE-CODE" unless otherwise explicitly stated.
-Any assets, including structures, are available under the license in "LICENSE-ASSETS" unless otherwise explicitly stated.
+Any code under the jerios.painmod package, unless otherwise explicitly stated, is available under the Mozilla Public License Version 2.0 license which can be seen in "LICENSE-CODE" or https://choosealicense.com/licenses/mpl-2.0/.
+
+Any assets, including structures, unless otherwise explicitly stated, is available under the Attribution-NonCommercial-ShareAlike 4.0 International which can be seen in "LICENSE-ASSETS" or https://creativecommons.org/licenses/by-nc-sa/4.0/.
