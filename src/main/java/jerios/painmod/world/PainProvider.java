@@ -39,7 +39,7 @@ public class PainProvider extends WorldProvider {
         );
     }
 
-
+    @Override
     public boolean shouldMapSpin(String entity, double x, double y, double z)
     {
         return true;
@@ -70,7 +70,7 @@ public class PainProvider extends WorldProvider {
     @Override
     public String getDepartMessage()
     {
-        return "YOU HAVE FINALLY ESCAPED THE PAIN DIMENSION";
+        return "I AM FINALLY FREE.";
     }
 
     @Override
@@ -153,12 +153,4 @@ public class PainProvider extends WorldProvider {
         return PainConfig.painDimensionID;
     }
 
-
-    @Override
-    public boolean canDoLightning(Chunk chunk) {
-        if (new Random().nextBoolean()) {
-            return super.canDoLightning(chunk);
-        }
-        return false;
-    }
 }

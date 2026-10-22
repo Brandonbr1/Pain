@@ -45,7 +45,7 @@ public class ItemHarmfulEssence extends Item {
                     {
                         for (int i = 0; i < names.length; i++)
                         {
-                            if (potion != Potion.harm || !Objects.equals(potion.getName(), names[i]))
+                            if (!Objects.equals(potion.getName(), names[i]))
                             {
                                 player.addPotionEffect(new PotionEffect(potion.id, 5, 2));
                             }

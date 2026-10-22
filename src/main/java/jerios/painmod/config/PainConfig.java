@@ -39,7 +39,7 @@ public class PainConfig {
             painDimensionID = con.getInt("Pain Dimension ID", "DIMENSION", freeID, Integer.MIN_VALUE, Integer.MAX_VALUE, "The Pain Dimension ID", "config.PainDimension");
 
 
-            blacklistedPotionsHarmfulEssence = con.getStringList("Blacklisted Potions", "Blacklist", new String[]{}, "Potions name which is blacklisted from applying on Harmful essence. Instant damage is excluded automatically");
+            blacklistedPotionsHarmfulEssence = con.getStringList("Blacklisted Potions", "Blacklist", new String[]{"potion.harm"}, "Potions name which is blacklisted from applying on Harmful essence");
 
             painBiomeID = con.getInt("Pain Plains Biome ID", BIOME_ID, 80, 0, Integer.MAX_VALUE, "The Biome ID of the pain plains");
 

@@ -14,7 +14,8 @@ public class PainPlains extends BiomeGenBase {
 
     public PainPlains(int id) {
         super(id);
-        this.topBlock = ModItemBlocks.painDirt;
+        this.topBlock = ModItemBlocks.painGrass;
+        this.fillerBlock = ModItemBlocks.painDirt;
         this.setColor(9286496);
         this.setBiomeName("Pain Plains");
         this.setTemperatureRainfall(0.8F, 0.4F);
