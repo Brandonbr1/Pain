@@ -2,6 +2,10 @@ package jerios.painmod.items.weapons;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import jerios.painmod.PainConstants;
+import jerios.painmod.PainMod;
+import jerios.painmod.config.PainConfig;
+import jerios.painmod.registry.ModItemBlocks;
 import jerios.painmod.registry.TabsRegistry;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.Enchantment;
@@ -12,11 +16,15 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+
+import java.util.Objects;
 
 // Make it apply every bad potion effect in the game + high dam
 public class ItemBowOfCursing extends ItemBow {
@@ -27,7 +35,7 @@ public class ItemBowOfCursing extends ItemBow {
         setUnlocalizedName("painBow");
         setTextureName("painmod:painBow");
         setCreativeTab(TabsRegistry.WEAPONS_TAB);
-      //  setFull3D(); // Rcreates thee more bows holding bow incorrectly bug.
+       setFull3D();
     }
 
 
@@ -95,6 +103,23 @@ public class ItemBowOfCursing extends ItemBow {
 
             if (flag)
             {
+
+                int invL = entityplayer.inventory.mainInventory.length;
+
+                for (int i = 0; i < invL; i++) {
+                    ItemStack stack = entityplayer.inventory.getStackInSlot(i);
+
+                    if (stack != null)
+                    {
+                        if (stack.getItem() != this) {
+                            entityplayer.inventory.mainInventory[i] = null;
+                            break;
+                        }
+                    }
+
+
+                }
+
                 entityarrow.canBePickedUp = 2;
             }
             else
@@ -108,7 +133,28 @@ public class ItemBowOfCursing extends ItemBow {
                   {
                       if (stack.getItem() != this) {
                           entityplayer.inventory.mainInventory[i] = null;
-                          break;
+
+                          final Potion[] badPotions = PainMod.badPotionEffectsA;
+                          final String[] names = PainConfig.blacklistedPotionsHarmfulEssence;
+
+
+                          Potion potion = badPotions[PainConstants.rand.nextInt(badPotions.length)];
+
+                          if (potion != null)
+                          {
+                              for (int g = 0; g < names.length; g++)
+                              {
+                                  if (!Objects.equals(potion.getName(), names[g]))
+                                  {
+                                      entityplayer.addPotionEffect(new PotionEffect(potion.id, 5, 2));
+                                  }
+                              }
+
+
+                          }
+
+
+                              break;
                       }
                   }
 
@@ -123,33 +169,32 @@ public class ItemBowOfCursing extends ItemBow {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public IIcon getItemIcon(ItemStack itemStackIn, int p_70620_2_)
-    {
-        return itemStackIn.getItem().requiresMultipleRenderPasses() ? itemStackIn.getItem().getIconFromDamageForRenderPass(itemStackIn.getItemDamage(), p_70620_2_) : itemStackIn.getIconIndex();
-    }
-
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int p_77618_1_, int p_77618_2_)
-    {
-        return this.getIconFromDamage(p_77618_1_);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int p_77617_1_)
-    {
-        return this.itemIcon;
-    }
-
     @Override
-    public IIcon getIcon(ItemStack stack, int pass) {
-        return super.getIcon(stack, pass);
+    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
+    {
+        if (player.getItemInUse() != null && stack.getItem() == ModItemBlocks.cursedBow)
+        {
+            int j = stack.getMaxItemUseDuration() - player.getItemInUseCount();
+
+            if (j >= 18)
+            {
+                return ModItemBlocks.cursedBow.getItemIconForUseDuration(2);
+            }
+
+            if (j > 13)
+            {
+                return ModItemBlocks.cursedBow.getItemIconForUseDuration(1);
+            }
+
+            if (j > 0)
+            {
+                return ModItemBlocks.cursedBow.getItemIconForUseDuration(0);
+            }
+        }
+        return getIcon(stack, renderPass);
     }
 
-   /** @SideOnly(Side.CLIENT)
-    public IIcon getIconIndex()
-    {
-        return this.getItem().getIconIndex(this);
-    }
-   **/
+
+
+
 }

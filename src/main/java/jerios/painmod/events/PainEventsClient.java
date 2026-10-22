@@ -27,25 +27,9 @@ public class PainEventsClient {
     // WOW.... Vanilla really hardcoded the bow...
     @SubscribeEvent
     public void onFov(FOVUpdateEvent updateEvent) {
-
-
-        System.out.println("FIRE");
         float f = 1.0F;
 
         EntityPlayerSP playerSP = updateEvent.entity;
-
-        if (playerSP.capabilities.isFlying)
-        {
-            f *= 1.1F;
-        }
-
-        IAttributeInstance iattributeinstance = playerSP.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-        f = (float)((double)f * ((iattributeinstance.getAttributeValue() / (double)playerSP.capabilities.getWalkSpeed() + 1.0D) / 2.0D));
-
-        if (playerSP.capabilities.getWalkSpeed() == 0.0F || Float.isNaN(f) || Float.isInfinite(f))
-        {
-            f = 1.0F;
-        }
 
         if (playerSP.isUsingItem() && playerSP.getItemInUse().getItem() == ModItemBlocks.cursedBow)
         {
@@ -62,6 +46,8 @@ public class PainEventsClient {
             }
 
             f *= 1.0F - f1 * 0.15F;
+
+            updateEvent.newfov = f;
         }
     }
 
