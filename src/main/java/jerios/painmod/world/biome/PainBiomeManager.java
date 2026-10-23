@@ -6,11 +6,17 @@ import net.minecraft.world.biome.BiomeGenBase;
 public class PainBiomeManager extends BiomeGenBase {
 
     public static final BiomeGenBase[] painBiomes = new BiomeGenBase[256];
+    public final int biomeID;
 
 
-
-    public PainBiomeManager(int id) {
+    public PainBiomeManager(BiomeGenBase biomeGenBase, int id, String name) {
         super(id, false);
+        this.biomeID = id;
+        painBiomes[id] = biomeGenBase;
+        if (painBiomes[id] != null)
+        {
+            throw new RuntimeException("Biome Already registered!!! ID: " + id + " Biome Name: " + name );
+        }
     }
 
 

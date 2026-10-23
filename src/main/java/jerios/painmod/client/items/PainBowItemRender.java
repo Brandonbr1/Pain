@@ -1,15 +1,11 @@
 package jerios.painmod.client.items;
 
-import cpw.mods.fml.common.Mod;
 import jerios.painmod.registry.ModItemBlocks;
 import jerios.painmod.utils.PGL;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
@@ -30,30 +26,20 @@ public class PainBowItemRender implements IItemRenderer {
       Item item =  itemstack.getItem();
         if (item == ModItemBlocks.cursedBow && type == ItemRenderType.EQUIPPED)
         {
+            final EntityLivingBase entity = (EntityLivingBase) data[1];
             PGL.popMatrix();
 
 
-            final EntityLivingBase entity = (EntityLivingBase) data[1];
-            float f2 = 0.625F;
-            //0.1875F + 0.3125F = 0.5f
-            //0.125 -0.1875 = 0.6225
-            //0.3125F + 0.1875F = -.5
-         //   0.3125 + 0.125 = 0.4375 // 0.437
-            //0.625 + 0.437 = 1.062f scale
-            //0.625 + 0.5 = 1.125f scale
-            // try 0.1875F next?
-            // 0.1250
-
-           PGL.translate(0.0f, -0.3125F, 0.3125F);
-            PGL.translate(0.0f, -0.125F, 0.0F);
-            PGL.rotate(13.0F, 0.0F, 1.0F, 0.0F);
-            PGL.scale(1,1,1);
+            GL11.glTranslatef(0.0F, -0.0925f, 0.3125F);
+            GL11.glRotatef(20.0F, 0.0F, 1.0F, 0.0F);
 
 
             RenderManager.instance.itemRenderer.renderItem(entity, itemstack, 0, ItemRenderType.ENTITY);
 
 
+
             PGL.pushMatrix();
+
         }
     }
 }
