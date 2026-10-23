@@ -13,7 +13,10 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.biome.BiomeGenBase;
 
+import java.util.Map;
+
 public class ModMobs {
+
 
     public static void register() {
         registerEntityWithEgg(PainZombie.class, "painZombie", 128, 1,true, 5,5);

@@ -5,9 +5,11 @@ import jerios.painmod.block.BlockCorruptedDarknessBlock;
 import jerios.painmod.block.BlockPainPortal;
 import jerios.painmod.block.PainBlock;
 import jerios.painmod.block.PainGrass;
+import jerios.painmod.block.spawner.BlockPainSpawner;
 import jerios.painmod.items.ItemPainPotion;
 import jerios.painmod.items.ItemPainSpawnEgg;
 import jerios.painmod.items.essence.ItemHarmfulEssence;
+import jerios.painmod.items.spawner.ItemMonsterSpawner;
 import jerios.painmod.items.weapons.ItemBowOfCursing;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -31,6 +33,8 @@ public class ModItemBlocks {
     public static Block painDirt;
 
     public static Block painLogs;
+
+    public static Block spawner;
 
     public static void register() {
         spawnEgg = new ItemPainSpawnEgg().setCreativeTab(TabsRegistry.SPAWN_EGG_TAB);
@@ -60,6 +64,10 @@ public class ModItemBlocks {
 
         painDirt = new PainBlock(Material.ground, "painDirt");
         registerBlock(painDirt, "PainDirt");
+
+        spawner = new BlockPainSpawner();
+
+        GameRegistry.registerBlock(spawner, ItemMonsterSpawner.class, "PainMonsterSpawner");
 
     }
 

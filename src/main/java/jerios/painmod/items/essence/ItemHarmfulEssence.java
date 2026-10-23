@@ -39,7 +39,7 @@ public class ItemHarmfulEssence extends Item {
             {
                 EntityPlayer player = (EntityPlayer) entityIn;
 
-                if (player.ticksExisted % 5 == 0)
+                if (player.ticksExisted % 40 == 0)
                 {
                     Potion potion = badPotions[PainConstants.rand.nextInt(badPotions.length)];
 
@@ -49,7 +49,7 @@ public class ItemHarmfulEssence extends Item {
                         {
                             if (!Objects.equals(potion.getName(), names[i]))
                             {
-                                player.addPotionEffect(new PotionEffect(potion.id, 5, 2));
+                                player.addPotionEffect(new PotionEffect(potion.id, 40, 2));
                             }
                         }
 

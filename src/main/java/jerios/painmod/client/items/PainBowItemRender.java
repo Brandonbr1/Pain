@@ -23,19 +23,18 @@ public class PainBowItemRender implements IItemRenderer {
     @Override
     public void renderItem(ItemRenderType type, ItemStack itemstack, Object... data)
     {
-      Item item =  itemstack.getItem();
+        Item item =  itemstack.getItem();
         if (item == ModItemBlocks.cursedBow && type == ItemRenderType.EQUIPPED)
         {
             final EntityLivingBase entity = (EntityLivingBase) data[1];
             PGL.popMatrix();
 
 
-            GL11.glTranslatef(0.0F, -0.0925f, 0.3125F);
-            GL11.glRotatef(20.0F, 0.0F, 1.0F, 0.0F);
+            PGL.translate(0.0F, -0.625F, 0.2125F);
+            PGL.rotate(-20.0F, 0.0F, 1.0F, 0.0F);
 
 
             RenderManager.instance.itemRenderer.renderItem(entity, itemstack, 0, ItemRenderType.ENTITY);
-
 
 
             PGL.pushMatrix();
