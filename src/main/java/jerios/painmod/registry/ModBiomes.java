@@ -8,7 +8,7 @@ public class ModBiomes {
 
     public static BiomeGenBase painPlains;
 
-    public static void registerBiomes() {
+    public static void register() {
         painPlains = new PainPlains(PainConfig.painBiomeID);
     }
 

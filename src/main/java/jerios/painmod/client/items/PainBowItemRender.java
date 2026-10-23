@@ -48,8 +48,11 @@ public class PainBowItemRender implements IItemRenderer {
              */
 
             // 0.1953125F
-            GL11.glTranslatef(0.1953F, -0.3125F, 0.3125F);
-            GL11.glRotatef(-5.0F, 0.0F, 1.0F, 0.0F);
+            GL11.glTranslatef(-0.1953F, 0.0f, 0.625F);
+            GL11.glTranslatef(0.0f, 0.625f, 0.0f);
+           // GL11.glRotatef(20, 0.0F, 1.0F, 0.0F);
+          //  GL11.glTranslatef(-0.1953F, -0.3125F, 0.625f);
+            //GL11.glRotatef(20.0F, 0.0F, 1.0F, 0.0F);
 
             RenderManager.instance.itemRenderer.renderItem(entity, itemstack, 0, ItemRenderType.ENTITY);
 

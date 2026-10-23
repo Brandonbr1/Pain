@@ -3,6 +3,8 @@ package jerios.painmod.registry;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import jerios.painmod.PainMod;
+import jerios.painmod.command.CommandPainWeather;
+import jerios.painmod.config.PainConfig;
 import jerios.painmod.integerationHandler.baubbles.registry.BaubblesIntegration;
 import jerios.painmod.items.ItemPainSpawnEgg;
 import jerios.painmod.world.teleport.PainTeleporter;
@@ -31,7 +33,8 @@ public class RegistryHandler {
         ModGenerator.register();
         ModPotions.register();
         ModAchievements.register();
-        ModBiomes.registerBiomes();
+        ModBiomes.register();
+        ModFluidRegistry.register();
     }
 
     public static void registerInit() {
@@ -58,9 +61,11 @@ public class RegistryHandler {
 
     public static void onServerStart(FMLServerStartingEvent event) {
 
-        GameRulesRegistry.register(event.getServer().getEntityWorld().getGameRules());
+        GameRulesRegistry.register(event.getServer().worldServers[PainConfig.painDimensionID].getGameRules());
 
         WorldServer[] server = event.getServer().worldServers;
+
+        event.registerServerCommand(new CommandPainWeather());
 
 
         for (int i = 0; i < server.length; i++) {
