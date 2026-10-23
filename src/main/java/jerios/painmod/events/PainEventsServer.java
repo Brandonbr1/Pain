@@ -59,14 +59,27 @@ public class PainEventsServer {
             }
         }
     }
+
+
     
     @SubscribeEvent
-    public void actuallySayText(PlayerEvent.PlayerChangedDimensionEvent event) {
+    public void playerChangedDim(PlayerEvent.PlayerChangedDimensionEvent event) {
         EntityPlayer player = event.player;
+        final int dim = PainConfig.painDimensionID;
         if (event.fromDim != PainConfig.painDimensionID && event.toDim == PainConfig.painDimensionID) {
             player.addChatMessage(new ChatComponentTranslation("painmod.enterDim"));
         } else if (event.fromDim == PainConfig.painDimensionID && event.toDim != PainConfig.painDimensionID) {
-            player.addChatMessage(new ChatComponentTranslation("painmod.ahhFinallyFree"));
+           PainProps props = PainProps.get(player);
+           if (props != null && props.escapedDim) {
+               player.addChatMessage(new ChatComponentTranslation("painmod.ahhFinallyFree"));
+           } else {
+               if (player instanceof EntityPlayerMP) {
+                   EntityPlayerMP playerMP = (EntityPlayerMP) player;
+                   WorldServer ws = playerMP.mcServer.worldServerForDimension(dim);
+                   TeleporterHandler.travelToDimension(playerMP, PainConfig.painDimensionID, new PainTeleporter(ws));
+                   player.addChatMessage(new ChatComponentTranslation("painmod.failedEscape"));
+               }
+           }
         }
     }
 

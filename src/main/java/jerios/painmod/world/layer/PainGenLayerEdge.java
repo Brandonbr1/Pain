@@ -135,14 +135,11 @@ public class PainGenLayerEdge extends PainGenLayer
         COOL_WARM,
         HEAT_ICE,
         SPECIAL;
-
-        private static final String __OBFID = "CL_00000549";
     }
 
     static final class SwitchMode
         {
             static final int[] field_151642_a = new int[Mode.values().length];
-            private static final String __OBFID = "CL_00000548";
 
             static
             {

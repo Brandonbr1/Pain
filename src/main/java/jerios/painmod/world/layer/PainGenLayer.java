@@ -25,7 +25,6 @@ public abstract class PainGenLayer extends GenLayer
     private long chunkSeed;
     /** base seed to the LCG prng provided via the constructor */
     protected long baseSeed;
-    private static final String __OBFID = "CL_00000559";
 
     /**
      * the first array item is a linked list of the bioms, the second is the zoom function, the third is the same as the
@@ -197,7 +196,7 @@ public abstract class PainGenLayer extends GenLayer
                 crashreportcategory.addCrashSection("Biome B ID", Integer.valueOf(biomeIDB));
                 crashreportcategory.addCrashSectionCallable("Biome A", new Callable()
                 {
-                    private static final String __OBFID = "CL_00000560";
+
                     public String call()
                     {
                         return String.valueOf(BiomeGenBase.getBiome(biomeIDA));
@@ -205,7 +204,7 @@ public abstract class PainGenLayer extends GenLayer
                 });
                 crashreportcategory.addCrashSectionCallable("Biome B", new Callable()
                 {
-                    private static final String __OBFID = "CL_00000561";
+
                     public String call()
                     {
                         return String.valueOf(BiomeGenBase.getBiome(biomeIDB));

@@ -29,13 +29,29 @@ public class PainBowItemRender implements IItemRenderer {
             final EntityLivingBase entity = (EntityLivingBase) data[1];
             PGL.popMatrix();
 
+            /** BOW STACK
+             *                 f2 = 0.625F;
+             *                 GL11.glTranslatef(0.0F, 0.125F, 0.3125F);
+             *                 GL11.glRotatef(-20.0F, 0.0F, 1.0F, 0.0F);
+             *                 GL11.glScalef(f2, -f2, f2);
+             *                 GL11.glRotatef(-100.0F, 1.0F, 0.0F, 0.0F);
+             *                 GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+             */
 
-            PGL.translate(0.0F, -0.625F, 0.2125F);
-            PGL.rotate(-20.0F, 0.0F, 1.0F, 0.0F);
+            /**
+             *  f2 = 0.625F;
+             *  THE 3D STACK
+             GL11.glTranslatef(0.0F, 0.1875F, 0.0F);
+             GL11.glScalef(f2, -f2, f2);
+             GL11.glRotatef(-100.0F, 1.0F, 0.0F, 0.0F);
+             GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+             */
 
+            // 0.1953125F
+            GL11.glTranslatef(0.1953F, -0.3125F, 0.3125F);
+            GL11.glRotatef(-5.0F, 0.0F, 1.0F, 0.0F);
 
             RenderManager.instance.itemRenderer.renderItem(entity, itemstack, 0, ItemRenderType.ENTITY);
-
 
             PGL.pushMatrix();
 

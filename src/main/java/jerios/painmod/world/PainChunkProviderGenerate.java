@@ -296,7 +296,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                         float f3 = biomegenbase1.rootHeight;
                         float f4 = biomegenbase1.heightVariation;
 
-                        if (this.worldType == WorldType.AMPLIFIED && f3 > 0.0F)
+                        if (rand.nextInt(52) == 0 && f3 > 0.0F)
                         {
                             f3 = 1.0F + f3 * 2.0F;
                             f4 = 1.0F + f4 * 4.0F;
@@ -306,7 +306,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
                         if (biomegenbase1.rootHeight > biomegenbase.rootHeight)
                         {
-                            f5 /= 2.0F;
+                           f5 /= 2.0F;
                         }
 
                         f += f4 * f5;
@@ -369,7 +369,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                     double d7 = this.noiseStackOctaves[l] / 512.0D;
                     double d8 = this.noiseStackOctaves1[l] / 512.0D;
                     double d9 = (this.noiseStackOctaves2[l] / 10.0D + 1.0D) / 2.0D;
-                    double d10 = MathHelper.denormalizeClamp(d7, d8, d9) - d6;
+                    double d10 = MathHelper.denormalizeClamp(d7, d8, d9) - d6; /// THIS IF FUCKING INSANE IF YOU SET D6 TO 0
 
                     if (j2 > 29)
                     {
@@ -421,7 +421,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         int l1;
         int i2;
 
-        if (biomegenbase != BiomeGenBase.desert && biomegenbase != BiomeGenBase.desertHills && !flag && this.rand.nextInt(4) == 0
+        if (!flag && this.rand.nextInt(4) == 0
                 && TerrainGen.populate(chunkProvider, worldObj, rand, x, z, flag, LAKE))
         {
             k1 = k + this.rand.nextInt(16) + 8;
