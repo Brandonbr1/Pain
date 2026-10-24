@@ -32,9 +32,14 @@ public abstract class PainGenLayer extends GenLayer
      */
     public static PainGenLayer[] initializeAllBiomeGenerators(long p_75901_0_, WorldType p_75901_2_)
     {
-        boolean flag = false;
+        //Perhaps only using fuzzy zoom woild look good?
+
+
+
+
+
         PainGenLayerIsland genlayerisland = new PainGenLayerIsland(1L);
-        PainGenLayerFuzzyZoom genlayerfuzzyzoom = new PainGenLayerFuzzyZoom(2000L, genlayerisland);
+        PainGenLayerZoom genlayerfuzzyzoom = new PainGenLayerZoom(2000L, genlayerisland);
         PainGenLayerAddIsland genlayeraddisland = new PainGenLayerAddIsland(1L, genlayerfuzzyzoom);
         PainGenLayerZoom genlayerzoom = new PainGenLayerZoom(2001L, genlayeraddisland);
         genlayeraddisland = new PainGenLayerAddIsland(2L, genlayerzoom);
@@ -52,23 +57,13 @@ public abstract class PainGenLayer extends GenLayer
         PainGenLayerAddMushroomIsland genlayeraddmushroomisland = new PainGenLayerAddMushroomIsland(5L, genlayeraddisland);
         PainGenLayerDeepOcean genlayerdeepocean = new PainGenLayerDeepOcean(4L, genlayeraddmushroomisland);
         PainGenLayer genlayer2 = PainGenLayerZoom.magnify(1000L, genlayerdeepocean, 0);
-        byte b0 = 4;
+        byte b0 = 6;
 
-        if (p_75901_2_ == WorldType.LARGE_BIOMES)
-        {
-            b0 = 6;
-        }
-
-        if (flag)
-        {
-            b0 = 4;
-        }
-        b0 = getModdedBiomeSize(p_75901_2_, b0);
 
         PainGenLayer genlayer = PainGenLayerZoom.magnify(1000L, genlayer2, 0);
         PainGenLayerRiverInit genlayerriverinit = new PainGenLayerRiverInit(100L, genlayer);
+
         Object object = getBiomeLayer(p_75901_0_, genlayer2, p_75901_2_);
-        // Object objecttest = p_75901_2_.getBiomeLayer(p_75901_0_, genlayer2);
 
         PainGenLayer genlayer1 = PainGenLayerZoom.magnify(1000L, genlayerriverinit, 2);
         PainGenLayerHills genlayerhills = new PainGenLayerHills(1000L, (PainGenLayer)object, genlayer1);
@@ -251,32 +246,10 @@ public abstract class PainGenLayer extends GenLayer
         PainGenLayer ret = new PainGenLayerBiome(200L, parentLayer, type);
         ret = PainGenLayerZoom.magnify(1000L, ret, 2);
         ret = new PainGenLayerBiomeEdge(1000L, ret);
+
         return ret;
     }
 
 
-    // =========== Jerios ===================================
 
-    /* ======================================== FORGE START =====================================*/
-    protected long nextLong(long par1)
-    {
-        long j = (this.chunkSeed >> 24) % par1;
-
-        if (j < 0)
-        {
-            j += par1;
-        }
-
-        this.chunkSeed *= this.chunkSeed * 6364136223846793005L + 1442695040888963407L;
-        this.chunkSeed += this.worldGenSeed;
-        return j;
-    }
-
-    public static byte getModdedBiomeSize(WorldType worldType, byte original)
-    {
-        WorldTypeEvent.BiomeSize event = new WorldTypeEvent.BiomeSize(worldType, original);
-        MinecraftForge.TERRAIN_GEN_BUS.post(event);
-        return event.newSize;
-    }
-    /* ========================================= FORGE END ======================================*/
 }

@@ -10,6 +10,7 @@ import jerios.painmod.items.ItemPainPotion;
 import jerios.painmod.items.ItemPainSpawnEgg;
 import jerios.painmod.items.essence.ItemHarmfulEssence;
 import jerios.painmod.items.spawner.ItemMonsterSpawner;
+import jerios.painmod.items.weapons.ItemBoneSword;
 import jerios.painmod.items.weapons.ItemBowOfCursing;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -36,6 +37,8 @@ public class ModItemBlocks {
 
     public static Block spawner;
 
+    public static Item boneSword;
+
     public static void register() {
         spawnEgg = new ItemPainSpawnEgg().setCreativeTab(TabsRegistry.SPAWN_EGG_TAB);
         registerItem(spawnEgg, "spawn_egg");
@@ -45,29 +48,32 @@ public class ModItemBlocks {
 
 
         cursedBow = new ItemBowOfCursing();
-        registerItem(cursedBow, "CursedBow");
+        registerItem(cursedBow, "cursed_bow");
 
 
 
         harmfulEssence = new ItemHarmfulEssence();
-        registerItem(harmfulEssence, "HarmfulEssence");
+        registerItem(harmfulEssence, "harmful_essence");
 
 
         painPortal = new BlockPainPortal();
-        registerBlock(painPortal, "PainPortal");
+        registerBlock(painPortal, "pain_portal");
 
         corruptedBlock = new BlockCorruptedDarknessBlock();
-        registerBlock(corruptedBlock, "CorruptedDarknessBlock");
+        registerBlock(corruptedBlock, "corrupted_darkness_block");
 
         painGrass = new PainGrass("painGrass");
-        registerBlock(painGrass, "PainGrass");
+        registerBlock(painGrass, "paint_grass");
 
         painDirt = new PainBlock(Material.ground, "painDirt");
-        registerBlock(painDirt, "PainDirt");
+        registerBlock(painDirt, "pain_dirt");
 
         spawner = new BlockPainSpawner();
 
-        GameRegistry.registerBlock(spawner, ItemMonsterSpawner.class, "PainMonsterSpawner");
+        GameRegistry.registerBlock(spawner, ItemMonsterSpawner.class, "pain_monster_spawner");
+
+        boneSword = new ItemBoneSword();
+        registerItem(boneSword, "bone_sword");
 
     }
 

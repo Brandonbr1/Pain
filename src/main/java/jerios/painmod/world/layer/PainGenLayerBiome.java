@@ -21,20 +21,20 @@ public class PainGenLayerBiome extends PainGenLayer
     public PainGenLayerBiome(long p_i2122_1_, PainGenLayer p_i2122_3_, WorldType p_i2122_4_)
     {
         super(p_i2122_1_);
-        
+
         this.parent = p_i2122_3_;
-        
+
         for (BiomeManager.BiomeType type : BiomeManager.BiomeType.values())
         {
             com.google.common.collect.ImmutableList<BiomeEntry> biomesToAdd = BiomeManager.getBiomes(type);
             int idx = type.ordinal();
-            
+
             if (biomes[idx] == null) biomes[idx] = new ArrayList<BiomeEntry>();
             if (biomesToAdd != null) biomes[idx].addAll(biomesToAdd);
         }
-        
+
         int desertIdx = BiomeManager.BiomeType.DESERT.ordinal();
-        
+
         if (p_i2122_4_ == WorldType.DEFAULT_1_1)
         {
             biomes[desertIdx].add(new BiomeEntry(BiomeGenBase.desert, 10));
@@ -131,7 +131,7 @@ public class PainGenLayerBiome extends PainGenLayer
 
         return aint1;
     }
-    
+
     protected BiomeEntry getWeightedBiomeEntry(BiomeManager.BiomeType type)
     {
         List<BiomeEntry> biomeList = biomes[type.ordinal()];

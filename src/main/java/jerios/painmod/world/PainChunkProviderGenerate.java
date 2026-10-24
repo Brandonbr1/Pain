@@ -94,12 +94,11 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         }
     }
 
-	/** generateBaseTerrain**/
-    public void func_147424_a(int p_147424_1_, int p_147424_2_, Block[] p_147424_3_)
+    public void generateTerrain(int p_147424_1_, int p_147424_2_, Block[] p_147424_3_)
     {
         byte b0 = 63;
         this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, p_147424_1_ * 4 - 2, p_147424_2_ * 4 - 2, 10, 10);
-        this.func_147423_a(p_147424_1_ * 4, 0, p_147424_2_ * 4);
+        this.generateInitalNoiseXZStack(p_147424_1_ * 4, 0, p_147424_2_ * 4);
 
         for (int k = 0; k < 4; ++k)
         {
@@ -180,18 +179,18 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
         double d0 = 0.03125D;
 
-      // this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
+        // this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
 
-       /** this.stoneNoise = this.noiseGen4.func_151599_a(
-                this.stoneNoise,
-                chunkX * 16,
-                chunkZ * 16,
-                0,
-                16,
-                16,
-                1,
-                d0 * 2.0D);
-        **/
+        /** this.stoneNoise = this.noiseGen4.func_151599_a(
+         this.stoneNoise,
+         chunkX * 16,
+         chunkZ * 16,
+         0,
+         16,
+         16,
+         1,
+         d0 * 2.0D);
+         **/
 
 
         this.stoneNoise = this.stoneStack.generateNoiseOctaves(
@@ -235,7 +234,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         this.rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L);
         Block[] ablock = new Block[65536];
         byte[] abyte = new byte[65536];
-        this.func_147424_a(x, z, ablock);
+        this.generateTerrain(x, z, ablock);
         this.biomesForGeneration = this.worldObj.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
         this.replaceBlocksForBiome(x, z, ablock, abyte, this.biomesForGeneration);
         this.caveGenerator.func_151539_a(this, this.worldObj, x, z, ablock);
@@ -261,13 +260,14 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         return chunk;
     }
 
-                /** generateInitalNoiseXZStack**/
-    private void func_147423_a(int x, int y, int z)
+    private void generateInitalNoiseXZStack(int x, int y, int z)
     {
         double d0 = 684.412D;
         double d1 = 684.412D;
         double d2 = 512.0D;
         double d3 = 512.0D;
+
+        //perhaps messing wit this would get what I want.. It does... do a random call
         this.noiseStackOctaves5 = this.noiseGen6.generateNoiseOctaves(this.noiseStackOctaves5, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
         this.noiseStackOctaves2 = this.noiseGen3.generateNoiseOctaves(this.noiseStackOctaves2, x, y, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
         this.noiseStackOctaves = this.noiseGen1.generateNoiseOctaves(this.noiseStackOctaves, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
@@ -296,6 +296,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                         float f3 = biomegenbase1.rootHeight;
                         float f4 = biomegenbase1.heightVariation;
 
+                        // make the world gen occasionally look super wonky
                         if (rand.nextInt(52) == 0 && f3 > 0.0F)
                         {
                             f3 = 1.0F + f3 * 2.0F;
@@ -306,7 +307,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
                         if (biomegenbase1.rootHeight > biomegenbase.rootHeight)
                         {
-                           f5 /= 2.0F;
+                            f5 /= 2.0F;
                         }
 
                         f += f4 * f5;
@@ -359,7 +360,9 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
                 for (int j2 = 0; j2 < 33; ++j2)
                 {
-                    double d6 = ((double)j2 - d5) * 12.0D * 128.0D / 256.0D / d14;
+                    // allow worldgen features to look more crazy
+                                                    //4.0D also works well
+                    double d6 = ((double)j2 - d5) * 6.0D * 128.0D / 256.0D / d14;
 
                     if (d6 < 0.0D)
                     {
@@ -369,13 +372,16 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                     double d7 = this.noiseStackOctaves[l] / 512.0D;
                     double d8 = this.noiseStackOctaves1[l] / 512.0D;
                     double d9 = (this.noiseStackOctaves2[l] / 10.0D + 1.0D) / 2.0D;
-                    double d10 = MathHelper.denormalizeClamp(d7, d8, d9) - d6; /// THIS IF FUCKING INSANE IF YOU SET D6 TO 0
+
+                    // reduce clamp randomly?
+                    double d10 = MathHelper.denormalizeClamp(d7, d8, d9) - d6;
 
                     if (j2 > 29)
                     {
                         double d11 = (double)((float)(j2 - 29) / 3.0F);
                         d10 = d10 * (1.0D - d11) + -10.0D * d11;
                     }
+
 
                     this.noiseStackXZ[l] = d10;
                     ++l;
@@ -561,8 +567,8 @@ public class PainChunkProviderGenerate implements IChunkProvider {
             this.scatteredFeatureGenerator.func_151539_a(this, this.worldObj, p_82695_1_, p_82695_2_, (Block[])null);
         }
     }
-    
-    
-    
-    
+
+
+
+
 }

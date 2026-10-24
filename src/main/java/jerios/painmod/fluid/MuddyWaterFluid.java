@@ -2,8 +2,11 @@ package jerios.painmod.fluid;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import jerios.painmod.registry.TabsRegistry;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -11,9 +14,11 @@ import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
 
-public class MuddyWaterFluid extends BlockFluidClassic {
+public class MuddyWaterFluid extends BlockFluidFinite {
     public MuddyWaterFluid(Fluid fluid, Material material) {
         super(fluid, material);
+        setBlockName("muddyFluid");
+        setCreativeTab(TabsRegistry.BLOCKS_TAB);
     }
 
     @SideOnly(Side.CLIENT)
@@ -21,6 +26,12 @@ public class MuddyWaterFluid extends BlockFluidClassic {
     @SideOnly(Side.CLIENT)
     protected IIcon flowingIcon;
 
+
+    @Override
+    public void onEntityCollidedWithBlock(World worldIn, int x, int y, int z, Entity entityIn) {
+        super.onEntityCollidedWithBlock(worldIn, x, y, z, entityIn);
+        entityIn.attackEntityFrom(DamageSource.anvil, 1);
+    }
 
     @Override
     public IIcon getIcon(int side, int meta) {
