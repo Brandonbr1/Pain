@@ -193,6 +193,11 @@ public class PainChunkProviderGenerate implements IChunkProvider {
          **/
 
 
+       // if (rand.nextInt(100) == 0) {
+       //     d0 = 0.09125D;
+      //  }
+
+
         this.stoneNoise = this.stoneStack.generateNoiseOctaves(
                 this.stoneNoise,
                 chunkX * 16,
@@ -272,6 +277,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         this.noiseStackOctaves2 = this.noiseGen3.generateNoiseOctaves(this.noiseStackOctaves2, x, y, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
         this.noiseStackOctaves = this.noiseGen1.generateNoiseOctaves(this.noiseStackOctaves, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
         this.noiseStackOctaves1 = this.noiseGen2.generateNoiseOctaves(this.noiseStackOctaves1, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
+       //DO STUFF WITH IT noiseGen4
         boolean flag1 = false;
         boolean flag = false;
         int l = 0;
@@ -361,8 +367,8 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                 for (int j2 = 0; j2 < 33; ++j2)
                 {
                     // allow worldgen features to look more crazy
-                                                    //4.0D also works well
-                    double d6 = ((double)j2 - d5) * 6.0D * 128.0D / 256.0D / d14;
+                    //4.0D also works well
+                    double d6 = ((double)j2 - d5) * 12.0D * 128.0D / 256.0D / d14;
 
                     if (d6 < 0.0D)
                     {
@@ -535,7 +541,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
      */
     public String makeString()
     {
-        return "RandomLevelSource";
+        return "PainMod_RandomLevelSource";
     }
 
     /**

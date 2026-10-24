@@ -9,11 +9,11 @@ public class PainGenLayerHills extends PainGenLayer
 {
     private static final Logger logger = LogManager.getLogger();
     private PainGenLayer painLayer;
-    public PainGenLayerHills(long p_i45479_1_, PainGenLayer p_i45479_3_, PainGenLayer p_i45479_4_)
+    public PainGenLayerHills(long p_i45479_1_, PainGenLayer parent, PainGenLayer layer)
     {
         super(p_i45479_1_);
-        this.parent = p_i45479_3_;
-        this.painLayer = p_i45479_4_;
+        this.parent = parent;
+        this.painLayer = layer;
     }
 
     /**
