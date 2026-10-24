@@ -3,13 +3,14 @@ package jerios.painmod.world.layer;
 import jerios.painmod.registry.ModBiomes;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
-public class PainGenLayerBiome extends PainGenLayer
+public class PainGenLayerBiome extends GenLayer
 {
 
     private final BiomeGenBase[] allowedBiomes;
-    public PainGenLayerBiome(long p_i2122_1_, PainGenLayer p_i2122_3_, WorldType p_i2122_4_)
+    public PainGenLayerBiome(long p_i2122_1_, GenLayer p_i2122_3_, WorldType p_i2122_4_)
     {
         super(p_i2122_1_);
 

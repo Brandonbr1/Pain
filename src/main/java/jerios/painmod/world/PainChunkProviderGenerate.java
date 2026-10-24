@@ -193,9 +193,9 @@ public class PainChunkProviderGenerate implements IChunkProvider {
          **/
 
 
-       // if (rand.nextInt(100) == 0) {
-       //     d0 = 0.09125D;
-      //  }
+        if (rand.nextInt(80) == 0) {
+            d0 = 0.06125D;
+        }
 
 
         this.stoneNoise = this.stoneStack.generateNoiseOctaves(

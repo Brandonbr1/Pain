@@ -5,10 +5,8 @@ import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.gen.layer.GenLayer;
+import net.minecraft.world.gen.layer.*;
 import net.minecraftforge.common.BiomeManager;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.terraingen.WorldTypeEvent;
 
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -18,7 +16,7 @@ public abstract class PainGenLayer extends GenLayer
     /** seed from World#getWorldSeed that is used in the LCG prng */
     private long worldGenSeed;
     /** parent GenLayer that was provided via the constructor */
-    protected PainGenLayer parent;
+    protected GenLayer parent;
     /**
      * final part of the LCG prng that uses the chunk X, Z coords along with the other two seeds to generate
      * pseudorandom numbers
@@ -29,76 +27,68 @@ public abstract class PainGenLayer extends GenLayer
 
     public Random random = new Random(chunkSeed);
 
+
     /**
      * the first array item is a linked list of the bioms, the second is the zoom function, the third is the same as the
      * first.
      */
-    public static PainGenLayer[] initializeAllBiomeGenerators(long p_75901_0_, WorldType p_75901_2_)
+    public static GenLayer[] initializeAllBiomeGenerators(long seed, WorldType worldType)
     {
-
-
-        //occasionally swap between 1.6.4 and 1.7 layer stack?
-
         PainGenLayerIsland genlayerisland = new PainGenLayerIsland(1L);
-        PainGenLayerZoom genlayerfuzzyzoom = new PainGenLayerZoom(2000L, genlayerisland);
-        PainGenLayerAddIsland genlayeraddisland = new PainGenLayerAddIsland(1L, genlayerfuzzyzoom);
+        PainGenLayerFuzzyZoom genlayerfuzzyzoom = new PainGenLayerFuzzyZoom(2000L, genlayerisland);
+        GenLayerAddIsland genlayeraddisland = new GenLayerAddIsland(1L, genlayerfuzzyzoom);
         PainGenLayerZoom genlayerzoom = new PainGenLayerZoom(2001L, genlayeraddisland);
-        genlayeraddisland = new PainGenLayerAddIsland(2L, genlayerzoom);
-        genlayeraddisland = new PainGenLayerAddIsland(50L, genlayeraddisland);
-        genlayeraddisland = new PainGenLayerAddIsland(70L, genlayeraddisland);
-        PainGenLayerRemoveTooMuchOcean genlayerremovetoomuchocean = new PainGenLayerRemoveTooMuchOcean(2L, genlayeraddisland);
-        PainGenLayerAddSnow genlayeraddsnow = new PainGenLayerAddSnow(2L, genlayerremovetoomuchocean);
-        genlayeraddisland = new PainGenLayerAddIsland(3L, genlayeraddsnow);
+        genlayeraddisland = new GenLayerAddIsland(2L, genlayerzoom);
 
-        PainGenLayerAddIsland genlayeredge = new PainGenLayerAddIsland(2L, genlayeraddisland);
+        GenLayerAddSnow genlayeraddsnow = new GenLayerAddSnow(2L, genlayeraddisland);
 
-        genlayeredge = new PainGenLayerAddIsland(2L, genlayeredge);
-
-        genlayeredge = new PainGenLayerAddIsland(3L, genlayeredge);
-
-        genlayerzoom = new PainGenLayerZoom(2002L, genlayeredge);
-        genlayerzoom = new PainGenLayerZoom(2003L, genlayerzoom);
-        genlayeraddisland = new PainGenLayerAddIsland(4L, genlayerzoom);
-        PainGenLayerAddMushroomIsland genlayeraddmushroomisland = new PainGenLayerAddMushroomIsland(5L, genlayeraddisland);
-        PainGenLayerDeepOcean genlayerdeepocean = new PainGenLayerDeepOcean(4L, genlayeraddmushroomisland);
-        PainGenLayer genlayer2 = PainGenLayerZoom.magnify(1000L, genlayerdeepocean, 0);
-        byte size = 6;
+        genlayerzoom = new PainGenLayerZoom(2002L, genlayeraddsnow);
 
 
-        PainGenLayer genlayer = PainGenLayerZoom.magnify(1000L, genlayer2, 0);
+        genlayeraddisland = new GenLayerAddIsland(3L, genlayerzoom);
+        genlayerzoom = new PainGenLayerZoom(2003L, genlayeraddisland);
+        genlayeraddisland = new GenLayerAddIsland(4L, genlayerzoom);
+        GenLayerRemoveTooMuchOcean removeTooMuchOcean = new GenLayerRemoveTooMuchOcean(2L,genlayeraddisland);
+        GenLayerAddMushroomIsland genlayeraddmushroomisland = new GenLayerAddMushroomIsland(5L, removeTooMuchOcean);
+        byte b0 = 6;
+
+
+        GenLayer genlayer = PainGenLayerZoom.magnify(1000L, genlayeraddmushroomisland, 0);
         PainGenLayerRiverInit genlayerriverinit = new PainGenLayerRiverInit(100L, genlayer);
+        genlayer = PainGenLayerZoom.magnify(1000L, genlayerriverinit, b0 + 2);
+        GenLayerRiver genlayerriver = new GenLayerRiver(1L, genlayer);
+        GenLayerSmooth genlayersmooth = new GenLayerSmooth(1000L, genlayerriver);
+        GenLayer genlayer1 = PainGenLayerZoom.magnify(1000L, genlayeraddmushroomisland, 0);
+        PainGenLayerBiome genlayerbiome = new PainGenLayerBiome(200L, genlayer1, worldType);
+        genlayer1 = PainGenLayerZoom.magnify(1000L, genlayerbiome, 2);
+        Object object = new GenLayerHills(1000L,genlayerbiome, genlayer1);
 
-        Object object = getBiomeLayer(p_75901_0_, genlayer2, p_75901_2_);
-
-        PainGenLayer genlayer1 = PainGenLayerZoom.magnify(1000L, genlayerriverinit, 2);
-        PainGenLayerHills genlayerhills = new PainGenLayerHills(1000L, (PainGenLayer)object, genlayer1);
-        genlayer = PainGenLayerZoom.magnify(1000L, genlayerriverinit, 2);
-        genlayer = PainGenLayerZoom.magnify(1000L, genlayer, size);
-        PainGenLayerRiver genlayerriver = new PainGenLayerRiver(1L, genlayer);
-        PainGenLayerSmooth genlayersmooth = new PainGenLayerSmooth(1000L, genlayerriver);
-        object = new PainGenLayerRareBiome(1001L, genlayerhills);
-
-        for (int j = 0; j < size; ++j)
+        for (int j = 0; j < b0; ++j)
         {
-            object = new PainGenLayerZoom((long)(1000 + j), (PainGenLayer)object);
+            object = new PainGenLayerZoom((long)(1000 + j), (GenLayer)object);
 
             if (j == 0)
             {
-                object = new PainGenLayerAddIsland(3L, (PainGenLayer)object);
+                object = new GenLayerAddIsland(3L, (GenLayer)object);
             }
 
             if (j == 1)
             {
-                object = new PainGenLayerShore(1000L, (PainGenLayer)object);
+                object = new GenLayerShore(1000L, (GenLayer)object);
+            }
+
+            if (j == 1)
+            {
+              //  object = new GenLayerSwampRivers(1000L, (GenLayer)object);
             }
         }
 
-        PainGenLayerSmooth genlayersmooth1 = new PainGenLayerSmooth(1000L, (PainGenLayer)object);
-        PainGenLayerRiverMix genlayerrivermix = new PainGenLayerRiverMix(100L, genlayersmooth1, genlayersmooth);
+        GenLayerSmooth genlayersmooth1 = new GenLayerSmooth(1000L, (GenLayer)object);
+        PainGenLayerMix genlayerrivermix = new PainGenLayerMix(100L, genlayersmooth1, genlayersmooth);
         PainGenLayerVoronoiZoom genlayervoronoizoom = new PainGenLayerVoronoiZoom(10L, genlayerrivermix);
-        genlayerrivermix.initWorldGenSeed(p_75901_0_);
-        genlayervoronoizoom.initWorldGenSeed(p_75901_0_);
-        return new PainGenLayer[] {genlayerrivermix, genlayervoronoizoom, genlayerrivermix};
+        genlayerrivermix.initWorldGenSeed(seed);
+        genlayervoronoizoom.initWorldGenSeed(seed);
+        return new GenLayer[] {genlayerrivermix, genlayervoronoizoom, genlayerrivermix};
     }
 
     public PainGenLayer(long p_i2125_1_)
@@ -114,6 +104,7 @@ public abstract class PainGenLayer extends GenLayer
     }
 
     public void genSeed(long seed) {
+
         this.baseSeed = seed;
         this.baseSeed *= this.baseSeed * 6364136223846793005L + 1442695040888963407L;
         this.baseSeed += seed;
@@ -253,10 +244,10 @@ public abstract class PainGenLayer extends GenLayer
         return p_151617_2_ == p_151617_3_ && p_151617_3_ == p_151617_4_ ? p_151617_2_ : (p_151617_1_ == p_151617_2_ && p_151617_1_ == p_151617_3_ ? p_151617_1_ : (p_151617_1_ == p_151617_2_ && p_151617_1_ == p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_3_ && p_151617_1_ == p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_2_ && p_151617_3_ != p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_3_ && p_151617_2_ != p_151617_4_ ? p_151617_1_ : (p_151617_1_ == p_151617_4_ && p_151617_2_ != p_151617_3_ ? p_151617_1_ : (p_151617_2_ == p_151617_3_ && p_151617_1_ != p_151617_4_ ? p_151617_2_ : (p_151617_2_ == p_151617_4_ && p_151617_1_ != p_151617_3_ ? p_151617_2_ : (p_151617_3_ == p_151617_4_ && p_151617_1_ != p_151617_2_ ? p_151617_3_ : this.selectRandom(new int[] {p_151617_1_, p_151617_2_, p_151617_3_, p_151617_4_}))))))))));
     }
 
-    public static PainGenLayer getBiomeLayer(long worldSeed, PainGenLayer parentLayer, WorldType type)
+    public static GenLayer getBiomeLayer(long worldSeed, GenLayer parentLayer, WorldType type)
     {
-        PainGenLayer ret = new PainGenLayerBiome(200L, parentLayer, type);
-        ret = PainGenLayerZoom.magnify(1000L, ret, 2);
+        GenLayer ret = new PainGenLayerBiome(200L, parentLayer, type);
+        ret = GenLayerZoom.magnify(1000L, ret, 2);
       //  ret = new PainGenLayerBiomeEdge(1000L, ret);
 
         return ret;
