@@ -6,6 +6,8 @@ import net.minecraftforge.common.config.Configuration;
 public class PainConfig {
 
 
+    public static float maxBrightnessInDim = 40;
+
     public static int glutID = 24;
     public static int malnourishment = 25;
     public static int deadlyPoison = 26;
@@ -44,6 +46,8 @@ public class PainConfig {
             painBiomeID = con.getInt("Pain Plains Biome ID", BIOME_ID, 80, 0, Integer.MAX_VALUE, "The Biome ID of the pain plains");
 
             spawnInPainDim = con.getBoolean("Spawn in Pain Dim?", "Difficulty", true, "Should the player spawn in the dimension and have to escape it?");
+
+            maxBrightnessInDim = con.getFloat("Max Brightness in Dim", "Visuals", 40.0F, 0.0F, 100.0F, "Max Brightness allowed when in Pain Dim");
 
         if (con.hasChanged()) {
             con.save();

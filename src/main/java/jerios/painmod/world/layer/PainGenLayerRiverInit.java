@@ -16,6 +16,7 @@ public class PainGenLayerRiverInit extends GenLayer {
      */
     public int[] getInts(int par1, int par2, int par3, int par4)
     {
+        System.out.println("CALLED");
         int[] aint = this.parent.getInts(par1, par2, par3, par4);
         int[] aint1 = IntCache.getIntCache(par3 * par4);
 

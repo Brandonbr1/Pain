@@ -32,36 +32,45 @@ public abstract class PainGenLayer extends GenLayer
      * the first array item is a linked list of the bioms, the second is the zoom function, the third is the same as the
      * first.
      */
-    public static GenLayer[] initializeAllBiomeGenerators(long seed, WorldType worldType)
+    public static GenLayer[] initializeAllBiomeGenerators(long p_75901_0_, WorldType p_75901_2_)
     {
         PainGenLayerIsland genlayerisland = new PainGenLayerIsland(1L);
+
         PainGenLayerFuzzyZoom genlayerfuzzyzoom = new PainGenLayerFuzzyZoom(2000L, genlayerisland);
+
         GenLayerAddIsland genlayeraddisland = new GenLayerAddIsland(1L, genlayerfuzzyzoom);
+
         PainGenLayerZoom genlayerzoom = new PainGenLayerZoom(2001L, genlayeraddisland);
+
         genlayeraddisland = new GenLayerAddIsland(2L, genlayerzoom);
+        genlayeraddisland = new GenLayerAddIsland(50L, genlayeraddisland);
+        genlayeraddisland = new GenLayerAddIsland(70L, genlayeraddisland);
 
-        GenLayerAddSnow genlayeraddsnow = new GenLayerAddSnow(2L, genlayeraddisland);
-
-        genlayerzoom = new PainGenLayerZoom(2002L, genlayeraddsnow);
-
-
-        genlayeraddisland = new GenLayerAddIsland(3L, genlayerzoom);
-        genlayerzoom = new PainGenLayerZoom(2003L, genlayeraddisland);
+        GenLayerRemoveTooMuchOcean genlayerremovetoomuchocean = new GenLayerRemoveTooMuchOcean(2L, genlayeraddisland);
+        GenLayerAddSnow genlayeraddsnow = new GenLayerAddSnow(2L, genlayerremovetoomuchocean);
+        genlayeraddisland = new GenLayerAddIsland(3L, genlayeraddsnow);
+        PainGenLayerZoom genlayeredge = new PainGenLayerZoom(2L, genlayeraddisland);
+        genlayeredge = new PainGenLayerZoom(2L, genlayeredge);
+        genlayeredge = new PainGenLayerZoom(3L, genlayeredge);
+        genlayerzoom = new PainGenLayerZoom(2002L, genlayeredge);
+        genlayerzoom = new PainGenLayerZoom(2003L, genlayerzoom);
         genlayeraddisland = new GenLayerAddIsland(4L, genlayerzoom);
-        GenLayerRemoveTooMuchOcean removeTooMuchOcean = new GenLayerRemoveTooMuchOcean(2L,genlayeraddisland);
-        GenLayerAddMushroomIsland genlayeraddmushroomisland = new GenLayerAddMushroomIsland(5L, removeTooMuchOcean);
+        GenLayerAddMushroomIsland genlayeraddmushroomisland = new GenLayerAddMushroomIsland(5L, genlayeraddisland);
+        GenLayerDeepOcean genlayerdeepocean = new GenLayerDeepOcean(4L, genlayeraddmushroomisland);
+        GenLayer genlayer2 = PainGenLayerZoom.magnify(1000L, genlayerdeepocean, 0);
         byte b0 = 6;
 
-
-        GenLayer genlayer = PainGenLayerZoom.magnify(1000L, genlayeraddmushroomisland, 0);
+        GenLayer genlayer = PainGenLayerZoom.magnify(1000L, genlayer2, 0);
         PainGenLayerRiverInit genlayerriverinit = new PainGenLayerRiverInit(100L, genlayer);
-        genlayer = PainGenLayerZoom.magnify(1000L, genlayerriverinit, b0 + 2);
+        Object object = p_75901_2_.getBiomeLayer(p_75901_0_, genlayer2);
+
+        GenLayer genlayer1 = PainGenLayerZoom.magnify(1000L, genlayerriverinit, 2);
+        GenLayerHills genlayerhills = new GenLayerHills(1000L, (GenLayer)object, genlayer1);
+        genlayer = PainGenLayerZoom.magnify(1000L, genlayerriverinit, 2);
+        genlayer = PainGenLayerZoom.magnify(1000L, genlayer, b0);
         GenLayerRiver genlayerriver = new GenLayerRiver(1L, genlayer);
         GenLayerSmooth genlayersmooth = new GenLayerSmooth(1000L, genlayerriver);
-        GenLayer genlayer1 = PainGenLayerZoom.magnify(1000L, genlayeraddmushroomisland, 0);
-        PainGenLayerBiome genlayerbiome = new PainGenLayerBiome(200L, genlayer1, worldType);
-        genlayer1 = PainGenLayerZoom.magnify(1000L, genlayerbiome, 2);
-        Object object = new GenLayerHills(1000L,genlayerbiome, genlayer1);
+        object = new GenLayerRareBiome(1001L, genlayerhills);
 
         for (int j = 0; j < b0; ++j)
         {
@@ -76,19 +85,17 @@ public abstract class PainGenLayer extends GenLayer
             {
                 object = new GenLayerShore(1000L, (GenLayer)object);
             }
-
-            if (j == 1)
-            {
-              //  object = new GenLayerSwampRivers(1000L, (GenLayer)object);
-            }
         }
+
+
 
         GenLayerSmooth genlayersmooth1 = new GenLayerSmooth(1000L, (GenLayer)object);
         PainGenLayerMix genlayerrivermix = new PainGenLayerMix(100L, genlayersmooth1, genlayersmooth);
         PainGenLayerVoronoiZoom genlayervoronoizoom = new PainGenLayerVoronoiZoom(10L, genlayerrivermix);
-        genlayerrivermix.initWorldGenSeed(seed);
-        genlayervoronoizoom.initWorldGenSeed(seed);
+        genlayerrivermix.initWorldGenSeed(p_75901_0_);
+        genlayervoronoizoom.initWorldGenSeed(p_75901_0_);
         return new GenLayer[] {genlayerrivermix, genlayervoronoizoom, genlayerrivermix};
+
     }
 
     public PainGenLayer(long p_i2125_1_)
@@ -172,8 +179,6 @@ public abstract class PainGenLayer extends GenLayer
      * Returns a list of integer values generated by this layer. These may be interpreted as temperatures, rainfall
      * amounts, or biomeList[] indices based on the particular GenLayer subclass.
      */
-    public abstract int[] getInts(int areaX, int areaY, int areaWidth, int areaHeight);
-
     /**
      * returns true if the biomeIDs are equal, or returns the result of the comparison as per BiomeGenBase.isEqualTo
      */
@@ -247,7 +252,7 @@ public abstract class PainGenLayer extends GenLayer
     public static GenLayer getBiomeLayer(long worldSeed, GenLayer parentLayer, WorldType type)
     {
         GenLayer ret = new PainGenLayerBiome(200L, parentLayer, type);
-        ret = GenLayerZoom.magnify(1000L, ret, 2);
+    //    ret = GenLayerZoom.magnify(1000L, ret, 2);
       //  ret = new PainGenLayerBiomeEdge(1000L, ret);
 
         return ret;

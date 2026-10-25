@@ -18,16 +18,16 @@ public class WorldGenHoles extends WorldGenerator {
                 for (int k = 0; k < 4; k++)
                 {
                     if (random.nextBoolean() && world.blockExists(x + j, py,z + k)) {
-                        world.setBlock(x + j, py,z + k, Blocks.air, 0, 3);
+                        world.setBlock(x + j, py,z + k, Blocks.air, 0, 2);
                     }
                     if (random.nextBoolean() && world.blockExists(x - j, py, z - k)) {
-                        world.setBlock(x - j, py, z - k, Blocks.air, 0, 3);
+                        world.setBlock(x - j, py, z - k, Blocks.air, 0, 2);
                     }
                     if (random.nextBoolean() && world.blockExists(x - j, py, z + k)) {
-                        world.setBlock(x - j, py, z + k, Blocks.air, 0, 3);
+                        world.setBlock(x - j, py, z + k, Blocks.air, 0, 2);
                     }
                     if (random.nextBoolean() && world.blockExists(x + j, py, z - k)) {
-                        world.setBlock(x + j, py, z - k, Blocks.air, 0, 3);
+                        world.setBlock(x + j, py, z - k, Blocks.air, 0, 2);
                     }
                 }
 

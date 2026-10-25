@@ -1,17 +1,14 @@
 package jerios.painmod.events;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import jerios.painmod.config.PainConfig;
 import jerios.painmod.registry.ModItemBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.init.Items;
 import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import org.lwjgl.Sys;
 
 public class PainEventsClient {
 
@@ -21,7 +18,18 @@ public class PainEventsClient {
     public void onTickClient(TickEvent.ClientTickEvent event) {
         //leftClickCounter
         // rightClickTimer set high when we have the potion effect active
+
+        if (mc.theWorld != null && mc.theWorld.provider.dimensionId == PainConfig.painDimensionID)
+        {
+            if (mc.gameSettings != null && mc.gameSettings .gammaSetting > PainConfig.maxBrightnessInDim)
+            {
+                System.out.println("GAMMA       "+mc.gameSettings.gammaSetting);
+                mc.gameSettings.gammaSetting = PainConfig.maxBrightnessInDim;
+            }
+        }
+
     }
+
 
 
     // WOW.... Vanilla really hardcoded the bow...

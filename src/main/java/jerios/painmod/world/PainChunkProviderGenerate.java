@@ -11,7 +11,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.SpawnerAnimals;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -19,9 +18,9 @@ import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.MapGenCaves;
 import net.minecraft.world.gen.MapGenRavine;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
-import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.MapGenStronghold;
@@ -39,19 +38,16 @@ import static net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.Ev
 public class PainChunkProviderGenerate implements IChunkProvider {
 
     private Random rand;
-    private NoiseGeneratorOctaves noiseGen1;
-    private NoiseGeneratorOctaves noiseGen2;
+    private NoiseGeneratorOctaves noiseGen1; // lower noise
+    private NoiseGeneratorOctaves noiseGen2; // upper noise
     private NoiseGeneratorOctaves noiseGen3;
-    private NoiseGeneratorPerlin noiseGen4;
+    public NoiseGeneratorOctaves noiseGen4;
     public NoiseGeneratorOctaves noiseGen5;
-    public NoiseGeneratorOctaves noiseGen6;
-    public NoiseGeneratorOctaves mobSpawnerNoise;
 
-    public NoiseGeneratorOctaves stoneStack;
+
 
     private World worldObj;
     private final boolean mapFeaturesEnabled;
-    private WorldType worldType;
     private final double[] noiseStackXZ;
     private final float[] parabolicField;
     private double[] stoneNoise = new double[256];
@@ -71,16 +67,17 @@ public class PainChunkProviderGenerate implements IChunkProvider {
     {
         this.worldObj = p_i2006_1_;
         this.mapFeaturesEnabled = p_i2006_4_;
-        this.worldType = p_i2006_1_.getWorldInfo().getTerrainType();
         this.rand = new Random(p_i2006_2_);
+
+
         this.noiseGen1 = new NoiseGeneratorOctaves(this.rand, 16);
         this.noiseGen2 = new NoiseGeneratorOctaves(this.rand, 16);
         this.noiseGen3 = new NoiseGeneratorOctaves(this.rand, 8);
-        this.noiseGen4 = new NoiseGeneratorPerlin(this.rand, 4);
-        this.noiseGen5 = new NoiseGeneratorOctaves(this.rand, 10);
-        this.noiseGen6 = new NoiseGeneratorOctaves(this.rand, 16);
-        this.mobSpawnerNoise = new NoiseGeneratorOctaves(this.rand, 8);
-        this.stoneStack = new NoiseGeneratorOctaves(rand, 4);
+        this.noiseGen4 = new NoiseGeneratorOctaves(rand, 4);
+        this.noiseGen5 = new NoiseGeneratorOctaves(this.rand, 10); // 4 was the number vortex.1 also works well
+
+
+
         this.noiseStackXZ = new double[825];
         this.parabolicField = new float[25];
 
@@ -98,7 +95,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
     {
         byte b0 = 63;
         this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, p_147424_1_ * 4 - 2, p_147424_2_ * 4 - 2, 10, 10);
-        this.generateInitalNoiseXZStack(p_147424_1_ * 4, 0, p_147424_2_ * 4);
+        this.generateInitalNoiseXZStack(p_147424_1_ * 4, 0, p_147424_2_ * 4, p_147424_1_, p_147424_2_);
 
         for (int k = 0; k < 4; ++k)
         {
@@ -179,26 +176,12 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
         double d0 = 0.03125D;
 
-        // this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
-
-        /** this.stoneNoise = this.noiseGen4.func_151599_a(
-         this.stoneNoise,
-         chunkX * 16,
-         chunkZ * 16,
-         0,
-         16,
-         16,
-         1,
-         d0 * 2.0D);
-         **/
-
-
         if (rand.nextInt(80) == 0) {
             d0 = 0.06125D;
         }
 
 
-        this.stoneNoise = this.stoneStack.generateNoiseOctaves(
+        this.stoneNoise = this.noiseGen4.generateNoiseOctaves(
                 this.stoneNoise,
                 chunkX * 16,
                 chunkZ * 16,
@@ -265,7 +248,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         return chunk;
     }
 
-    private void generateInitalNoiseXZStack(int x, int y, int z)
+    private void generateInitalNoiseXZStack(int x, int y, int z, int chunkX, int chunkZ)
     {
         double d0 = 684.412D;
         double d1 = 684.412D;
@@ -273,11 +256,11 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         double d3 = 512.0D;
 
         //perhaps messing wit this would get what I want.. It does... do a random call
-        this.noiseStackOctaves5 = this.noiseGen6.generateNoiseOctaves(this.noiseStackOctaves5, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
+        this.noiseStackOctaves5 = this.noiseGen5.generateNoiseOctaves(this.noiseStackOctaves5, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
         this.noiseStackOctaves2 = this.noiseGen3.generateNoiseOctaves(this.noiseStackOctaves2, x, y, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
         this.noiseStackOctaves = this.noiseGen1.generateNoiseOctaves(this.noiseStackOctaves, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
         this.noiseStackOctaves1 = this.noiseGen2.generateNoiseOctaves(this.noiseStackOctaves1, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
-       //DO STUFF WITH IT noiseGen4
+        //DO STUFF WITH IT noiseGen4
         boolean flag1 = false;
         boolean flag = false;
         int l = 0;
@@ -299,26 +282,26 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                     for (int i2 = -b0; i2 <= b0; ++i2)
                     {
                         BiomeGenBase biomegenbase1 = this.biomesForGeneration[j1 + l1 + 2 + (k1 + i2 + 2) * 10];
-                        float f3 = biomegenbase1.rootHeight;
-                        float f4 = biomegenbase1.heightVariation;
+                        float biomeRoot = biomegenbase1.rootHeight;
+                        float biomeHeight = biomegenbase1.heightVariation;
 
                         // make the world gen occasionally look super wonky
-                        if (rand.nextInt(52) == 0 && f3 > 0.0F)
+                        if (rand.nextInt(52) == 0 && biomeRoot > 0.0F)
                         {
-                            f3 = 1.0F + f3 * 2.0F;
-                            f4 = 1.0F + f4 * 4.0F;
+                            biomeRoot = 1.0F + biomeRoot * 2.0F;
+                            biomeHeight = 1.0F + biomeHeight * 4.0F;
                         }
 
-                        float f5 = this.parabolicField[l1 + 2 + (i2 + 2) * 5] / (f3 + 2.0F);
+                        float noiseBiome = this.parabolicField[l1 + 2 + (i2 + 2) * 5] / (biomeRoot + 2.0F);
 
                         if (biomegenbase1.rootHeight > biomegenbase.rootHeight)
                         {
-                            f5 /= 2.0F;
+                            noiseBiome /= 2.0F;
                         }
 
-                        f += f4 * f5;
-                        f1 += f3 * f5;
-                        f2 += f5;
+                        f += biomeHeight * noiseBiome;
+                        f1 += biomeRoot * noiseBiome;
+                        f2 += noiseBiome;
                     }
                 }
 
@@ -358,6 +341,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                 }
 
                 ++i1;
+
                 double d13 = (double)f1;
                 double d14 = (double)f;
                 d13 += d12 * 0.2D;
@@ -366,21 +350,41 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
                 for (int j2 = 0; j2 < 33; ++j2)
                 {
-                    // allow worldgen features to look more crazy
-                    //4.0D also works well
-                    double d6 = ((double)j2 - d5) * 12.0D * 128.0D / 256.0D / d14;
+
+
+
+
+
+
+
+                    double scaleFactor = 12.0D;
+
+                    if (chunkX > 200 || chunkZ > 200) {
+                        scaleFactor = 2.0D;
+                    } else if (chunkX > 100 || chunkZ > 100) {
+                        scaleFactor = 4.0D;
+                    } else if (chunkX > 80 || chunkZ > 80) {
+                        scaleFactor = 6.0D;
+                    } else if (chunkX > 40 || chunkZ > 40) {
+                        scaleFactor = 8.0D;
+                    } else if (chunkX > 20 || chunkZ > 20) {
+                        scaleFactor =10.0D;
+                    }
+
+                    double d6 = ((double)j2 - d5) * scaleFactor * 128.0D / 256.0D / d14;
 
                     if (d6 < 0.0D)
                     {
                         d6 *= 4.0D;
                     }
 
-                    double d7 = this.noiseStackOctaves[l] / 512.0D;
-                    double d8 = this.noiseStackOctaves1[l] / 512.0D;
-                    double d9 = (this.noiseStackOctaves2[l] / 10.0D + 1.0D) / 2.0D;
+                    double d7 = this.noiseStackOctaves[l] / 512.0D; // lower noise
+                    double d8 = this.noiseStackOctaves1[l] / 512.0D; //upper noise
+                    double d9 = (this.noiseStackOctaves2[l] / 10.0D + 1.0D) / 2.0D; // val that gets passed
 
                     // reduce clamp randomly?
                     double d10 = MathHelper.denormalizeClamp(d7, d8, d9) - d6;
+
 
                     if (j2 > 29)
                     {
@@ -404,12 +408,11 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         return true;
     }
 
-    /**
-     * Populates chunk with ores etc etc
-     */
+
+    @Override
     public void populate(IChunkProvider chunkProvider, int x, int z)
     {
-        BlockFalling.fallInstantly = true;
+        BlockFalling.fallInstantly = false;
         int k = x * 16;
         int l = z * 16;
         BiomeGenBase biomegenbase = this.worldObj.getBiomeGenForCoords(k + 16, l + 16);
@@ -450,6 +453,25 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
             (new WorldGenLakes(Blocks.air)).generate(this.worldObj, this.rand, k1, l1, i2);
 
+        }
+
+
+        int var25;
+
+        for (var25 = 0; var25 < 50; ++var25)
+        {
+            k1 = k + this.rand.nextInt(16) + 8;
+            l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
+            i2 = l + this.rand.nextInt(16) + 8;
+            (new WorldGenLiquids(Blocks.air)).generate(worldObj, rand, k1, l1, i2);
+        }
+
+        for (var25 = 0; var25 < 20; ++var25)
+        {
+            k1 = k + this.rand.nextInt(16) + 8;
+            l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
+            i2 = l + this.rand.nextInt(16) + 8;
+            (new WorldGenLiquids(Blocks.air)).generate(worldObj, rand, k1, l1, i2);
         }
 
         boolean doGen = TerrainGen.populate(chunkProvider, worldObj, rand, x, z, flag, DUNGEON);

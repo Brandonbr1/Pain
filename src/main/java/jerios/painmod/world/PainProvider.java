@@ -27,7 +27,7 @@ public class PainProvider extends WorldProvider {
     protected void registerWorldChunkManager() {
         this.worldChunkMgr = new PainChunkManager(worldObj);
         this.dimensionId = PainConfig.painDimensionID;
-        this.hasNoSky = false;
+        this.hasNoSky = true;
     }
 
     @Override
