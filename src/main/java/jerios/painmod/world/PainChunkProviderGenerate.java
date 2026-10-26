@@ -44,6 +44,8 @@ public class PainChunkProviderGenerate implements IChunkProvider {
     public NoiseGeneratorOctaves noiseGenStone;
     public NoiseGeneratorOctaves noiseGenDepth;
 
+    public NoiseGeneratorOctaves noiseGenErosion;
+
     private World worldObj;
     private final boolean mapFeaturesEnabled;
     private final double[] noiseArray;
@@ -59,6 +61,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
     double[] noiseLow;
     double[] noiseUpper;
     double[] depthNoise;
+    double[] erosionNoise;
 
     public PainChunkProviderGenerate(World world, long seed, boolean mapFeatures)
     {
@@ -409,116 +412,134 @@ public class PainChunkProviderGenerate implements IChunkProvider {
     public void populate(IChunkProvider chunkProvider, int x, int z)
     {
         BlockFalling.fallInstantly = false;
-        int k = x * 16;
-        int l = z * 16;
-        BiomeGenBase biomegenbase = this.worldObj.getBiomeGenForCoords(k + 16, l + 16);
+        int xPosFromChunk = x * 16;
+        int zPosFromChunk = z * 16;
+        BiomeGenBase biomegenbase = this.worldObj.getBiomeGenForCoords(xPosFromChunk + 16, zPosFromChunk + 16);
         this.rand.setSeed(this.worldObj.getSeed());
-        long i1 = this.rand.nextLong() / 2L * 2L + 1L;
-        long j1 = this.rand.nextLong() / 2L * 2L + 1L;
-        this.rand.setSeed((long)x * i1 + (long)z * j1 ^ this.worldObj.getSeed());
-        boolean flag = false;
+        long seedHashX = this.rand.nextLong() / 2L * 2L + 1L;
+        long seedHashZ = this.rand.nextLong() / 2L * 2L + 1L;
+        this.rand.setSeed((long)x * seedHashX + (long)z * seedHashZ ^ this.worldObj.getSeed());
+        boolean villageGen = false;
 
-        MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(chunkProvider, worldObj, rand, x, z, flag));
+        MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(chunkProvider, worldObj, rand, x, z, villageGen));
 
         if (this.mapFeaturesEnabled)
         {
             this.mineshaftGenerator.generateStructuresInChunk(this.worldObj, this.rand, x, z);
-            flag = this.villageGenerator.generateStructuresInChunk(this.worldObj, this.rand, x, z);
+            villageGen = this.villageGenerator.generateStructuresInChunk(this.worldObj, this.rand, x, z);
             this.scatteredFeatureGenerator.generateStructuresInChunk(this.worldObj, this.rand, x, z);
         }
 
-        int k1;
-        int l1;
-        int i2;
+        int shiftedX;
+        int shiftedY;
+        int shiftedz;
 
-        if (!flag && this.rand.nextInt(4) == 0
-                && TerrainGen.populate(chunkProvider, worldObj, rand, x, z, flag, LAKE))
+        if (!villageGen && this.rand.nextInt(4) == 0
+                && TerrainGen.populate(chunkProvider, worldObj, rand, x, z, villageGen, LAKE))
         {
-            k1 = k + this.rand.nextInt(16) + 8;
-            l1 = this.rand.nextInt(256);
-            i2 = l + this.rand.nextInt(16) + 8;
-            (new WorldGenLakes(Blocks.air)).generate(this.worldObj, this.rand, k1, l1, i2);
+            shiftedX = xPosFromChunk + this.rand.nextInt(16) + 8;
+            shiftedY = this.rand.nextInt(256);
+            shiftedz = zPosFromChunk + this.rand.nextInt(16) + 8;
+            (new WorldGenLakes(Blocks.air)).generate(this.worldObj, this.rand, shiftedX, shiftedY, shiftedz);
         }
 
-        if (TerrainGen.populate(chunkProvider, worldObj, rand, x, z, flag, LAVA) && !flag && this.rand.nextInt(8) == 0)
+        if (TerrainGen.populate(chunkProvider, worldObj, rand, x, z, villageGen, LAVA) && !villageGen && this.rand.nextInt(8) == 0)
         {
-            k1 = k + this.rand.nextInt(16) + 8;
-            l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
-            i2 = l + this.rand.nextInt(16) + 8;
+            shiftedX = xPosFromChunk + this.rand.nextInt(16) + 8;
+            shiftedY = this.rand.nextInt(this.rand.nextInt(248) + 8);
+            shiftedz = zPosFromChunk + this.rand.nextInt(16) + 8;
 
-            (new WorldGenLakes(Blocks.air)).generate(this.worldObj, this.rand, k1, l1, i2);
+            (new WorldGenLakes(Blocks.air)).generate(this.worldObj, this.rand, shiftedX, shiftedY, shiftedz);
 
         }
 
 
-        int var25;
+        int tryAmmount;
 
-        for (var25 = 0; var25 < 50; ++var25)
+        for (tryAmmount = 0; tryAmmount < 50; ++tryAmmount)
         {
-            k1 = k + this.rand.nextInt(16) + 8;
-            l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
-            i2 = l + this.rand.nextInt(16) + 8;
-            (new WorldGenLiquids(Blocks.air)).generate(worldObj, rand, k1, l1, i2);
+            shiftedX = xPosFromChunk + this.rand.nextInt(16) + 8;
+            shiftedY = this.rand.nextInt(this.rand.nextInt(248) + 8);
+            shiftedz = zPosFromChunk + this.rand.nextInt(16) + 8;
+            (new WorldGenLiquids(Blocks.air)).generate(worldObj, rand, shiftedX, shiftedY, shiftedz);
         }
 
-        for (var25 = 0; var25 < 20; ++var25)
+        for (tryAmmount = 0; tryAmmount < 20; ++tryAmmount)
         {
-            k1 = k + this.rand.nextInt(16) + 8;
-            l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
-            i2 = l + this.rand.nextInt(16) + 8;
-            (new WorldGenLiquids(Blocks.air)).generate(worldObj, rand, k1, l1, i2);
+            shiftedX = xPosFromChunk + this.rand.nextInt(16) + 8;
+            shiftedY = this.rand.nextInt(this.rand.nextInt(248) + 8);
+            shiftedz = zPosFromChunk + this.rand.nextInt(16) + 8;
+            (new WorldGenLiquids(Blocks.air)).generate(worldObj, rand, shiftedX, shiftedY, shiftedz);
         }
 
-        boolean doGen = TerrainGen.populate(chunkProvider, worldObj, rand, x, z, flag, DUNGEON);
-        for (k1 = 0; doGen && k1 < 8; ++k1)
+        boolean doGen = TerrainGen.populate(chunkProvider, worldObj, rand, x, z, villageGen, DUNGEON);
+        for (shiftedX = 0; doGen && shiftedX < 8; ++shiftedX)
         {
-            l1 = k + this.rand.nextInt(16) + 8;
-            i2 = this.rand.nextInt(256);
-            int j2 = l + this.rand.nextInt(16) + 8;
-            (new WorldGenDungeons()).generate(this.worldObj, this.rand, l1, i2, j2);
+            shiftedY = xPosFromChunk + this.rand.nextInt(16) + 8;
+            shiftedz = this.rand.nextInt(256);
+            int j2 = zPosFromChunk + this.rand.nextInt(16) + 8;
+            (new WorldGenDungeons()).generate(this.worldObj, this.rand, shiftedY, shiftedz, j2);
         }
 
         if (rand.nextInt(2) == 0)
         {
-            l1 = k + this.rand.nextInt(16) + 8;
+            shiftedY = xPosFromChunk + this.rand.nextInt(16) + 8;
 
-            int j2 = l + this.rand.nextInt(16) + 8;
-            i2 = worldObj.getTopSolidOrLiquidBlock(l1, j2);
-            (new WorldGenHoles()).generate(this.worldObj, this.rand, l1, i2, j2);
+            int j2 = zPosFromChunk + this.rand.nextInt(16) + 8;
+            shiftedz = worldObj.getTopSolidOrLiquidBlock(shiftedY, j2);
+            (new WorldGenHoles()).generate(this.worldObj, this.rand, shiftedY, shiftedz, j2);
 
         }
 
-        biomegenbase.decorate(this.worldObj, this.rand, k, l);
-        if (TerrainGen.populate(chunkProvider, worldObj, rand, x, z, flag, ANIMALS))
+        biomegenbase.decorate(this.worldObj, this.rand, xPosFromChunk, zPosFromChunk);
+        if (TerrainGen.populate(chunkProvider, worldObj, rand, x, z, villageGen, ANIMALS))
         {
-            PainSpawner.performWorldGenSpawning(this.worldObj, biomegenbase, k + 8, l + 8, 16, 16, this.rand);
-            SpawnerAnimals.performWorldGenSpawning(this.worldObj, biomegenbase, k + 8, l + 8, 16, 16, this.rand);
+            PainSpawner.performWorldGenSpawning(this.worldObj, biomegenbase, xPosFromChunk + 8, zPosFromChunk + 8, 16, 16, this.rand);
+            SpawnerAnimals.performWorldGenSpawning(this.worldObj, biomegenbase, xPosFromChunk + 8, zPosFromChunk + 8, 16, 16, this.rand);
         }
-        k += 8;
-        l += 8;
 
 
 
-        doGen = TerrainGen.populate(chunkProvider, worldObj, rand, x, z, flag, ICE);
-        for (k1 = 0; doGen && k1 < 16; ++k1)
-        {
-            for (l1 = 0; l1 < 16; ++l1)
-            {
-                i2 = this.worldObj.getPrecipitationHeight(k + k1, l + l1);
 
-                if (this.worldObj.isBlockFreezable(k1 + k, i2 - 1, l1 + l))
-                {
-                    this.worldObj.setBlock(k1 + k, i2 - 1, l1 + l, Blocks.ice, 0, 2);
-                }
-
-                if (this.worldObj.func_147478_e(k1 + k, i2, l1 + l, true))
-                {
-                    this.worldObj.setBlock(k1 + k, i2, l1 + l, Blocks.snow_layer, 0, 2);
+        for(tryAmmount = zPosFromChunk + 8; tryAmmount < zPosFromChunk + 8 + 16; ++var25) {
+            for(var19 = xPosFromChunk + 8; var19 < xPosFromChunk + 8 + 16; ++var19) {
+                var20 = tryAmmount - (zPosFromChunk + 8);
+                var21 = var19 - (xPosFromChunk + 8);
+                int var22 = this.worldObj.findTopSolidBlock(tryAmmount, var19);
+                double var23 = this.generatedTemperatures[var20 * 16 + var21] - (double)(var22 - 64) / 64.0D * 0.3D;
+                if (var23 < 0.5D && var22 > 0 && var22 < 128 && this.worldObj.isAirBlock(var25, var22, var19) && this.worldObj.getBlockMaterial(var25, var22 - 1, var19).getIsSolid() && this.worldObj.getBlockMaterial(var25, var22 - 1, var19) != Material.ice) {
+                    this.worldObj.setBlockWithNotify(tryAmmount, var22, var19, Block.snow.blockID);
                 }
             }
         }
 
-        MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Post(chunkProvider, worldObj, rand, x, z, flag));
+
+        xPosFromChunk += 8;
+        zPosFromChunk += 8;
+
+
+
+        doGen = TerrainGen.populate(chunkProvider, worldObj, rand, x, z, villageGen, ICE);
+        for (shiftedX = 0; doGen && shiftedX < 16; ++shiftedX)
+        {
+            for (shiftedY = 0; shiftedY < 16; ++shiftedY)
+            {
+                shiftedz = this.worldObj.getPrecipitationHeight(xPosFromChunk + shiftedX, zPosFromChunk + shiftedY);
+
+                if (this.worldObj.isBlockFreezable(shiftedX + xPosFromChunk, shiftedz - 1, shiftedY + zPosFromChunk))
+                {
+                    this.worldObj.setBlock(shiftedX + xPosFromChunk, shiftedz - 1, shiftedY + zPosFromChunk, Blocks.ice, 0, 2);
+                }
+
+                if (this.worldObj.func_147478_e(shiftedX + xPosFromChunk, shiftedz, shiftedY + zPosFromChunk, true))
+                {
+                    this.worldObj.setBlock(shiftedX + xPosFromChunk, shiftedz, shiftedY + zPosFromChunk, Blocks.snow_layer, 0, 2);
+                }
+            }
+        }
+
+
+        MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Post(chunkProvider, worldObj, rand, x, z, villageGen));
 
         BlockFalling.fallInstantly = false;
     }
