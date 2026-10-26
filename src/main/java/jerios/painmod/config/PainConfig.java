@@ -25,6 +25,9 @@ public class PainConfig {
 
 
      public static int painBiomeID;
+    public static int painJungleID;
+
+    public static int painDesertID;
 
 
      public static boolean spawnInPainDim;
@@ -44,8 +47,11 @@ public class PainConfig {
             blacklistedPotionsHarmfulEssence = con.getStringList("Blacklisted Potions", "Blacklist", new String[]{"potion.harm"}, "Potions name which is blacklisted from applying on Harmful essence");
 
             painBiomeID = con.getInt("Pain Plains Biome ID", BIOME_ID, 80, 0, Integer.MAX_VALUE, "The Biome ID of the pain plains");
+            painJungleID = con.getInt("Pain Jungle Biome ID", BIOME_ID, 81, 0, Integer.MAX_VALUE, "The Biome ID of the pain Jungle");
+            painDesertID = con.getInt("Pain Desert Biome ID", BIOME_ID, 82, 0, Integer.MAX_VALUE, "The Biome ID of the Pain Desert");
 
-            spawnInPainDim = con.getBoolean("Spawn in Pain Dim?", "Difficulty", true, "Should the player spawn in the dimension and have to escape it?");
+
+        spawnInPainDim = con.getBoolean("Spawn in Pain Dim?", "Difficulty", true, "Should the player spawn in the dimension and have to escape it?");
 
             maxBrightnessInDim = con.getFloat("Max Brightness in Dim", "Visuals", 40.0F, 0.0F, 100.0F, "Max Brightness allowed when in Pain Dim");
 
