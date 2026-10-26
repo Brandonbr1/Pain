@@ -7,6 +7,7 @@ import jerios.painmod.world.mapGen.PainMapGenRavine;
 import jerios.painmod.world.spawners.PainSpawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
@@ -19,6 +20,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
+import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
@@ -266,6 +268,9 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         this.noiseLow = this.noiseGenLow.generateNoiseOctaves(this.noiseLow, x, y, z, 5, 33, 5, scale1, scale1, scale1);
         this.noiseUpper = this.noiseGenUpper.generateNoiseOctaves(this.noiseUpper, x, y, z, 5, 33, 5, scale1, scale1, scale1);
         //DO STUFF WITH IT noiseGen4
+        this.erosionNoise = noiseGenErosion.generateNoiseOctaves(this.erosionNoise,x,y,z,8,5,8,scale3,scale3,scale3);
+
+
         boolean flag1 = false;
         boolean flag = false;
         int index = 0;
@@ -430,26 +435,26 @@ public class PainChunkProviderGenerate implements IChunkProvider {
             this.scatteredFeatureGenerator.generateStructuresInChunk(this.worldObj, this.rand, x, z);
         }
 
-        int shiftedX;
-        int shiftedY;
-        int shiftedz;
+        int shiftedX = 0;
+        int shiftedY = 0;
+        int shiftedZ = 0;
 
         if (!villageGen && this.rand.nextInt(4) == 0
                 && TerrainGen.populate(chunkProvider, worldObj, rand, x, z, villageGen, LAKE))
         {
             shiftedX = xPosFromChunk + this.rand.nextInt(16) + 8;
             shiftedY = this.rand.nextInt(256);
-            shiftedz = zPosFromChunk + this.rand.nextInt(16) + 8;
-            (new WorldGenLakes(Blocks.air)).generate(this.worldObj, this.rand, shiftedX, shiftedY, shiftedz);
+            shiftedZ = zPosFromChunk + this.rand.nextInt(16) + 8;
+            (new WorldGenLakes(Blocks.air)).generate(this.worldObj, this.rand, shiftedX, shiftedY, shiftedZ);
         }
 
         if (TerrainGen.populate(chunkProvider, worldObj, rand, x, z, villageGen, LAVA) && !villageGen && this.rand.nextInt(8) == 0)
         {
             shiftedX = xPosFromChunk + this.rand.nextInt(16) + 8;
             shiftedY = this.rand.nextInt(this.rand.nextInt(248) + 8);
-            shiftedz = zPosFromChunk + this.rand.nextInt(16) + 8;
+            shiftedZ = zPosFromChunk + this.rand.nextInt(16) + 8;
 
-            (new WorldGenLakes(Blocks.air)).generate(this.worldObj, this.rand, shiftedX, shiftedY, shiftedz);
+            (new WorldGenLakes(Blocks.air)).generate(this.worldObj, this.rand, shiftedX, shiftedY, shiftedZ);
 
         }
 
@@ -460,25 +465,25 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         {
             shiftedX = xPosFromChunk + this.rand.nextInt(16) + 8;
             shiftedY = this.rand.nextInt(this.rand.nextInt(248) + 8);
-            shiftedz = zPosFromChunk + this.rand.nextInt(16) + 8;
-            (new WorldGenLiquids(Blocks.air)).generate(worldObj, rand, shiftedX, shiftedY, shiftedz);
+            shiftedZ = zPosFromChunk + this.rand.nextInt(16) + 8;
+            (new WorldGenLiquids(Blocks.air)).generate(worldObj, rand, shiftedX, shiftedY, shiftedZ);
         }
 
         for (tryAmmount = 0; tryAmmount < 20; ++tryAmmount)
         {
             shiftedX = xPosFromChunk + this.rand.nextInt(16) + 8;
             shiftedY = this.rand.nextInt(this.rand.nextInt(248) + 8);
-            shiftedz = zPosFromChunk + this.rand.nextInt(16) + 8;
-            (new WorldGenLiquids(Blocks.air)).generate(worldObj, rand, shiftedX, shiftedY, shiftedz);
+            shiftedZ = zPosFromChunk + this.rand.nextInt(16) + 8;
+            (new WorldGenLiquids(Blocks.air)).generate(worldObj, rand, shiftedX, shiftedY, shiftedZ);
         }
 
         boolean doGen = TerrainGen.populate(chunkProvider, worldObj, rand, x, z, villageGen, DUNGEON);
         for (shiftedX = 0; doGen && shiftedX < 8; ++shiftedX)
         {
             shiftedY = xPosFromChunk + this.rand.nextInt(16) + 8;
-            shiftedz = this.rand.nextInt(256);
+            shiftedZ = this.rand.nextInt(256);
             int j2 = zPosFromChunk + this.rand.nextInt(16) + 8;
-            (new WorldGenDungeons()).generate(this.worldObj, this.rand, shiftedY, shiftedz, j2);
+            (new WorldGenDungeons()).generate(this.worldObj, this.rand, shiftedY, shiftedZ, j2);
         }
 
         if (rand.nextInt(2) == 0)
@@ -486,8 +491,8 @@ public class PainChunkProviderGenerate implements IChunkProvider {
             shiftedY = xPosFromChunk + this.rand.nextInt(16) + 8;
 
             int j2 = zPosFromChunk + this.rand.nextInt(16) + 8;
-            shiftedz = worldObj.getTopSolidOrLiquidBlock(shiftedY, j2);
-            (new WorldGenHoles()).generate(this.worldObj, this.rand, shiftedY, shiftedz, j2);
+            shiftedZ = worldObj.getTopSolidOrLiquidBlock(shiftedY, j2);
+            (new WorldGenHoles()).generate(this.worldObj, this.rand, shiftedY, shiftedZ, j2);
 
         }
 
@@ -499,23 +504,31 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         }
 
 
+        int var25 = tryAmmount;
+        int var4 = xPosFromChunk;
+        int var5 = zPosFromChunk;
+        int var19 = shiftedX;
+        int var20 = shiftedY;
+        int var21 = shiftedZ;
 
 
-        for(tryAmmount = zPosFromChunk + 8; tryAmmount < zPosFromChunk + 8 + 16; ++var25) {
-            for(var19 = xPosFromChunk + 8; var19 < xPosFromChunk + 8 + 16; ++var19) {
-                var20 = tryAmmount - (zPosFromChunk + 8);
-                var21 = var19 - (xPosFromChunk + 8);
-                int var22 = this.worldObj.findTopSolidBlock(tryAmmount, var19);
-                double var23 = this.generatedTemperatures[var20 * 16 + var21] - (double)(var22 - 64) / 64.0D * 0.3D;
-                if (var23 < 0.5D && var22 > 0 && var22 < 128 && this.worldObj.isAirBlock(var25, var22, var19) && this.worldObj.getBlockMaterial(var25, var22 - 1, var19).getIsSolid() && this.worldObj.getBlockMaterial(var25, var22 - 1, var19) != Material.ice) {
-                    this.worldObj.setBlockWithNotify(tryAmmount, var22, var19, Block.snow.blockID);
+        for(var25 = var4 + 8; var25 < var4 + 8 + 16; ++var25) {
+            for(var19 = var5 + 8; var19 < var5 + 8 + 16; ++var19) {
+                var20 = var25 - (var4 + 8);
+                var21 = var19 - (var5 + 8);
+                int var22 = this.worldObj.getTopSolidOrLiquidBlock(var25, var19);
+                double var23 = this.erosionNoise[var20 * 16 + var21] - (double)(var22 - 64) / 64.0D * 0.3D;
+                System.out.println("NOISE   "+var23);
+                if (var23 < 0.5D && var22 > 0 && var22 < 128 && this.worldObj.isAirBlock(var25, var22, var19) && this.worldObj.getBlock(var25, var22 - 1, var19).isOpaqueCube() && this.worldObj.getBlock(var25, var22 - 1, var19).getMaterial() != Material.ice) {
+                    this.worldObj.setBlock(var25, var22, var19, Blocks.air, 0, 2);
                 }
             }
         }
 
-
         xPosFromChunk += 8;
         zPosFromChunk += 8;
+
+
 
 
 
@@ -524,16 +537,16 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         {
             for (shiftedY = 0; shiftedY < 16; ++shiftedY)
             {
-                shiftedz = this.worldObj.getPrecipitationHeight(xPosFromChunk + shiftedX, zPosFromChunk + shiftedY);
+                shiftedZ = this.worldObj.getPrecipitationHeight(xPosFromChunk + shiftedX, zPosFromChunk + shiftedY);
 
-                if (this.worldObj.isBlockFreezable(shiftedX + xPosFromChunk, shiftedz - 1, shiftedY + zPosFromChunk))
+                if (this.worldObj.isBlockFreezable(shiftedX + xPosFromChunk, shiftedZ - 1, shiftedY + zPosFromChunk))
                 {
-                    this.worldObj.setBlock(shiftedX + xPosFromChunk, shiftedz - 1, shiftedY + zPosFromChunk, Blocks.ice, 0, 2);
+                    this.worldObj.setBlock(shiftedX + xPosFromChunk, shiftedZ - 1, shiftedY + zPosFromChunk, Blocks.ice, 0, 2);
                 }
 
-                if (this.worldObj.func_147478_e(shiftedX + xPosFromChunk, shiftedz, shiftedY + zPosFromChunk, true))
+                if (this.worldObj.func_147478_e(shiftedX + xPosFromChunk, shiftedZ, shiftedY + zPosFromChunk, true))
                 {
-                    this.worldObj.setBlock(shiftedX + xPosFromChunk, shiftedz, shiftedY + zPosFromChunk, Blocks.snow_layer, 0, 2);
+                    this.worldObj.setBlock(shiftedX + xPosFromChunk, shiftedZ, shiftedY + zPosFromChunk, Blocks.snow_layer, 0, 2);
                 }
             }
         }
