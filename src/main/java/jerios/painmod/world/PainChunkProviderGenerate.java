@@ -268,7 +268,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         this.noiseLow = this.noiseGenLow.generateNoiseOctaves(this.noiseLow, x, y, z, 5, 33, 5, scale1, scale1, scale1);
         this.noiseUpper = this.noiseGenUpper.generateNoiseOctaves(this.noiseUpper, x, y, z, 5, 33, 5, scale1, scale1, scale1);
         //DO STUFF WITH IT noiseGen4
-        this.erosionNoise = noiseGenErosion.generateNoiseOctaves(this.erosionNoise,x,y,z,8,5,8,scale3,scale3,scale3);
+   //     this.erosionNoise = noiseGenErosion.generateNoiseOctaves(this.erosionNoise,x,y,z,8,5,8,scale3,scale3,scale3);
 
 
         boolean flag1 = false;
@@ -504,7 +504,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         }
 
 
-        int var25 = tryAmmount;
+    /**    int var25 = tryAmmount;
         int var4 = xPosFromChunk;
         int var5 = zPosFromChunk;
         int var19 = shiftedX;
@@ -524,6 +524,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                 }
             }
         }
+     **/
 
         xPosFromChunk += 8;
         zPosFromChunk += 8;

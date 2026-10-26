@@ -33,7 +33,7 @@ public class TeleporterHandler {
     }
 
     /**
-     * Teleports only Entity to dim
+     * Teleports only Entity to dimension
      * @param ent
      * @param dimensionId
      * @param teleporter

@@ -2,7 +2,11 @@ package jerios.painmod.utils;
 
 import org.lwjgl.opengl.GL11;
 
-public class PGL {
+public abstract class PGL {
+
+    public static void fog(int par, float dist) {
+        GL11.glFogf(par, dist);
+    }
 
     public static void enable(int cap) {
        GL11.glEnable(cap);
