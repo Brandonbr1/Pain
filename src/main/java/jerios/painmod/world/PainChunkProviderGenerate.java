@@ -18,15 +18,12 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.MapGenBase;
-import net.minecraft.world.gen.MapGenCaves;
-import net.minecraft.world.gen.MapGenRavine;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
-import net.minecraft.world.gen.structure.MapGenStronghold;
 import net.minecraft.world.gen.structure.MapGenVillage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.ChunkProviderEvent;
@@ -41,17 +38,15 @@ import static net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.Ev
 public class PainChunkProviderGenerate implements IChunkProvider {
 
     private Random rand;
-    private NoiseGeneratorOctaves noiseGen1; // lower noise
-    private NoiseGeneratorOctaves noiseGen2; // upper noise
-    private NoiseGeneratorOctaves noiseGen3;
-    public NoiseGeneratorOctaves noiseGen4;
-    public NoiseGeneratorOctaves noiseGen5;
-
-
+    private NoiseGeneratorOctaves noiseGenLow; // lower noise
+    private NoiseGeneratorOctaves noiseGenUpper; // upper noise
+    private NoiseGeneratorOctaves noiseGenSlide;
+    public NoiseGeneratorOctaves noiseGenStone;
+    public NoiseGeneratorOctaves noiseGenDepth;
 
     private World worldObj;
     private final boolean mapFeaturesEnabled;
-    private final double[] noiseStackXZ;
+    private final double[] noiseArray;
     private final float[] parabolicField;
     private double[] stoneNoise = new double[256];
     private MapGenBase caveGenerator = new PainMapGenCaves();
@@ -60,27 +55,27 @@ public class PainChunkProviderGenerate implements IChunkProvider {
     private MapGenScatteredFeature scatteredFeatureGenerator = new MapGenScatteredFeature();
     private MapGenBase ravineGenerator = new PainMapGenRavine();
     private BiomeGenBase[] biomesForGeneration;
-    double[] noiseStackOctaves2;
-    double[] noiseStackOctaves;
-    double[] noiseStackOctaves1;
-    double[] noiseStackOctaves5;
+    double[] noiseSlide;
+    double[] noiseLow;
+    double[] noiseUpper;
+    double[] depthNoise;
 
-    public PainChunkProviderGenerate(World p_i2006_1_, long p_i2006_2_, boolean p_i2006_4_)
+    public PainChunkProviderGenerate(World world, long seed, boolean mapFeatures)
     {
-        this.worldObj = p_i2006_1_;
-        this.mapFeaturesEnabled = p_i2006_4_;
-        this.rand = new Random(p_i2006_2_);
+        this.worldObj = world;
+        this.mapFeaturesEnabled = mapFeatures;
+        this.rand = new Random(seed);
 
 
-        this.noiseGen1 = new NoiseGeneratorOctaves(this.rand, 16);
-        this.noiseGen2 = new NoiseGeneratorOctaves(this.rand, 16);
-        this.noiseGen3 = new NoiseGeneratorOctaves(this.rand, 8);
-        this.noiseGen4 = new NoiseGeneratorOctaves(rand, 4);
-        this.noiseGen5 = new NoiseGeneratorOctaves(this.rand, 10);
+        this.noiseGenLow = new NoiseGeneratorOctaves(this.rand, 16);
+        this.noiseGenUpper = new NoiseGeneratorOctaves(this.rand, 16);
+        this.noiseGenSlide = new NoiseGeneratorOctaves(this.rand, 8);
+        this.noiseGenStone = new NoiseGeneratorOctaves(rand, 4);
+        this.noiseGenDepth = new NoiseGeneratorOctaves(this.rand, 10);
 
 
 
-        this.noiseStackXZ = new double[825];
+        this.noiseArray = new double[825];
         this.parabolicField = new float[25];
 
         for (int j = -2; j <= 2; ++j)
@@ -93,77 +88,77 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         }
     }
 
-    public void generateTerrain(int p_147424_1_, int p_147424_2_, Block[] p_147424_3_)
+    public void generateTerrain(int x, int z, Block[] blocks)
     {
-        byte b0 = 63;
-        this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, p_147424_1_ * 4 - 2, p_147424_2_ * 4 - 2, 10, 10);
-        this.generateInitalNoiseXZStack(p_147424_1_ * 4, 0, p_147424_2_ * 4, p_147424_1_, p_147424_2_);
+        byte oceanHeight = 63;
+        this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, x * 4 - 2, z * 4 - 2, 10, 10);
+        this.generateInitalNoiseXZStack(x * 4, 0, z * 4, x, z);
 
-        for (int k = 0; k < 4; ++k)
+        for (int noiseLayer1 = 0; noiseLayer1 < 4; ++noiseLayer1)
         {
-            int l = k * 5;
-            int i1 = (k + 1) * 5;
+            int noiseL1P1 = noiseLayer1 * 5;
+            int noiseL1P2 = (noiseLayer1 + 1) * 5;
 
-            for (int j1 = 0; j1 < 4; ++j1)
+            for (int noiseLayer2 = 0; noiseLayer2 < 4; ++noiseLayer2)
             {
-                int k1 = (l + j1) * 33;
-                int l1 = (l + j1 + 1) * 33;
-                int i2 = (i1 + j1) * 33;
-                int j2 = (i1 + j1 + 1) * 33;
+                int noiseL2P1 = (noiseL1P1 + noiseLayer2) * 33;
+                int noiseL2P2 = (noiseL1P1 + noiseLayer2 + 1) * 33;
+                int noiseL2P3 = (noiseL1P2 + noiseLayer2) * 33;
+                int noiseL2P4 = (noiseL1P2 + noiseLayer2 + 1) * 33;
 
-                for (int k2 = 0; k2 < 32; ++k2)
+                for (int noiseLayer3 = 0; noiseLayer3 < 32; ++noiseLayer3)
                 {
-                    double d0 = 0.125D;
-                    double d1 = this.noiseStackXZ[k1 + k2];
-                    double d2 = this.noiseStackXZ[l1 + k2];
-                    double d3 = this.noiseStackXZ[i2 + k2];
-                    double d4 = this.noiseStackXZ[j2 + k2];
-                    double d5 = (this.noiseStackXZ[k1 + k2 + 1] - d1) * d0;
-                    double d6 = (this.noiseStackXZ[l1 + k2 + 1] - d2) * d0;
-                    double d7 = (this.noiseStackXZ[i2 + k2 + 1] - d3) * d0;
-                    double d8 = (this.noiseStackXZ[j2 + k2 + 1] - d4) * d0;
+                    double noiseScaleLayer3 = 0.125D;
+                    double noiseLayer3P1 = this.noiseArray[noiseL2P1 + noiseLayer3];
+                    double noiseLayer3P2 = this.noiseArray[noiseL2P2 + noiseLayer3];
+                    double noiseLayer3P3 = this.noiseArray[noiseL2P3 + noiseLayer3];
+                    double noiseLayer3P4 = this.noiseArray[noiseL2P4 + noiseLayer3];
+                    double noiseLayer3P5 = (this.noiseArray[noiseL2P1 + noiseLayer3 + 1] - noiseLayer3P1) * noiseScaleLayer3;
+                    double noiseLayer3P6 = (this.noiseArray[noiseL2P2 + noiseLayer3 + 1] - noiseLayer3P2) * noiseScaleLayer3;
+                    double noiseLayer3P7 = (this.noiseArray[noiseL2P3 + noiseLayer3 + 1] - noiseLayer3P3) * noiseScaleLayer3;
+                    double noiseLayer3P8 = (this.noiseArray[noiseL2P4 + noiseLayer3 + 1] - noiseLayer3P4) * noiseScaleLayer3;
 
-                    for (int l2 = 0; l2 < 8; ++l2)
+                    for (int noiseLayer4 = 0; noiseLayer4 < 8; ++noiseLayer4)
                     {
-                        double d9 = 0.25D;
-                        double d10 = d1;
-                        double d11 = d2;
-                        double d12 = (d3 - d1) * d9;
-                        double d13 = (d4 - d2) * d9;
+                        double noiseScaleLayer4 = 0.25D;
+                        double noiseLayer4P1 = noiseLayer3P1;
+                        double noiseLayer4P2 = noiseLayer3P2;
+                        double noiseLayer4P3 = (noiseLayer3P3 - noiseLayer3P1) * noiseScaleLayer4;
+                        double noiseLayer4P4 = (noiseLayer3P4 - noiseLayer3P2) * noiseScaleLayer4;
 
-                        for (int i3 = 0; i3 < 4; ++i3)
+                        for (int noiseLayer5 = 0; noiseLayer5 < 4; ++noiseLayer5)
                         {
-                            int j3 = i3 + k * 4 << 12 | 0 + j1 * 4 << 8 | k2 * 8 + l2;
-                            short short1 = 256;
-                            j3 -= short1;
-                            double d14 = 0.25D;
-                            double d16 = (d11 - d10) * d14;
-                            double d15 = d10 - d16;
+                            int depth = noiseLayer5 + noiseLayer1 * 4 << 12 | 0 + noiseLayer2 * 4 << 8 | noiseLayer3 * 8 + noiseLayer4;
+                            short maxDepth = 256;
+                            depth -= maxDepth;
+                            double noiseScaleLayer5 = 0.25D;
+                            double noiseLayer5P1 = (noiseLayer4P2 - noiseLayer4P1) * noiseScaleLayer5;
+                            double noiseLayer5P2 = noiseLayer4P1 - noiseLayer5P1;
 
-                            for (int k3 = 0; k3 < 4; ++k3)
+                            for (int noiseLayer6 = 0; noiseLayer6 < 4; ++noiseLayer6)
                             {
-                                if ((d15 += d16) > 0.0D)
+                                if ((noiseLayer5P2 += noiseLayer5P1) > 0.0D)
                                 {
-                                    p_147424_3_[j3 += short1] = Blocks.stone;
+                                    blocks[depth += maxDepth] = Blocks.stone;
                                 }
-                                else if (k2 * 8 + l2 < b0)
+                                else if (noiseLayer3 * 8 + noiseLayer4 < oceanHeight)
                                 {
-                                    p_147424_3_[j3 += short1] = Blocks.water;
+                                    blocks[depth += maxDepth] = Blocks.water;
                                 }
                                 else
                                 {
-                                    p_147424_3_[j3 += short1] = null;
+                                    blocks[depth += maxDepth] = null;
                                 }
                             }
 
-                            d10 += d12;
-                            d11 += d13;
+                            noiseLayer4P1 += noiseLayer4P3;
+                            noiseLayer4P2 += noiseLayer4P4;
                         }
 
-                        d1 += d5;
-                        d2 += d6;
-                        d3 += d7;
-                        d4 += d8;
+                        noiseLayer3P1 += noiseLayer3P5;
+                        noiseLayer3P2 += noiseLayer3P6;
+                        noiseLayer3P3 += noiseLayer3P7;
+                        noiseLayer3P4 += noiseLayer3P8;
                     }
                 }
             }
@@ -176,14 +171,14 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         MinecraftForge.EVENT_BUS.post(event);
         if (event.getResult() == Event.Result.DENY) return;
 
-        double d0 = 0.03125D;
+        double stoneScale = 0.03125D;
 
         if (rand.nextInt(80) == 0) {
-            d0 = 0.06125D;
+            stoneScale = 0.06125D;
         }
 
 
-        this.stoneNoise = this.noiseGen4.generateNoiseOctaves(
+        this.stoneNoise = this.noiseGenStone.generateNoiseOctaves(
                 this.stoneNoise,
                 chunkX * 16,
                 chunkZ * 16,
@@ -191,9 +186,9 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                 16,
                 16,
                 1,
-                d0 * 2.0D,
-                d0 * 2.0D,
-                d0 * 2.0D);
+                stoneScale * 2.0D,
+                stoneScale * 2.0D,
+                stoneScale * 2.0D);
 
 
 
@@ -222,27 +217,27 @@ public class PainChunkProviderGenerate implements IChunkProvider {
     public Chunk provideChunk(int x, int z)
     {
         this.rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L);
-        Block[] ablock = new Block[65536];
-        byte[] abyte = new byte[65536];
-        this.generateTerrain(x, z, ablock);
+        Block[] blocks = new Block[65536];
+        byte[] metas = new byte[65536];
+        this.generateTerrain(x, z, blocks);
         this.biomesForGeneration = this.worldObj.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
-        this.replaceBlocksForBiome(x, z, ablock, abyte, this.biomesForGeneration);
-        this.caveGenerator.func_151539_a(this, this.worldObj, x, z, ablock);
-        this.ravineGenerator.func_151539_a(this, this.worldObj, x, z, ablock);
+        this.replaceBlocksForBiome(x, z, blocks, metas, this.biomesForGeneration);
+        this.caveGenerator.func_151539_a(this, this.worldObj, x, z, blocks);
+        this.ravineGenerator.func_151539_a(this, this.worldObj, x, z, blocks);
 
         if (this.mapFeaturesEnabled)
         {
-            this.mineshaftGenerator.func_151539_a(this, this.worldObj, x, z, ablock);
-            this.villageGenerator.func_151539_a(this, this.worldObj, x, z, ablock);
-            this.scatteredFeatureGenerator.func_151539_a(this, this.worldObj, x, z, ablock);
+            this.mineshaftGenerator.func_151539_a(this, this.worldObj, x, z, blocks);
+            this.villageGenerator.func_151539_a(this, this.worldObj, x, z, blocks);
+            this.scatteredFeatureGenerator.func_151539_a(this, this.worldObj, x, z, blocks);
         }
 
-        Chunk chunk = new Chunk(this.worldObj, ablock, abyte, x, z);
-        byte[] abyte1 = chunk.getBiomeArray();
+        Chunk chunk = new Chunk(this.worldObj, blocks, metas, x, z);
+        byte[] biomeArray = chunk.getBiomeArray();
 
-        for (int k = 0; k < abyte1.length; ++k)
+        for (int k = 0; k < biomeArray.length; ++k)
         {
-            abyte1[k] = (byte)this.biomesForGeneration[k].biomeID;
+            biomeArray[k] = (byte)this.biomesForGeneration[k].biomeID;
         }
 
         chunk.generateSkylightMap();
@@ -251,40 +246,46 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
     private void generateInitalNoiseXZStack(int x, int y, int z, int chunkX, int chunkZ)
     {
-        double d0 = 684.412D;
-        double d1 = 684.412D;
-        double d2 = 512.0D;
-        double d3 = 512.0D;
+        double scale1 = 684.412D;
+        double scale2 = 200.0D;
+        double scale3 = 0.5D;
+        double scale4 = 8.555150000000001D;
+        double scale5 = 4.277575000000001D;
+        double scale6 = 8.555150000000001D;
+       // double d1 = 684.412D;
+       // double d2 = 512.0D;
+      //  double d3 = 512.0D;
+
 
         //perhaps messing wit this would get what I want.. It does... do a random call
-        this.noiseStackOctaves5 = this.noiseGen5.generateNoiseOctaves(this.noiseStackOctaves5, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
-        this.noiseStackOctaves2 = this.noiseGen3.generateNoiseOctaves(this.noiseStackOctaves2, x, y, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
-        this.noiseStackOctaves = this.noiseGen1.generateNoiseOctaves(this.noiseStackOctaves, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
-        this.noiseStackOctaves1 = this.noiseGen2.generateNoiseOctaves(this.noiseStackOctaves1, x, y, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
+        this.depthNoise = this.noiseGenDepth.generateNoiseOctaves(this.depthNoise, x, z, 5, 5, scale2, scale2, scale3);
+        this.noiseSlide = this.noiseGenSlide.generateNoiseOctaves(this.noiseSlide, x, y, z, 5, 33, 5, scale6, scale5, scale4);
+        this.noiseLow = this.noiseGenLow.generateNoiseOctaves(this.noiseLow, x, y, z, 5, 33, 5, scale1, scale1, scale1);
+        this.noiseUpper = this.noiseGenUpper.generateNoiseOctaves(this.noiseUpper, x, y, z, 5, 33, 5, scale1, scale1, scale1);
         //DO STUFF WITH IT noiseGen4
         boolean flag1 = false;
         boolean flag = false;
-        int l = 0;
-        int i1 = 0;
+        int index = 0;
+        int index2D = 0;
         double d4 = 8.5D;
 
-        for (int j1 = 0; j1 < 5; ++j1)
+        for (int sizeX = 0; sizeX < 5; ++sizeX)
         {
-            for (int k1 = 0; k1 < 5; ++k1)
+            for (int sizeZ = 0; sizeZ < 5; ++sizeZ)
             {
-                float f = 0.0F;
-                float f1 = 0.0F;
-                float f2 = 0.0F;
-                byte b0 = 2;
-                BiomeGenBase biomegenbase = this.biomesForGeneration[j1 + 2 + (k1 + 2) * 10];
+                float maxSum = 0.0F;
+                float minSum = 0.0F;
+                float weightSum = 0.0F;
+                byte radius = 2;
+                BiomeGenBase centerBiome = this.biomesForGeneration[sizeX + 2 + (sizeZ + 2) * 10];
 
-                for (int l1 = -b0; l1 <= b0; ++l1)
+                for (int l1 = -radius; l1 <= radius; ++l1)
                 {
-                    for (int i2 = -b0; i2 <= b0; ++i2)
+                    for (int i2 = -radius; i2 <= radius; ++i2)
                     {
-                        BiomeGenBase biomegenbase1 = this.biomesForGeneration[j1 + l1 + 2 + (k1 + i2 + 2) * 10];
-                        float biomeRoot = biomegenbase1.rootHeight;
-                        float biomeHeight = biomegenbase1.heightVariation;
+                        BiomeGenBase neighbourBiome = this.biomesForGeneration[sizeX + l1 + 2 + (sizeZ + i2 + 2) * 10];
+                        float biomeRoot = neighbourBiome.rootHeight;
+                        float biomeHeight = neighbourBiome.heightVariation;
 
                         // make the world gen occasionally look super wonky
                         if (rand.nextInt(52) == 0 && biomeRoot > 0.0F)
@@ -295,61 +296,61 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
                         float noiseBiome = this.parabolicField[l1 + 2 + (i2 + 2) * 5] / (biomeRoot + 2.0F);
 
-                        if (biomegenbase1.rootHeight > biomegenbase.rootHeight)
+                        if (neighbourBiome.rootHeight > centerBiome.rootHeight)
                         {
                             noiseBiome /= 2.0F;
                         }
 
-                        f += biomeHeight * noiseBiome;
-                        f1 += biomeRoot * noiseBiome;
-                        f2 += noiseBiome;
+                        maxSum += biomeHeight * noiseBiome;
+                        minSum += biomeRoot * noiseBiome;
+                        weightSum += noiseBiome;
                     }
                 }
 
-                f /= f2;
-                f1 /= f2;
-                f = f * 0.9F + 0.1F;
-                f1 = (f1 * 4.0F - 1.0F) / 8.0F;
-                double d12 = this.noiseStackOctaves5[i1] / 8000.0D;
+                maxSum /= weightSum;
+                minSum /= weightSum;
+                maxSum = maxSum * 0.9F + 0.1F;
+                minSum = (minSum * 4.0F - 1.0F) / 8.0F;
+                double depthNoiseCalculation = this.depthNoise[index2D] / 8000.0D;
 
-                if (d12 < 0.0D)
+                if (depthNoiseCalculation < 0.0D)
                 {
-                    d12 = -d12 * 0.3D;
+                    depthNoiseCalculation = -depthNoiseCalculation * 0.3D;
                 }
 
-                d12 = d12 * 3.0D - 2.0D;
+                depthNoiseCalculation = depthNoiseCalculation * 3.0D - 2.0D;
 
-                if (d12 < 0.0D)
+                if (depthNoiseCalculation < 0.0D)
                 {
-                    d12 /= 2.0D;
+                    depthNoiseCalculation /= 2.0D;
 
-                    if (d12 < -1.0D)
+                    if (depthNoiseCalculation < -1.0D)
                     {
-                        d12 = -1.0D;
+                        depthNoiseCalculation = -1.0D;
                     }
 
-                    d12 /= 1.4D;
-                    d12 /= 2.0D;
+                    depthNoiseCalculation /= 1.4D;
+                    depthNoiseCalculation /= 2.0D;
                 }
                 else
                 {
-                    if (d12 > 1.0D)
+                    if (depthNoiseCalculation > 1.0D)
                     {
-                        d12 = 1.0D;
+                        depthNoiseCalculation = 1.0D;
                     }
 
-                    d12 /= 8.0D;
+                    depthNoiseCalculation /= 8.0D;
                 }
 
-                ++i1;
+                ++index2D;
 
-                double d13 = (double)f1;
-                double d14 = (double)f;
-                d13 += d12 * 0.2D;
+                double d13 = (double)minSum;
+                double d14 = (double)maxSum;
+                d13 += depthNoiseCalculation * 0.2D;
                 d13 = d13 * 8.5D / 8.0D;
                 double d5 = 8.5D + d13 * 4.0D;
 
-                for (int j2 = 0; j2 < 33; ++j2)
+                for (int sizeY = 0; sizeY < 33; ++sizeY)
                 {
 
                     double scaleFactor = 12.0D;
@@ -366,30 +367,30 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                         scaleFactor =10.0D;
                     }
 
-                    double d6 = ((double)j2 - d5) * scaleFactor * 128.0D / 256.0D / d14;
+                    double falloff = ((double)sizeY - d5) * scaleFactor * 128.0D / 256.0D / d14;
 
-                    if (d6 < 0.0D)
+                    if (falloff < 0.0D)
                     {
-                        d6 *= 4.0D;
+                        falloff *= 4.0D;
                     }
 
-                    double d7 = this.noiseStackOctaves[l] / 512.0D; // lower noise
-                    double d8 = this.noiseStackOctaves1[l] / 512.0D; //upper noise
-                    double d9 = (this.noiseStackOctaves2[l] / 10.0D + 1.0D) / 2.0D; // val that gets passed
+                    double low = this.noiseLow[index] / 512.0D; // lower noise
+                    double high = this.noiseUpper[index] / 512.0D; //upper noise
+                    double selector = (this.noiseSlide[index] / 10.0D + 1.0D) / 2.0D; // val that gets passed
 
                     // reduce clamp randomly?
-                    double d10 = MathHelper.denormalizeClamp(d7, d8, d9) - d6;
+                    double density = MathHelper.denormalizeClamp(low, high, selector) - falloff;
 
 
-                    if (j2 > 29)
+                    if (sizeY > 29)
                     {
-                        double d11 = (double)((float)(j2 - 29) / 3.0F);
-                        d10 = d10 * (1.0D - d11) + -10.0D * d11;
+                        double d11 = (double)((float)(sizeY - 29) / 3.0F);
+                        density = density * (1.0D - d11) + -10.0D * d11;
                     }
 
 
-                    this.noiseStackXZ[l] = d10;
-                    ++l;
+                    this.noiseArray[index] = density;
+                    ++index;
                 }
             }
         }
