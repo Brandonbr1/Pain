@@ -20,7 +20,6 @@ public class PainProps implements IExtendedEntityProperties {
     public boolean escapedDim = false;
 
     public PainProps() {
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     @Override
@@ -53,36 +52,4 @@ public class PainProps implements IExtendedEntityProperties {
         return (PainProps) p.getExtendedProperties(PROP_NAME);
     }
 
-    public static class EventHandler {
-
-        @SubscribeEvent
-        public void entityConstruct(EntityEvent.EntityConstructing e) {
-            if (e.entity instanceof EntityPlayer) {
-                if (e.entity.getExtendedProperties(PROP_NAME) == null) {
-                    e.entity.registerExtendedProperties(PROP_NAME, new PainProps());
-                }
-            }
-        }
-
-        @SubscribeEvent
-        public void entityJoinWorld(EntityJoinWorldEvent e) {
-
-        }
-
-        @SubscribeEvent
-        public void playerStartedTracking(PlayerEvent.StartTracking e) {
-
-        }
-
-        @SubscribeEvent
-        public void onClonePlayer(PlayerEvent.Clone e) {
-            if (e.wasDeath) {
-                NBTTagCompound compound = new NBTTagCompound();
-                PainProps.get(e.original).saveNBTData(compound);
-                PainProps.get(e.entityPlayer).loadNBTData(compound);
-            }
-
-        }
-
-    }
 }

@@ -1,9 +1,7 @@
 package jerios.painmod.client.audio;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import jerios.painmod.config.PainConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.MusicTicker;
@@ -15,57 +13,47 @@ import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class PainMusic extends MusicTicker {
-    private final Random rand = new Random();
-    private ISound isound;
-    private int timer = 100;
-    public Minecraft minecraft = FMLClientHandler.instance().getClient();
-    public MusicTicker wrapedTicker;
+    private final Random field_147679_a = new Random();
+    private ISound field_147678_c;
+    private int field_147676_d = 100;
+    public Minecraft field_147677_b;
 
-    public PainMusic(MusicTicker wrapped) {
-        super(FMLClientHandler.instance().getClient());
-        this.wrapedTicker = wrapped;
+    public PainMusic(Minecraft minecraft) {
+        super(minecraft);
+        this.field_147677_b = minecraft;
     }
 
 
     @Override
     public void update()
     {
-        //Fallback just in case it somehow does not get replaced back.
-        if (minecraft.theWorld != null && minecraft.theWorld.provider.dimensionId != PainConfig.painDimensionID)
-        {
-            if (wrapedTicker != null)
-            {
-                wrapedTicker.update();
-            }
-        }
-
         PainMusic.MusicType musictype = MusicType.GAME;
 
-        if (this.isound != null)
+        if (this.field_147678_c != null)
         {
-            if (!musictype.getMusicTickerLocation().equals(this.isound.getPositionedSoundLocation()))
+            if (!musictype.getMusicTickerLocation().equals(this.field_147678_c.getPositionedSoundLocation()))
             {
-                this.minecraft.getSoundHandler().stopSound(this.isound);
-                this.timer = MathHelper.getRandomIntegerInRange(this.rand, 0, musictype.getMinDelay() / 2);
+                this.field_147677_b.getSoundHandler().stopSound(this.field_147678_c);
+                this.field_147676_d = MathHelper.getRandomIntegerInRange(this.field_147679_a, musictype.getMinDelay(), musictype.getMaxDelay() / 2);
             }
 
-            if (!this.minecraft.getSoundHandler().isSoundPlaying(this.isound))
+            if (!this.field_147677_b.getSoundHandler().isSoundPlaying(this.field_147678_c))
             {
-                this.isound = null;
-                this.timer = Math.min(MathHelper.getRandomIntegerInRange(this.rand, musictype.getMinDelay(), musictype.getMaxDelay()), this.timer);
+                this.field_147678_c = null;
+                this.field_147676_d = Math.min(MathHelper.getRandomIntegerInRange(this.field_147679_a, musictype.getMinDelay(), musictype.getMaxDelay()), this.field_147676_d);
             }
         }
 
-        if (this.isound == null && this.timer-- <= 0)
+        if (this.field_147678_c == null && this.field_147676_d-- <= 0)
         {
-            this.isound = PositionedSoundRecord.func_147673_a(musictype.getMusicTickerLocation());
-            this.minecraft.getSoundHandler().playSound(this.isound);
-            this.timer = Integer.MAX_VALUE;
+            this.field_147678_c = PositionedSoundRecord.func_147673_a(musictype.getMusicTickerLocation());
+            this.field_147677_b.getSoundHandler().playSound(this.field_147678_c);
+            this.field_147676_d = Integer.MAX_VALUE;
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public static enum MusicType
+    public enum MusicType
     {
         GAME(new ResourceLocation("painmod:music.game"), 300, 900);
         private final ResourceLocation location;

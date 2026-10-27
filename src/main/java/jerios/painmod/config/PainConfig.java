@@ -58,7 +58,7 @@ public class PainConfig {
 
             maxBrightnessInDim = con.getFloat("Max Brightness in Dim", "Visuals", 40.0F, 0.0F, 100.0F, "Max Brightness allowed when in Pain Dim");
 
-        fogDensity = con.getFloat("Fog Density in Pain Dim", "Visuals", 0.3f, 0.0f, 10.0f, "Max Density of the fog in Pain Dim");
+        fogDensity = con.getFloat("Fog Density in Pain Dim", "Visuals", 1.0f, 0.0f, 10.0f, "Max Density of the fog in Pain Dim");
 
         fogDensityEnd = con.getFloat("Fog Density End in Pain Dim", "Visuals", 0.8f, 0.0f, 10.0f, "Max Density of the fog in Pain Dim End parameter");
         fogDensityStart =  con.getFloat("Fog Density Start in Pain Dim", "Visuals", 0.1f, 0.0f, 10.0f, "Max Density of the fog in Pain Dim Start parameter");

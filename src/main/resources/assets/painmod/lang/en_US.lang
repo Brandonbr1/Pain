@@ -3,4 +3,5 @@ tile.painGrass.name=Nutrient Deficient Grass
 painmod.enterDim=What is this place.... Where am I...? Very dark and ominous
 painmod.ahhFinallyFree=I AM FINALLY FREE.
 painmod.failedEscape=Did you really think I did not think of that?
+painmod.softlockPrevention1=Ok, you win.... Seems you softlocked yourself.
 item.painBow.name=Cursed Bow

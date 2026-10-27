@@ -24,7 +24,10 @@
       {"name":"music/SwedenBackwards", "stream":true},
       {"name":"music/nether", "stream":true},
       {"name":"music/ritalin", "stream":true},
-      {"name":"music/11", "stream":true}
+      {"name":"music/11", "stream":true},
+      {"name":"music/OneSecondIsEnoughToDieFor", "stream":true},
+      {"name":"music/WordsYouWillNeverUnderstand", "stream":true},
+      {"name":"music/AfterYouHearThisYouAreOlder", "stream":true}
     ]
   }
 }

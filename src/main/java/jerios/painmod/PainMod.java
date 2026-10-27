@@ -9,11 +9,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import jerios.painmod.config.PainConfig;
 import jerios.painmod.damageSource.RagePainSource;
-import jerios.painmod.events.PainEventsClient;
-import jerios.painmod.events.PainEventsServer;
-import jerios.painmod.props.PainProps;
+import jerios.painmod.events.PainEvents;
 import jerios.painmod.proxy.IProxy;
-import jerios.painmod.registry.GameRulesRegistry;
 import jerios.painmod.registry.RegistryHandler;
 import jerios.painmod.utils.PainFakePlayerFactory;
 import net.minecraft.potion.Potion;
@@ -53,9 +50,7 @@ public class PainMod {
         proxy.clientOnly();
         proxy.serverOnly();
         registerForgeEvent(new PainFakePlayerFactory());
-        registerBothEvents(new PainEventsServer());
-        registerBothEvents(new PainEventsClient());
-        new PainProps();
+        registerBothEvents(new PainEvents());
     }
 
     public void registerBothEvents(Object o){
