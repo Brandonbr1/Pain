@@ -2,20 +2,26 @@ package jerios.painmod.events;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import jerios.painmod.Share;
+import jerios.painmod.client.audio.PainMusic;
 import jerios.painmod.config.PainConfig;
 import jerios.painmod.registry.ModItemBlocks;
 import jerios.painmod.utils.PGL;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.client.event.sound.SoundEvent;
+import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
 public class PainEventsClient {
 
-    Minecraft mc = FMLClientHandler.instance().getClient();
+    private Minecraft mc = FMLClientHandler.instance().getClient();
 
     @SubscribeEvent
     public void onTickClient(TickEvent.ClientTickEvent event) {
@@ -30,21 +36,71 @@ public class PainEventsClient {
             }
         }
 
+        // Should this be running as a tick event?
+        // We should also prob change the sound if it is player changed dim event as well
+        if (mc.theWorld != null) {
+            if (mc.theWorld.provider.dimensionId == PainConfig.painDimensionID)
+            {
+                if (!(mc.mcMusicTicker instanceof PainMusic))
+                {
+                    prevMusicTicker = mc.mcMusicTicker;
+                    mc.mcMusicTicker = new PainMusic(mc.mcMusicTicker);
+                }
+            } else {
+                if (prevMusicTicker == null)
+                {
+                    prevMusicTicker = mc.mcMusicTicker;
+                }
+
+                if (mc.mcMusicTicker != prevMusicTicker)
+                {
+                    mc.mcMusicTicker = prevMusicTicker;
+                }
+            }
+
+
+        } else {
+            if (prevMusicTicker == null)
+            {
+                prevMusicTicker = mc.mcMusicTicker;
+            }
+
+            if (mc.mcMusicTicker != prevMusicTicker)
+            {
+                mc.mcMusicTicker = prevMusicTicker;
+            }
+        }
+
     }
 
     @SubscribeEvent
-    public void fogRenderEvent(EntityViewRenderEvent.RenderFogEvent fogEvent) {
-        float f1 = fogEvent.farPlaneDistance;
-        
+    public void disconnect(PlayerEvent.PlayerLoggedOutEvent loggedOutEvent) {
+        if (prevMusicTicker != null) {
+            mc.mcMusicTicker = prevMusicTicker;
+            prevMusicTicker = null;
+        }
+    }
 
-        GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
+    public MusicTicker prevMusicTicker;
 
-        GL11.glFogf(GL11.GL_FOG_START, f1 * 0.25F);
-        GL11.glFogf(GL11.GL_FOG_END, f1);
 
-        if (GLContext.getCapabilities().GL_NV_fog_distance)
+    @SubscribeEvent
+    public void fogRenderEvent(EntityViewRenderEvent.RenderFogEvent fogEvent)
+    {
+        if (mc.theWorld != null && mc.theWorld.provider.dimensionId == PainConfig.painDimensionID)
         {
-            GL11.glFogi(34138, 34139);
+            float dist = fogEvent.farPlaneDistance;
+
+            PGL.fog(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
+
+            GL11.glFogf(GL11.GL_FOG_START, dist * PainConfig.fogDensityStart);
+            GL11.glFogf(GL11.GL_FOG_END, dist * PainConfig.fogDensityEnd);
+
+            if (GLContext.getCapabilities().GL_NV_fog_distance)
+            {
+                PGL.fog(34138, 34139);
+            }
+
         }
 
     }
@@ -52,14 +108,19 @@ public class PainEventsClient {
     @SubscribeEvent
     public void fogDensityEvent(net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity density)
     {
-        density.density = 1.0f;
+        if (mc.theWorld != null && mc.theWorld.provider.dimensionId == PainConfig.painDimensionID) {
+
+            density.density = PainConfig.fogDensity;
+        }
     }
 
     @SubscribeEvent
     public void fogColorChange(EntityViewRenderEvent.FogColors fogColors) {
-        fogColors.blue = 1.0F;
-        fogColors.red = 1.0F;
-        fogColors.green = 1.0F;
+        if (mc.theWorld != null && mc.theWorld.provider.dimensionId == PainConfig.painDimensionID) {
+            fogColors.blue = 1.0F; //TODO: FOG COLORS AS CONFIG
+            fogColors.red = 1.0F;
+            fogColors.green = 1.0F;
+        }
     }
 
 

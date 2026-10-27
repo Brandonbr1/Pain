@@ -16,5 +16,12 @@
     "sounds":[
       {"name":"PainGrass_step", "stream":false}
     ]
+  },
+  "music.game": {
+    "category": "music",
+    "sounds":[
+      {"name":"music/13", "stream":true},
+      {"name":"music/SwedenBackwards", "stream":true}
+    ]
   }
 }
