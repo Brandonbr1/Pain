@@ -4,7 +4,6 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import jerios.painmod.Share;
 import jerios.painmod.client.audio.PainMusic;
 import jerios.painmod.config.PainConfig;
 import jerios.painmod.registry.ModItemBlocks;
@@ -14,8 +13,8 @@ import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.client.event.sound.SoundEvent;
-import net.minecraftforge.client.event.sound.SoundLoadEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
@@ -23,29 +22,46 @@ public class PainEventsClient {
 
     private Minecraft mc = FMLClientHandler.instance().getClient();
 
+
     @SubscribeEvent
-    public void onTickClient(TickEvent.ClientTickEvent event) {
+    public void onTickWorldRenderEvent(TickEvent.ClientTickEvent event) {
         //leftClickCounter
         // rightClickTimer set high when we have the potion effect active
 
-        if (mc.theWorld != null && mc.theWorld.provider.dimensionId == PainConfig.painDimensionID)
-        {
-            if (mc.gameSettings != null && mc.gameSettings.gammaSetting >= PainConfig.maxBrightnessInDim)
-            {
-                mc.gameSettings.gammaSetting = PainConfig.maxBrightnessInDim;
+        if (mc.theWorld != null) {
+            if (inPainDim()) {
+                if (mc.gameSettings != null && mc.gameSettings.gammaSetting >= PainConfig.maxBrightnessInDim) {
+                    mc.gameSettings.gammaSetting = PainConfig.maxBrightnessInDim;
+                }
             }
+
         }
 
-        // Should this be running as a tick event?
-        // We should also prob change the sound if it is player changed dim event as well
-        if (mc.theWorld != null) {
-            if (mc.theWorld.provider.dimensionId == PainConfig.painDimensionID)
+
+    }
+
+    @SubscribeEvent
+    public void loadPainDim(WorldEvent.Load load) {
+        if (load.world.isRemote) {
+            if (load.world.provider.dimensionId == PainConfig.painDimensionID)
             {
                 if (!(mc.mcMusicTicker instanceof PainMusic))
                 {
                     prevMusicTicker = mc.mcMusicTicker;
-                    mc.mcMusicTicker = new PainMusic(mc.mcMusicTicker);
+                    mc.mcMusicTicker = new PainMusic(prevMusicTicker);
+                } else {
+                    if (prevMusicTicker == null)
+                    {
+                        prevMusicTicker = mc.mcMusicTicker;
+                    }
+
+                    if (mc.mcMusicTicker != prevMusicTicker)
+                    {
+                        mc.mcMusicTicker = prevMusicTicker;
+                    }
                 }
+
+
             } else {
                 if (prevMusicTicker == null)
                 {
@@ -56,28 +72,18 @@ public class PainEventsClient {
                 {
                     mc.mcMusicTicker = prevMusicTicker;
                 }
-            }
 
-
-        } else {
-            if (prevMusicTicker == null)
-            {
-                prevMusicTicker = mc.mcMusicTicker;
-            }
-
-            if (mc.mcMusicTicker != prevMusicTicker)
-            {
-                mc.mcMusicTicker = prevMusicTicker;
             }
         }
-
     }
 
     @SubscribeEvent
-    public void disconnect(PlayerEvent.PlayerLoggedOutEvent loggedOutEvent) {
-        if (prevMusicTicker != null) {
-            mc.mcMusicTicker = prevMusicTicker;
-            prevMusicTicker = null;
+    public void disconnect(WorldEvent.Unload unload) {
+        if (unload.world.isRemote) {
+            if (prevMusicTicker != null) {
+                mc.mcMusicTicker = prevMusicTicker;
+                prevMusicTicker = null;
+            }
         }
     }
 
@@ -87,7 +93,7 @@ public class PainEventsClient {
     @SubscribeEvent
     public void fogRenderEvent(EntityViewRenderEvent.RenderFogEvent fogEvent)
     {
-        if (mc.theWorld != null && mc.theWorld.provider.dimensionId == PainConfig.painDimensionID)
+        if (inPainDim())
         {
             float dist = fogEvent.farPlaneDistance;
 
@@ -108,18 +114,17 @@ public class PainEventsClient {
     @SubscribeEvent
     public void fogDensityEvent(net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity density)
     {
-        if (mc.theWorld != null && mc.theWorld.provider.dimensionId == PainConfig.painDimensionID) {
-
+        if (inPainDim()) {
             density.density = PainConfig.fogDensity;
         }
     }
 
     @SubscribeEvent
     public void fogColorChange(EntityViewRenderEvent.FogColors fogColors) {
-        if (mc.theWorld != null && mc.theWorld.provider.dimensionId == PainConfig.painDimensionID) {
-            fogColors.blue = 1.0F; //TODO: FOG COLORS AS CONFIG
-            fogColors.red = 1.0F;
-            fogColors.green = 1.0F;
+        if (inPainDim()) {
+            fogColors.blue = 0.0F; //TODO: FOG COLORS AS CONFIG
+            fogColors.red = 0.0F;
+            fogColors.green = 0.0F;
         }
     }
 
@@ -149,6 +154,11 @@ public class PainEventsClient {
 
             updateEvent.newfov = f;
         }
+    }
+
+
+    private boolean inPainDim() {
+      return  mc.theWorld != null && mc.theWorld.provider.dimensionId == PainConfig.painDimensionID;
     }
 
 

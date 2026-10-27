@@ -31,9 +31,12 @@ public class PainMusic extends MusicTicker {
     public void update()
     {
         //Fallback just in case it somehow does not get replaced back.
-        if (minecraft.theWorld.provider.dimensionId != PainConfig.painDimensionID)
+        if (minecraft.theWorld != null && minecraft.theWorld.provider.dimensionId != PainConfig.painDimensionID)
         {
-            wrapedTicker.update();
+            if (wrapedTicker != null)
+            {
+                wrapedTicker.update();
+            }
         }
 
         PainMusic.MusicType musictype = MusicType.GAME;
