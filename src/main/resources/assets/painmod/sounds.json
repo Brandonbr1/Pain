@@ -23,7 +23,8 @@
       {"name":"music/13", "stream":true},
       {"name":"music/SwedenBackwards", "stream":true},
       {"name":"music/nether", "stream":true},
-      {"name":"music/ritalin", "stream":true}
+      {"name":"music/ritalin", "stream":true},
+      {"name":"music/11", "stream":true}
     ]
   }
 }
