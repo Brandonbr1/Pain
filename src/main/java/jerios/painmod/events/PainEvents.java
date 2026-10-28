@@ -83,8 +83,6 @@ public class PainEvents {
         }
     }
 
-
-    
     @SubscribeEvent
     public void playerChangedDim(PlayerEvent.PlayerChangedDimensionEvent event) {
         EntityPlayer player = event.player;
@@ -123,7 +121,7 @@ public class PainEvents {
         DerivedWorldInfo worldinfo = (DerivedWorldInfo) worldserver.getWorldInfo();
 
 
-        Share.LOG.info(worldinfo.getRainTime());
+        Share.LOG.info("Event Rain Time" +worldinfo.getRainTime());
 
 
         if (!player.worldObj.isRemote) {
@@ -151,6 +149,8 @@ public class PainEvents {
                                 if (tryCounter > 3)
                                 {
                                     giveUp = true;
+                                } else {
+                                    tryCounter--;
                                 }
                             }
 

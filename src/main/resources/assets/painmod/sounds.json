@@ -27,7 +27,9 @@
       {"name":"music/11", "stream":true},
       {"name":"music/OneSecondIsEnoughToDieFor", "stream":true},
       {"name":"music/WordsYouWillNeverUnderstand", "stream":true},
-      {"name":"music/AfterYouHearThisYouAreOlder", "stream":true}
+      {"name":"music/AfterYouHearThisYouAreOlder", "stream":true},
+      {"name":"music/no", "stream":true},
+      {"name":"music/headace", "stream":true}
     ]
   }
 }

@@ -2,6 +2,7 @@ package jerios.painmod.world;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import jerios.painmod.Share;
 import jerios.painmod.client.world.PainSkyRender;
 import jerios.painmod.config.PainConfig;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -10,8 +11,11 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
+import net.minecraft.world.WorldServerMulti;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.storage.DerivedWorldInfo;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.client.IRenderHandler;
 
 import java.util.Random;
@@ -152,5 +156,131 @@ public class PainProvider extends WorldProvider {
     {
         return PainConfig.painDimensionID;
     }
+
+
+    @Override
+    public void calculateInitialWeather()
+    {
+        calculateInitialWeatherBody();
+    }
+
+    public void calculateInitialWeatherBody()
+    {
+        if (worldObj.getWorldInfo().isRaining())
+        {
+            worldObj.rainingStrength = 1.0F;
+
+            if (worldObj.getWorldInfo().isThundering())
+            {
+                worldObj.thunderingStrength = 1.0F;
+            }
+        }
+    }
+
+    @Override
+    public void updateWeather()
+    {
+        updateWeatherBody();
+    }
+
+        public void updateWeatherBody()
+        {
+            if (worldObj instanceof WorldServerMulti) {
+                WorldServerMulti worldServerMulti = (WorldServerMulti) worldObj;
+
+                WorldInfo info = worldServerMulti.getWorldInfo();
+                if (info instanceof DerivedWorldInfo) {
+
+                    int i = worldServerMulti.getWorldInfo().getThunderTime();
+
+                    if (i <= 0)
+                    {
+                        if (worldServerMulti.getWorldInfo().isThundering())
+                        {
+                            worldServerMulti.getWorldInfo().setThunderTime(worldServerMulti.rand.nextInt(12000) + 3600);
+                        }
+                        else
+                        {
+                            worldServerMulti.getWorldInfo().setThunderTime(worldServerMulti.rand.nextInt(168000) + 12000);
+                        }
+                    }
+                    else
+                    {
+                        --i;
+                        worldServerMulti.getWorldInfo().setThunderTime(i);
+
+                        if (i <= 0)
+                        {
+                            worldServerMulti.getWorldInfo().setThundering(!worldServerMulti.getWorldInfo().isThundering());
+                        }
+                    }
+
+                    worldServerMulti.prevThunderingStrength = worldServerMulti.thunderingStrength;
+
+                    if (worldServerMulti.getWorldInfo().isThundering())
+                    {
+                        worldServerMulti.thunderingStrength = (float)((double)worldServerMulti.thunderingStrength + 0.01D);
+                    }
+                    else
+                    {
+                        worldServerMulti.thunderingStrength = (float)((double)worldServerMulti.thunderingStrength - 0.01D);
+                    }
+
+                    worldServerMulti.thunderingStrength = MathHelper.clamp_float(worldServerMulti.thunderingStrength, 0.0F, 1.0F);
+                    int j = worldServerMulti.getWorldInfo().getRainTime();
+
+                    if (j <= 0)
+                    {
+                        if (worldServerMulti.getWorldInfo().isRaining())
+                        {
+                            worldServerMulti.getWorldInfo().setRainTime(worldServerMulti.rand.nextInt(12000) + 12000);
+                        }
+                        else
+                        {
+                            worldServerMulti.getWorldInfo().setRainTime(worldServerMulti.rand.nextInt(168000) + 12000);
+                        }
+                    }
+                    else
+                    {
+                        --j;
+                        worldServerMulti.getWorldInfo().setRainTime(j);
+
+                        if (j <= 0)
+                        {
+                            worldServerMulti.getWorldInfo()
+                                    .setRaining(!worldServerMulti.getWorldInfo().isRaining());
+                        }
+                    }
+
+                    worldServerMulti.prevRainingStrength = worldServerMulti.rainingStrength;
+
+                    if (worldServerMulti.getWorldInfo().isRaining()  )
+                    {
+                        worldServerMulti.rainingStrength = (float)((double)worldServerMulti.rainingStrength + 0.01D);
+                    }
+                    else
+                    {
+                        worldServerMulti.rainingStrength = (float)((double)worldServerMulti.rainingStrength - 0.01D);
+                    }
+
+                    worldServerMulti.rainingStrength = MathHelper.clamp_float(worldServerMulti.rainingStrength, 0.0F, 1.0F);
+
+
+
+
+
+                }
+
+
+
+            }
+
+        }
+
+
+
+
+
+
 
 }

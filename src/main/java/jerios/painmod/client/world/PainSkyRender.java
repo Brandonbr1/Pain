@@ -11,6 +11,9 @@ import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
 public class PainSkyRender extends IRenderHandler {
+
+
+
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc)
     {
@@ -19,9 +22,7 @@ public class PainSkyRender extends IRenderHandler {
     }
 
 
-    /**
-     * Renders the sky with the partial tick time. Args: partialTickTime
-
+/**
     public void renderSky(float partialTickTime, WorldClient worldClient, Minecraft mc)
     {
         if (mc.theWorld.provider.dimensionId == 1)
@@ -108,7 +109,7 @@ public class PainSkyRender extends IRenderHandler {
             GL11.glEnable(GL11.GL_BLEND);
             OpenGlHelper.glBlendFunc(770, 771, 1, 0);
             RenderHelper.disableStandardItemLighting();
-            float[] afloat = mc.theWorld.provider.calcSunriseSunsetColors(this.theWorld.getCelestialAngle(partialTickTime), partialTickTime);
+            float[] afloat = mc.theWorld.provider.calcSunriseSunsetColors(mc.theWorld.getCelestialAngle(partialTickTime), partialTickTime);
             float f7;
             float f8;
             float f9;
@@ -259,5 +260,6 @@ public class PainSkyRender extends IRenderHandler {
             GL11.glDepthMask(true);
         }
     }
-     */
+ **/
+
 }
