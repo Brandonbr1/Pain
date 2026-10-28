@@ -1,85 +1,38 @@
 package jerios.painmod.client.world;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import jerios.painmod.PainConstants;
+import jerios.painmod.PainMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public class PainSkyRender extends IRenderHandler {
 
+    private static final ResourceLocation locationSunPng = new ResourceLocation("textures/environment/sun.png");
 
+    private static final ResourceLocation locationMoonPhasesPng = new ResourceLocation("painmod:textures/environment/moon_phases.png");
 
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc)
     {
-       // renderSky(partialTicks, world, mc);
-
+        renderSky(partialTicks, world, mc);
     }
 
 
-/**
+
     public void renderSky(float partialTickTime, WorldClient worldClient, Minecraft mc)
     {
-        if (mc.theWorld.provider.dimensionId == 1)
-        {
-            GL11.glDisable(GL11.GL_FOG);
-            GL11.glDisable(GL11.GL_ALPHA_TEST);
-            GL11.glEnable(GL11.GL_BLEND);
-            OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-            RenderHelper.disableStandardItemLighting();
-            GL11.glDepthMask(false);
-            mc.renderEngine.bindTexture(locationEndSkyPng);
-            Tessellator tessellator = Tessellator.instance;
-
-            for (int i = 0; i < 6; ++i)
-            {
-                GL11.glPushMatrix();
-
-                if (i == 1)
-                {
-                    GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-                }
-
-                if (i == 2)
-                {
-                    GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-                }
-
-                if (i == 3)
-                {
-                    GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-                }
-
-                if (i == 4)
-                {
-                    GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
-                }
-
-                if (i == 5)
-                {
-                    GL11.glRotatef(-90.0F, 0.0F, 0.0F, 1.0F);
-                }
-
-                tessellator.startDrawingQuads();
-                tessellator.setColorOpaque_I(2631720);
-                tessellator.addVertexWithUV(-100.0D, -100.0D, -100.0D, 0.0D, 0.0D);
-                tessellator.addVertexWithUV(-100.0D, -100.0D, 100.0D, 0.0D, 16.0D);
-                tessellator.addVertexWithUV(100.0D, -100.0D, 100.0D, 16.0D, 16.0D);
-                tessellator.addVertexWithUV(100.0D, -100.0D, -100.0D, 16.0D, 0.0D);
-                tessellator.draw();
-                GL11.glPopMatrix();
-            }
-
-            GL11.glDepthMask(true);
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-            GL11.glEnable(GL11.GL_ALPHA_TEST);
-        }
-        else if (mc.theWorld.provider.isSurfaceWorld())
+        if (mc.theWorld.provider.isSurfaceWorld())
         {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             Vec3 vec3 = mc.theWorld.getSkyColor(mc.renderViewEntity, partialTickTime);
@@ -88,22 +41,22 @@ public class PainSkyRender extends IRenderHandler {
             float f3 = (float)vec3.zCoord;
             float f6;
 
-            if (mc.gameSettings.anaglyph)
-            {
+            // anaglyph code
+            //TODO: PERHAPS USE THIS TO MAKE THE WORLD LOOK
                 float f4 = (f1 * 30.0F + f2 * 59.0F + f3 * 11.0F) / 100.0F;
                 float f5 = (f1 * 30.0F + f2 * 70.0F) / 100.0F;
                 f6 = (f1 * 30.0F + f3 * 70.0F) / 100.0F;
                 f1 = f4;
                 f2 = f5;
                 f3 = f6;
-            }
+
 
             GL11.glColor3f(f1, f2, f3);
             Tessellator tessellator1 = Tessellator.instance;
             GL11.glDepthMask(false);
             GL11.glEnable(GL11.GL_FOG);
             GL11.glColor3f(f1, f2, f3);
-            GL11.glCallList(this.glSkyList);
+            GL11.glCallList(mc.renderGlobal.glSkyList);
             GL11.glDisable(GL11.GL_FOG);
             GL11.glDisable(GL11.GL_ALPHA_TEST);
             GL11.glEnable(GL11.GL_BLEND);
@@ -192,12 +145,12 @@ public class PainSkyRender extends IRenderHandler {
             tessellator1.addVertexWithUV((double)(-f10), -100.0D, (double)(-f10), (double)f16, (double)f15);
             tessellator1.draw();
             GL11.glDisable(GL11.GL_TEXTURE_2D);
-            float f18 = mc.theWorld.getStarBrightness(partialTickTime) * f6;
+            float starBrightness = mc.theWorld.getStarBrightness(partialTickTime) * f6;
 
-            if (f18 > 0.0F)
+            if (starBrightness > 0.0F)
             {
-                GL11.glColor4f(f18, f18, f18, f18);
-                GL11.glCallList(this.starGLCallList);
+                GL11.glColor4f(starBrightness, starBrightness, starBrightness, starBrightness);
+                GL11.glCallList(mc.renderGlobal.starGLCallList);
             }
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -207,13 +160,13 @@ public class PainSkyRender extends IRenderHandler {
             GL11.glPopMatrix();
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glColor3f(0.0F, 0.0F, 0.0F);
-            double d0 = mc.thePlayer.getPosition(partialTickTime).yCoord - this.theWorld.getHorizon();
+            double d0 = mc.thePlayer.getPosition(partialTickTime).yCoord - mc.theWorld.getHorizon();
 
             if (d0 < 0.0D)
             {
                 GL11.glPushMatrix();
                 GL11.glTranslatef(0.0F, 12.0F, 0.0F);
-                GL11.glCallList(this.glSkyList2);
+                GL11.glCallList(mc.renderGlobal.glSkyList2);
                 GL11.glPopMatrix();
                 f8 = 1.0F;
                 f9 = -((float)(d0 + 65.0D));
@@ -254,12 +207,12 @@ public class PainSkyRender extends IRenderHandler {
 
             GL11.glPushMatrix();
             GL11.glTranslatef(0.0F, -((float)(d0 - 16.0D)), 0.0F);
-            GL11.glCallList(this.glSkyList2);
+            GL11.glCallList(mc.renderGlobal.glSkyList2);
             GL11.glPopMatrix();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
             GL11.glDepthMask(true);
         }
     }
- **/
+
 
 }

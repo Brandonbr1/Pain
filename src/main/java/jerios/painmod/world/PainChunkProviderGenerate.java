@@ -78,6 +78,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         this.noiseGenStone = new NoiseGeneratorOctaves(rand, 4);
         this.noiseGenDepth = new NoiseGeneratorOctaves(this.rand, 10);
 
+        this.noiseGenErosion = new NoiseGeneratorOctaves(this.rand, 4);
 
 
         this.noiseArray = new double[825];
@@ -353,7 +354,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                 ++index2D;
 
                 double d13 = (double)minSum;
-                double d14 = (double)maxSum;
+                double aMaxSum = (double)maxSum;
                 d13 += depthNoiseCalculation * 0.2D;
                 d13 = d13 * 8.5D / 8.0D;
                 double d5 = 8.5D + d13 * 4.0D;
@@ -375,7 +376,8 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                         scaleFactor =10.0D;
                     }
 
-                    double falloff = ((double)sizeY - d5) * scaleFactor * 128.0D / 256.0D / d14;
+                    // reduce randomly perhaps?
+                    double falloff = ((double)sizeY - d5) * scaleFactor * 128.0D / 256.0D / aMaxSum;
 
                     if (falloff < 0.0D)
                     {
@@ -386,7 +388,6 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                     double high = this.noiseUpper[index] / 512.0D; //upper noise
                     double selector = (this.noiseSlide[index] / 10.0D + 1.0D) / 2.0D; // val that gets passed
 
-                    // reduce clamp randomly?
                     double density = MathHelper.denormalizeClamp(low, high, selector) - falloff;
 
 

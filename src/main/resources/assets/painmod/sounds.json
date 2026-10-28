@@ -29,7 +29,21 @@
       {"name":"music/WordsYouWillNeverUnderstand", "stream":true},
       {"name":"music/AfterYouHearThisYouAreOlder", "stream":true},
       {"name":"music/no", "stream":true},
-      {"name":"music/headace", "stream":true}
+      {"name":"music/headace", "stream":true},
+      {"name":"music/boss", "stream":true},
+      {"name":"music/shuniji", "stream":true},
+      {"name":"music/mau5cave", "stream":true},
+      {"name":"music/minecraft_03_test", "stream":true}
     ]
-  }
+  },
+ "music.escaped": {
+     "category": "music",
+ "sounds":[
+ {"name":"conditionalMusic/biomeFest", "stream":true}
+
+]
+
+
+}
+
 }

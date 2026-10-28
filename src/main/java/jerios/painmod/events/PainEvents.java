@@ -110,18 +110,23 @@ public class PainEvents {
     int tryCounter = 0;
     boolean giveUp = false;
 
-    // some mods may not fire the Transport Dimension Event
-    @SubscribeEvent
-    public void preventFullyEscape(TickEvent.PlayerTickEvent event) {
-        EntityPlayer player = event.player;
 
+
+    @SubscribeEvent
+    public void world(TickEvent.WorldTickEvent tickEvent) {
 
 
         WorldServerMulti worldserver = (WorldServerMulti) MinecraftServer.getServer().worldServers[PainConfig.painDimensionID];
         DerivedWorldInfo worldinfo = (DerivedWorldInfo) worldserver.getWorldInfo();
 
 
-        Share.LOG.info("Event Rain Time" +worldinfo.getRainTime());
+        Share.LOG.info("Event Rain Time"  +worldinfo.getRainTime());
+    }
+
+    // some mods may not fire the Transport Dimension Event
+    @SubscribeEvent
+    public void preventFullyEscape(TickEvent.PlayerTickEvent event) {
+        EntityPlayer player = event.player;
 
 
         if (!player.worldObj.isRemote) {
@@ -483,7 +488,7 @@ public class PainEvents {
     @SubscribeEvent
     public void fogRenderEvent(EntityViewRenderEvent.RenderFogEvent fogEvent)
     {
-        if (inPainDim() && doesNotHaveOtherEffects())
+        if (inPainDim() || doesNotHaveOtherEffects())
         {
             float dist = fogEvent.farPlaneDistance;
 
@@ -505,7 +510,7 @@ public class PainEvents {
     @SubscribeEvent
     public void fogDensityEvent(net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity density)
     {
-        if (inPainDim() && doesNotHaveOtherEffects())
+        if (inPainDim() || doesNotHaveOtherEffects())
         {
             density.density = PainConfig.fogDensity;
         }
@@ -514,11 +519,11 @@ public class PainEvents {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void fogColorChange(EntityViewRenderEvent.FogColors fogColors) {
-        if (inPainDim() && doesNotHaveOtherEffects())
+        if (inPainDim() || doesNotHaveOtherEffects())
         {
-            fogColors.blue = 0.0F;
-            fogColors.red = 1.0F;
-            fogColors.green = 0.0F;
+            fogColors.blue = 0.1F;
+            fogColors.red = 0.1F;
+            fogColors.green = 0.1F;
         }
     }
 

@@ -7,6 +7,7 @@ import jerios.painmod.client.world.PainSkyRender;
 import jerios.painmod.config.PainConfig;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -62,6 +63,9 @@ public class PainProvider extends WorldProvider {
 
     @Override
     public IRenderHandler getSkyRenderer() {
+        setSkyRenderer(new PainSkyRender());
+
+
         return super.getSkyRenderer();
     }
 
@@ -122,7 +126,7 @@ public class PainProvider extends WorldProvider {
     @SideOnly(Side.CLIENT)
     public float getStarBrightness(float par1)
     {
-        return 0.0F;
+        return 1.0F;
     }
 
     @Override
@@ -183,104 +187,99 @@ public class PainProvider extends WorldProvider {
         updateWeatherBody();
     }
 
-        public void updateWeatherBody()
-        {
-            if (worldObj instanceof WorldServerMulti) {
-                WorldServerMulti worldServerMulti = (WorldServerMulti) worldObj;
 
-                WorldInfo info = worldServerMulti.getWorldInfo();
-                if (info instanceof DerivedWorldInfo) {
 
-                    int i = worldServerMulti.getWorldInfo().getThunderTime();
+    public void updateWeatherBody()
+    {
+
+            if (!worldObj.isRemote)
+            {
+
+                WorldServerMulti worldserver = (WorldServerMulti) MinecraftServer.getServer().worldServers[PainConfig.painDimensionID];
+                DerivedWorldInfo worldinfo = (DerivedWorldInfo) worldserver.getWorldInfo();
+
+
+                int i =  worldinfo.getThunderTime();
+
+
+                int sd = ((DerivedWorldInfo)worldserver.getWorldInfo()).getRainTime();
+                Share.LOG.info("IN WORLD TIMER    "+sd);
+
+                // worldinfo.getThunderTime();
+
+                if (i <= 0)
+                {
+                    if (worldinfo.isThundering())
+                    {
+                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setThunderTime(worldserver.rand.nextInt(12000) + 3600);
+                    }
+                    else
+                    {
+                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setThunderTime(worldserver.rand.nextInt(168000) + 12000);
+                    }
+                }
+                else
+                {
+                    --i;
+                    ((DerivedWorldInfo)worldserver.getWorldInfo()).setThunderTime(i);
 
                     if (i <= 0)
                     {
-                        if (worldServerMulti.getWorldInfo().isThundering())
-                        {
-                            worldServerMulti.getWorldInfo().setThunderTime(worldServerMulti.rand.nextInt(12000) + 3600);
-                        }
-                        else
-                        {
-                            worldServerMulti.getWorldInfo().setThunderTime(worldServerMulti.rand.nextInt(168000) + 12000);
-                        }
+                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setThundering(!((DerivedWorldInfo)worldserver.getWorldInfo()).isThundering());
+                    }
+                }
+
+                worldserver.prevThunderingStrength = worldserver.thunderingStrength;
+
+                if (((DerivedWorldInfo)worldserver.getWorldInfo()).isThundering())
+                {
+                    worldserver.thunderingStrength = (float)((double)worldserver.thunderingStrength + 0.01D);
+                }
+                else
+                {
+                    worldserver.thunderingStrength = (float)((double)worldserver.thunderingStrength - 0.01D);
+                }
+
+                worldserver.thunderingStrength = MathHelper.clamp_float(worldserver.thunderingStrength, 0.0F, 1.0F);
+                int j = ((DerivedWorldInfo)worldserver.getWorldInfo()).getRainTime();
+
+                if (j <= 0)
+                {
+                    if (((DerivedWorldInfo)worldserver.getWorldInfo()).isRaining())
+                    {
+                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setRainTime(worldserver.rand.nextInt(12000) + 12000);
                     }
                     else
                     {
-                        --i;
-                        worldServerMulti.getWorldInfo().setThunderTime(i);
-
-                        if (i <= 0)
-                        {
-                            worldServerMulti.getWorldInfo().setThundering(!worldServerMulti.getWorldInfo().isThundering());
-                        }
+                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setRainTime(worldserver.rand.nextInt(168000) + 12000);
                     }
-
-                    worldServerMulti.prevThunderingStrength = worldServerMulti.thunderingStrength;
-
-                    if (worldServerMulti.getWorldInfo().isThundering())
-                    {
-                        worldServerMulti.thunderingStrength = (float)((double)worldServerMulti.thunderingStrength + 0.01D);
-                    }
-                    else
-                    {
-                        worldServerMulti.thunderingStrength = (float)((double)worldServerMulti.thunderingStrength - 0.01D);
-                    }
-
-                    worldServerMulti.thunderingStrength = MathHelper.clamp_float(worldServerMulti.thunderingStrength, 0.0F, 1.0F);
-                    int j = worldServerMulti.getWorldInfo().getRainTime();
+                }
+                else
+                {
+                    --j;
+                    ((DerivedWorldInfo)worldserver.getWorldInfo()).setRainTime(j);
 
                     if (j <= 0)
                     {
-                        if (worldServerMulti.getWorldInfo().isRaining())
-                        {
-                            worldServerMulti.getWorldInfo().setRainTime(worldServerMulti.rand.nextInt(12000) + 12000);
-                        }
-                        else
-                        {
-                            worldServerMulti.getWorldInfo().setRainTime(worldServerMulti.rand.nextInt(168000) + 12000);
-                        }
+                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setRaining(!((DerivedWorldInfo)worldserver.getWorldInfo()).isRaining());
                     }
-                    else
-                    {
-                        --j;
-                        worldServerMulti.getWorldInfo().setRainTime(j);
-
-                        if (j <= 0)
-                        {
-                            worldServerMulti.getWorldInfo()
-                                    .setRaining(!worldServerMulti.getWorldInfo().isRaining());
-                        }
-                    }
-
-                    worldServerMulti.prevRainingStrength = worldServerMulti.rainingStrength;
-
-                    if (worldServerMulti.getWorldInfo().isRaining()  )
-                    {
-                        worldServerMulti.rainingStrength = (float)((double)worldServerMulti.rainingStrength + 0.01D);
-                    }
-                    else
-                    {
-                        worldServerMulti.rainingStrength = (float)((double)worldServerMulti.rainingStrength - 0.01D);
-                    }
-
-                    worldServerMulti.rainingStrength = MathHelper.clamp_float(worldServerMulti.rainingStrength, 0.0F, 1.0F);
-
-
-
-
-
                 }
 
+                worldserver.prevRainingStrength = worldserver.rainingStrength;
 
+                if (((DerivedWorldInfo)worldserver.getWorldInfo()).isRaining())
+                {
+                    worldserver.rainingStrength = (float)((double)worldserver.rainingStrength + 0.01D);
+                }
+                else
+                {
+                    worldserver.rainingStrength = (float)((double)worldserver.rainingStrength - 0.01D);
+                }
 
+                worldserver.rainingStrength = MathHelper.clamp_float(worldserver.rainingStrength, 0.0F, 1.0F);
             }
 
-        }
-
-
-
-
-
+    }
 
 
 }
