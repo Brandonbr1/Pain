@@ -488,18 +488,23 @@ public class PainEvents {
     @SubscribeEvent
     public void fogRenderEvent(EntityViewRenderEvent.RenderFogEvent fogEvent)
     {
-        if (inPainDim() || doesNotHaveOtherEffects())
+        if (inPainDim())
         {
             float dist = fogEvent.farPlaneDistance;
+            if (doesNotHaveOtherEffects()) {
 
-            PGL.fog(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
+                PGL.fog(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
 
-            GL11.glFogf(GL11.GL_FOG_START, dist * PainConfig.fogDensityStart);
-            GL11.glFogf(GL11.GL_FOG_END, dist * PainConfig.fogDensityEnd);
+                GL11.glFogf(GL11.GL_FOG_START, dist * PainConfig.fogDensityStart);
+                GL11.glFogf(GL11.GL_FOG_END, dist * PainConfig.fogDensityEnd);
 
-            if (GLContext.getCapabilities().GL_NV_fog_distance)
-            {
-                PGL.fog(34138, 34139);
+                if (GLContext.getCapabilities().GL_NV_fog_distance) {
+                    PGL.fog(34138, 34139);
+                }
+            } else {
+                PGL.fog(GL11.GL_FOG_MODE, GL11.GL_EXP);
+                GL11.glFogf(GL11.GL_FOG_START, dist * PainConfig.fogDensityStart);
+                GL11.glFogf(GL11.GL_FOG_END, dist * PainConfig.fogDensityEnd);
             }
 
         }
@@ -510,20 +515,31 @@ public class PainEvents {
     @SubscribeEvent
     public void fogDensityEvent(net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity density)
     {
-        if (inPainDim() || doesNotHaveOtherEffects())
+        if (inPainDim())
         {
-            density.density = PainConfig.fogDensity;
+            if (doesNotHaveOtherEffects()) {
+                density.density = PainConfig.fogDensity;
+            } else {
+                density.density = 2.0f;
+            }
         }
     }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void fogColorChange(EntityViewRenderEvent.FogColors fogColors) {
-        if (inPainDim() || doesNotHaveOtherEffects())
+        if (inPainDim() )
         {
-            fogColors.blue = 0.1F;
-            fogColors.red = 0.1F;
-            fogColors.green = 0.1F;
+            if (doesNotHaveOtherEffects())
+            {
+                fogColors.blue = 0.1F;
+                fogColors.red = 0.1F;
+                fogColors.green = 0.1F;
+            } else {
+                fogColors.green = 0.0f;
+                fogColors.red = 0.0f;
+                fogColors.blue = 0.0f;
+            }
         }
     }
 
