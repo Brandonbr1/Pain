@@ -2,14 +2,11 @@ package jerios.painmod.client.world;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import jerios.painmod.PainConstants;
-import jerios.painmod.PainMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IRenderHandler;
@@ -32,23 +29,12 @@ public class PainSkyRender extends IRenderHandler {
 
     public void renderSky(float partialTickTime, WorldClient worldClient, Minecraft mc)
     {
-        if (mc.theWorld.provider.isSurfaceWorld())
-        {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             Vec3 vec3 = mc.theWorld.getSkyColor(mc.renderViewEntity, partialTickTime);
             float f1 = (float)vec3.xCoord;
             float f2 = (float)vec3.yCoord;
             float f3 = (float)vec3.zCoord;
             float f6;
-
-            // anaglyph code
-            //TODO: PERHAPS USE THIS TO MAKE THE WORLD LOOK
-                float f4 = (f1 * 30.0F + f2 * 59.0F + f3 * 11.0F) / 100.0F;
-                float f5 = (f1 * 30.0F + f2 * 70.0F) / 100.0F;
-                f6 = (f1 * 30.0F + f3 * 70.0F) / 100.0F;
-                f1 = f4;
-                f2 = f5;
-                f3 = f6;
 
 
             GL11.glColor3f(f1, f2, f3);
@@ -62,53 +48,10 @@ public class PainSkyRender extends IRenderHandler {
             GL11.glEnable(GL11.GL_BLEND);
             OpenGlHelper.glBlendFunc(770, 771, 1, 0);
             RenderHelper.disableStandardItemLighting();
-            float[] afloat = mc.theWorld.provider.calcSunriseSunsetColors(mc.theWorld.getCelestialAngle(partialTickTime), partialTickTime);
             float f7;
             float f8;
             float f9;
             float f10;
-
-            if (afloat != null)
-            {
-                GL11.glDisable(GL11.GL_TEXTURE_2D);
-                GL11.glShadeModel(GL11.GL_SMOOTH);
-                GL11.glPushMatrix();
-                GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-                GL11.glRotatef(MathHelper.sin(mc.theWorld.getCelestialAngleRadians(partialTickTime)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
-                GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
-                f6 = afloat[0];
-                f7 = afloat[1];
-                f8 = afloat[2];
-                float f11;
-
-                if (mc.gameSettings.anaglyph)
-                {
-                    f9 = (f6 * 30.0F + f7 * 59.0F + f8 * 11.0F) / 100.0F;
-                    f10 = (f6 * 30.0F + f7 * 70.0F) / 100.0F;
-                    f11 = (f6 * 30.0F + f8 * 70.0F) / 100.0F;
-                    f6 = f9;
-                    f7 = f10;
-                    f8 = f11;
-                }
-
-                tessellator1.startDrawing(6);
-                tessellator1.setColorRGBA_F(f6, f7, f8, afloat[3]);
-                tessellator1.addVertex(0.0D, 100.0D, 0.0D);
-                byte b0 = 16;
-                tessellator1.setColorRGBA_F(afloat[0], afloat[1], afloat[2], 0.0F);
-
-                for (int j = 0; j <= b0; ++j)
-                {
-                    f11 = (float)j * (float)Math.PI * 2.0F / (float)b0;
-                    float f12 = MathHelper.sin(f11);
-                    float f13 = MathHelper.cos(f11);
-                    tessellator1.addVertex((double)(f12 * 120.0F), (double)(f13 * 120.0F), (double)(-f13 * 40.0F * afloat[3]));
-                }
-
-                tessellator1.draw();
-                GL11.glPopMatrix();
-                GL11.glShadeModel(GL11.GL_FLAT);
-            }
 
             GL11.glEnable(GL11.GL_TEXTURE_2D);
             OpenGlHelper.glBlendFunc(770, 1, 1, 0);
@@ -211,7 +154,7 @@ public class PainSkyRender extends IRenderHandler {
             GL11.glPopMatrix();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
             GL11.glDepthMask(true);
-        }
+
     }
 
 

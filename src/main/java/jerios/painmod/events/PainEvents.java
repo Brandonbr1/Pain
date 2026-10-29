@@ -502,9 +502,7 @@ public class PainEvents {
                     PGL.fog(34138, 34139);
                 }
             } else {
-                PGL.fog(GL11.GL_FOG_MODE, GL11.GL_EXP);
-                GL11.glFogf(GL11.GL_FOG_START, dist * PainConfig.fogDensityStart);
-                GL11.glFogf(GL11.GL_FOG_END, dist * PainConfig.fogDensityEnd);
+                System.out.println("I have Nightvision or blindness");
             }
 
         }
@@ -518,8 +516,10 @@ public class PainEvents {
         if (inPainDim())
         {
             if (doesNotHaveOtherEffects()) {
+                System.out.println("RUN????");
                 density.density = PainConfig.fogDensity;
             } else {
+                System.out.println("I have Nightvision or blindness");
                 density.density = 2.0f;
             }
         }
@@ -536,6 +536,7 @@ public class PainEvents {
                 fogColors.red = 0.1F;
                 fogColors.green = 0.1F;
             } else {
+                System.out.println("I have Nightvision or blindness");
                 fogColors.green = 0.0f;
                 fogColors.red = 0.0f;
                 fogColors.blue = 0.0f;

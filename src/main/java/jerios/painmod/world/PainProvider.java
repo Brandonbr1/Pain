@@ -6,6 +6,7 @@ import jerios.painmod.Share;
 import jerios.painmod.client.world.PainSkyRender;
 import jerios.painmod.config.PainConfig;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
@@ -65,7 +66,6 @@ public class PainProvider extends WorldProvider {
     public IRenderHandler getSkyRenderer() {
         setSkyRenderer(new PainSkyRender());
 
-
         return super.getSkyRenderer();
     }
 
@@ -105,6 +105,11 @@ public class PainProvider extends WorldProvider {
     public boolean isSkyColored()
     {
         return false;
+    }
+
+    @Override
+    public Vec3 getSkyColor(Entity cameraEntity, float partialTicks) {
+        return Vec3.createVectorHelper(000.0F, 000.0F, 000.0F);
     }
 
     // make it really dark
