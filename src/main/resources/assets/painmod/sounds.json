@@ -36,7 +36,9 @@
       {"name":"music/mau5cave", "stream":true},
       {"name":"music/minecraft_03_test", "stream":true},
       {"name":"music/shuniji", "stream":true},
-      {"name":"music/TouchesOfASoul", "stream":true}
+      {"name":"music/TouchesOfASoul", "stream":true},
+      {"name":"music/rewind", "stream":true}
+      {"name":"music/HungerII", "stream":true}
     ]
   }
 }
