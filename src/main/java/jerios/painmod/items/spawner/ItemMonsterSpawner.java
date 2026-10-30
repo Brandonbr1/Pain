@@ -25,6 +25,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMonsterSpawner extends ItemBlock {
 
+    public int spiner = 0;
+
     public ItemMonsterSpawner(Block block) {
         super(block);
         this.setHasSubtypes(true);

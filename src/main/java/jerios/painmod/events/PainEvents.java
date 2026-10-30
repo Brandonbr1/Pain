@@ -26,10 +26,16 @@ import net.minecraft.block.BlockPortal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -46,6 +52,7 @@ import net.minecraft.world.WorldServerMulti;
 import net.minecraft.world.storage.DerivedWorldInfo;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -419,7 +426,9 @@ public class PainEvents {
                 if (!(mc.mcMusicTicker instanceof PainMusic))
                 {
                     System.out.println("RUN0");
-                    prevMusicTicker = mc.mcMusicTicker;
+                    if (prevMusicTicker == null) {
+                        prevMusicTicker = mc.mcMusicTicker;
+                    }
                     mc.mcMusicTicker = new PainMusic(mc);
                     mc.getSoundHandler().stopSounds(); // stop all sounds so we play our own
                 } else {
@@ -509,12 +518,16 @@ public class PainEvents {
 
     @SubscribeEvent
     public void fogColorChange(EntityViewRenderEvent.FogColors fogColors) {
-     //   if (inPainDim())
-      //  {
-            System.out.println("WJFWJKSK "+fogColors.entity.isPotionActive(Potion.nightVision.id));
-                System.out.println("TEST" + fogColors.entity.worldObj.isRemote);
+        if (inPainDim())
+        {
+            fogColors.blue = 0.1f;
+            fogColors.green = 0.1f;
+            fogColors.red = 0.1f;
+        //IT WORKS NOW?
+       //     System.out.println("WJFWJKSK "+fogColors.entity.isPotionActive(Potion.nightVision.id));
+         //       System.out.println("TEST" + fogColors.entity.worldObj.isRemote);
 
-      //  }
+        }
     }
 
 
@@ -545,6 +558,58 @@ public class PainEvents {
 
             updateEvent.newfov = f;
         }
+    }
+
+    // THIS IS AWFUL!
+    @SubscribeEvent
+    public void renderTheBowCorrect(RenderPlayerEvent.Specials.Pre pre) {
+       EntityPlayer p_77029_1_ = pre.entityPlayer;
+
+        ModelBiped modelBipedMain = pre.renderer.modelBipedMain;
+
+        ItemStack itemstack1 = p_77029_1_.inventory.getCurrentItem();
+
+        float f2;
+
+        if (itemstack1 != null)
+        {
+
+            if (itemstack1.getItem() == ModItemBlocks.cursedBow) {
+                pre.renderItem = false;
+            } else {
+                pre.renderItem = true;
+                return;
+            }
+
+
+            GL11.glPushMatrix();
+            modelBipedMain.bipedRightArm.postRender(0.0625F);
+            GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
+
+             if (itemstack1.getItem() == ModItemBlocks.cursedBow) {
+                 f2 = 0.625F;
+                 GL11.glTranslatef(0.0F, 0.125F, 0.3125F);
+                 GL11.glRotatef(-20.0F, 0.0F, 1.0F, 0.0F);
+                 GL11.glScalef(f2, -f2, f2);
+                 GL11.glRotatef(-100.0F, 1.0F, 0.0F, 0.0F);
+                 GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+             }
+
+            float f3;
+            int k;
+            float f12;
+
+                k = itemstack1.getItem().getColorFromItemStack(itemstack1, 0);
+                float f11 = (float)(k >> 16 & 255) / 255.0F;
+                f12 = (float)(k >> 8 & 255) / 255.0F;
+                f3 = (float)(k & 255) / 255.0F;
+                GL11.glColor4f(f11, f12, f3, 1.0F);
+                RenderManager.instance.itemRenderer.renderItem(p_77029_1_, itemstack1, 0);
+
+
+            GL11.glPopMatrix();
+        }
+
     }
 
     /**

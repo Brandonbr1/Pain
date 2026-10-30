@@ -35,7 +35,7 @@ public class ItemBowOfCursing extends ItemBow {
         setUnlocalizedName("painBow");
         setTextureName("painmod:painBow");
         setCreativeTab(TabsRegistry.WEAPONS_TAB);
-        setFull3D();
+    //    setFull3D();
     }
 
 

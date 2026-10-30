@@ -17,8 +17,6 @@ public class ClientProxy extends CommonProxy implements IProxy{
     @Override
     public void clientOnly() {
      //   renderEntity(PainZombie.class, new RenderPainZombie());
-        MinecraftForgeClient.registerItemRenderer(ModItemBlocks.cursedBow, new PainBowItemRender());
-
     }
 
 
