@@ -2,8 +2,7 @@ package jerios.painmod.proxy;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import jerios.painmod.client.RenderPainZombie;
-import jerios.painmod.client.items.PainBowItemRender;
-import jerios.painmod.entity.PainZombie;
+import jerios.painmod.client.items.MonsterSpawnerRender;
 import jerios.painmod.registry.ModItemBlocks;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderSnowball;
@@ -16,6 +15,7 @@ public class ClientProxy extends CommonProxy implements IProxy{
 
     @Override
     public void clientOnly() {
+        MinecraftForgeClient.registerItemRenderer( Item.getItemFromBlock(ModItemBlocks.spawner), new MonsterSpawnerRender());
      //   renderEntity(PainZombie.class, new RenderPainZombie());
     }
 
