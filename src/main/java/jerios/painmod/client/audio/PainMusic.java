@@ -17,12 +17,15 @@ public class PainMusic extends MusicTicker {
     private ISound field_147678_c;
     private int field_147676_d = 100;
     public Minecraft field_147677_b;
-
     public PainMusic(Minecraft minecraft) {
         super(minecraft);
         this.field_147677_b = minecraft;
     }
 
+
+    public ISound getSound() {
+        return field_147678_c;
+    }
 
     @Override
     public void update()

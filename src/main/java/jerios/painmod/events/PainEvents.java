@@ -1,6 +1,7 @@
 package jerios.painmod.events;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -38,6 +39,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldServerMulti;
@@ -105,10 +107,6 @@ public class PainEvents {
     }
 
 
-    long time = System.currentTimeMillis();
-    long lastTime = 0;
-    int tryCounter = 0;
-    boolean giveUp = false;
 
 
 
@@ -135,10 +133,6 @@ public class PainEvents {
         if (player.ticksExisted % 200 == 0) {
             PainProps props = PainProps.get(player);
 
-            if (player.isPotionActive(Potion.nightVision)) {
-                player.removePotionEffect(Potion.nightVision.id);
-            }
-
 
             if (props != null) {
                 if (!props.escapedDim) {
@@ -146,29 +140,12 @@ public class PainEvents {
                     {
                         if (player instanceof EntityPlayerMP) {
 
-                            if (!giveUp && time > lastTime)
-                            {
-                                lastTime = time + 15000L;
-                                tryCounter++;
-
-                                if (tryCounter > 3)
-                                {
-                                    giveUp = true;
-                                } else {
-                                    tryCounter--;
-                                }
-                            }
-
-
-                            if (!giveUp) {
                                 final int dim = PainConfig.painDimensionID;
                                 EntityPlayerMP playerMP = (EntityPlayerMP) player;
                                 WorldServer ws = playerMP.mcServer.worldServerForDimension(dim);
                                 TeleporterHandler.travelToDimension(playerMP, PainConfig.painDimensionID, new PainTeleporter(ws));
                                 player.addChatMessage(new ChatComponentTranslation("painmod.failedEscape"));
-                            } else {
-                                player.addChatMessage(new ChatComponentTranslation("painmod.softlockPrevention1"));
-                            }
+
                         }
 
                     }
@@ -438,30 +415,37 @@ public class PainEvents {
         if (load.world.isRemote) {
             if (load.world.provider.dimensionId == PainConfig.painDimensionID)
             {
+                System.out.println("RUN7");
                 if (!(mc.mcMusicTicker instanceof PainMusic))
                 {
+                    System.out.println("RUN0");
                     prevMusicTicker = mc.mcMusicTicker;
                     mc.mcMusicTicker = new PainMusic(mc);
-                    mc.getSoundHandler().stopSounds(); // Clear the sound reference
+                    mc.getSoundHandler().stopSounds(); // stop all sounds so we play our own
                 } else {
+                    System.out.println("RUN6");
                     if (prevMusicTicker == null)
                     {
+                        System.out.println("RUN1");
                         prevMusicTicker = mc.mcMusicTicker;
                     }
-
                     if (mc.mcMusicTicker != prevMusicTicker)
                     {
+                        System.out.println("RUN2");
                         mc.mcMusicTicker = prevMusicTicker;
                     }
+
                 }
             } else {
+                System.out.println("RUN5");
                 if (prevMusicTicker == null)
                 {
+                    System.out.println("RUN3");
                     prevMusicTicker = mc.mcMusicTicker;
                 }
-
-                if (mc.mcMusicTicker != prevMusicTicker)
+                else if (mc.mcMusicTicker != prevMusicTicker)
                 {
+                    System.out.println("RUN4");
                     mc.mcMusicTicker = prevMusicTicker;
                 }
 
@@ -484,14 +468,14 @@ public class PainEvents {
     public MusicTicker prevMusicTicker;
 
 
-    @SideOnly(Side.CLIENT)
+   @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void fogRenderEvent(EntityViewRenderEvent.RenderFogEvent fogEvent)
     {
         if (inPainDim())
         {
+            fogEvent.setResult(Event.Result.ALLOW);
             float dist = fogEvent.farPlaneDistance;
-            if (doesNotHaveOtherEffects()) {
 
                 PGL.fog(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
 
@@ -501,48 +485,39 @@ public class PainEvents {
                 if (GLContext.getCapabilities().GL_NV_fog_distance) {
                     PGL.fog(34138, 34139);
                 }
-            } else {
-                System.out.println("I have Nightvision or blindness");
-            }
+
 
         }
 
     }
 
+
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void fogDensityEvent(net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity density)
+    public void fogDensityEvent(EntityViewRenderEvent.FogDensity density)
     {
         if (inPainDim())
         {
-            if (doesNotHaveOtherEffects()) {
-                System.out.println("RUN????");
                 density.density = PainConfig.fogDensity;
-            } else {
-                System.out.println("I have Nightvision or blindness");
-                density.density = 2.0f;
-            }
         }
     }
 
-    @SideOnly(Side.CLIENT)
+
+    // THIS CAUSESS NIGHT VISION TO BE VERY VISIBLE if fog color is 0.1, 0.1, 0.1....
+    // Why?
+
+
     @SubscribeEvent
     public void fogColorChange(EntityViewRenderEvent.FogColors fogColors) {
-        if (inPainDim() )
-        {
-            if (doesNotHaveOtherEffects())
-            {
-                fogColors.blue = 0.1F;
-                fogColors.red = 0.1F;
-                fogColors.green = 0.1F;
-            } else {
-                System.out.println("I have Nightvision or blindness");
-                fogColors.green = 0.0f;
-                fogColors.red = 0.0f;
-                fogColors.blue = 0.0f;
-            }
-        }
+     //   if (inPainDim())
+      //  {
+            System.out.println("WJFWJKSK "+fogColors.entity.isPotionActive(Potion.nightVision.id));
+                System.out.println("TEST" + fogColors.entity.worldObj.isRemote);
+
+      //  }
     }
+
+
 
 
     @SideOnly(Side.CLIENT)
@@ -591,14 +566,6 @@ public class PainEvents {
 
     private boolean inPainDim() {
         return mc.theWorld != null && mc.theWorld.provider.dimensionId == PainConfig.painDimensionID;
-    }
-
-    private boolean doesNotHaveOtherEffects() {
-        if (mc.thePlayer != null)
-        {
-            return !mc.thePlayer.isPotionActive(Potion.blindness) || !mc.thePlayer.isPotionActive(Potion.nightVision);
-        }
-        return false;
     }
 
 

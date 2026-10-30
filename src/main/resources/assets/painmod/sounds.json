@@ -29,10 +29,9 @@
       {"name":"music/WordsYouWillNeverUnderstand", "stream":true},
       {"name":"music/AfterYouHearThisYouAreOlder", "stream":true},
       {"name":"music/no", "stream":true},
-      {"name":"music/headace", "stream":true},
+      {"name":"music/headache", "stream":true},
       {"name":"music/BachsBadinerie", "stream":true},
       {"name":"music/boss", "stream":true},
-      {"name":"music/CreepySong2", "stream":true},
       {"name":"music/mau5cave", "stream":true},
       {"name":"music/minecraft_03_test", "stream":true},
       {"name":"music/shuniji", "stream":true},
@@ -41,5 +40,12 @@
       {"name":"music/HungerII", "stream":true},
       {"name":"music/soulsThatSpeak", "stream":true}
     ]
-  }
+  },
+  "msuic.exploration":{
+  "category": "music",
+  "sounds":[
+    {"name":"music/conditionalMusic/exploration/timeIsFaster", "stream":true},
+    {"name":"music/conditionalMusic/exploration/ExploringUnkown", "stream":true}
+  ]
+}
 }

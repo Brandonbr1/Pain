@@ -364,15 +364,15 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
                     double scaleFactor = 12.0D;
 
-                    if (chunkX > 200 || chunkZ > 200) {
+                    if (chunkX > 1200 || chunkZ > 1200) {
                         scaleFactor = 2.0D;
-                    } else if (chunkX > 100 || chunkZ > 100) {
+                    } else if (chunkX > 1000 || chunkZ > 1000) {
                         scaleFactor = 4.0D;
-                    } else if (chunkX > 80 || chunkZ > 80) {
+                    } else if (chunkX > 850 || chunkZ > 850) {
                         scaleFactor = 6.0D;
-                    } else if (chunkX > 40 || chunkZ > 40) {
+                    } else if (chunkX > 650 || chunkZ > 650) {
                         scaleFactor = 8.0D;
-                    } else if (chunkX > 20 || chunkZ > 20) {
+                    } else if (chunkX > 450 || chunkZ > 450) {
                         scaleFactor =10.0D;
                     }
 
