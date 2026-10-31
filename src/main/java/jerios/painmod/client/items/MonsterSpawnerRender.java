@@ -67,10 +67,7 @@ public class MonsterSpawnerRender implements IItemRenderer {
                     float f1 = 0.4375F;
                     GL11.glTranslatef(0.0F, 0.4F, 0.0F);
 
-                    this.field_98284_d = this.field_98287_c;
-                    this.field_98287_c = (this.field_98287_c + (double) (1000.0F / ((float) 20 + 200.0F))) % 360.0D;
-
-                    GL11.glRotatef((float) (field_98284_d + (field_98287_c - field_98284_d) * (double) 1) * 10.0F, 0.0F, 1.0F, 0.0F);
+                    GL11.glRotatef((float) (field_98284_d + (field_98287_c - field_98284_d) * (double) 0.5F) * 10.0F, 0.0F, 1.0F, 0.0F);
                     GL11.glRotatef(-30.0F, 1.0F, 0.0F, 0.0F);
                     GL11.glTranslatef(0.0F, -0.4F, 0.0F);
                     GL11.glScalef(f1, f1, f1);
@@ -88,7 +85,7 @@ public class MonsterSpawnerRender implements IItemRenderer {
         } else if (type == ItemRenderType.INVENTORY) {
             if (item.getItem() == Item.getItemFromBlock(ModItemBlocks.spawner))
             {
-              //  RenderBlocks renderBlocksIr = (RenderBlocks) data[0];
+                RenderBlocks renderBlocksIr = (RenderBlocks) data[0];
 
 
 
@@ -102,16 +99,27 @@ public class MonsterSpawnerRender implements IItemRenderer {
 
                     GL11.glPushMatrix();
 
-                    GL11.glRotatef(25.0F, 1.0F, 0.0F, 0.0F);
+              //      GL11.glRotatef(25.0F, 1.0F, 0.0F, 0.0F);
 
-                    GL11.glScalef(f1, f1, f1);
-
-                    itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, item, 0, 0);
-
+              //      GL11.glScalef(f1, f1, f1);
+                  //  RenderManager.instance.itemRenderer.renderItem(mc.thePlayer, item, 0, ItemRenderType.INVENTORY);
+                    GL11.glEnable(GL11.GL_BLEND);
+                    GL11.glEnable(GL11.GL_CULL_FACE);
+                    OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+                   mc.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+                    GL11.glDepthMask(false);
+                    renderBlocksIr.renderBlockAsItem(Blocks.mob_spawner, 0, 1.0F);
+              //      itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, item, 0, 0);
+                    GL11.glDepthMask(true);
                     GL11.glPopMatrix();
                     GL11.glPushMatrix();
 
-                    GL11.glRotatef((float) (field_98284_d + (field_98287_c - field_98284_d) * (double) 1) * 10.0F, 0.0F, 1.0F, 0.0F);
+
+                    this.field_98284_d = this.field_98287_c;
+                    this.field_98287_c = (this.field_98287_c + (double) (1000.0F / ((float) 20 + 200.0F))) % 360.0D;
+
+
+                    GL11.glRotatef((float) (field_98284_d + (field_98287_c - field_98284_d) * (double) 0.5D) * 10.0F, 0.0F, 1.0F, 0.0F);
 
 
 
