@@ -418,46 +418,41 @@ public class PainEvents {
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority = EventPriority.LOW)
-    public void loadPainDim(WorldEvent.Load load) {
-        if (load.world.isRemote) {
-            if (load.world.provider.dimensionId == PainConfig.painDimensionID)
-            {
-                System.out.println("RUN7");
-                if (!(mc.mcMusicTicker instanceof PainMusic))
-                {
-                    System.out.println("RUN0");
-                    if (prevMusicTicker == null) {
-                        prevMusicTicker = mc.mcMusicTicker;
+    public void changeMusicTicker(EntityJoinWorldEvent load) {
+        if (load.entity instanceof EntityPlayer) {
+            if (load.world.isRemote) {
+                if (load.world.provider.dimensionId == PainConfig.painDimensionID) {
+                    System.out.println("RUN7");
+                    if (!(mc.mcMusicTicker instanceof PainMusic)) {
+                        System.out.println("RUN0");
+                        if (prevMusicTicker == null) {
+                            prevMusicTicker = mc.mcMusicTicker;
+                        }
+                        mc.mcMusicTicker = new PainMusic(mc);
+                        mc.getSoundHandler().stopSounds(); // stop all sounds so we play our own
+                    } else {
+                        System.out.println("RUN6");
+                        if (prevMusicTicker == null) {
+                            System.out.println("RUN1");
+                            prevMusicTicker = mc.mcMusicTicker;
+                        }
+                        if (mc.mcMusicTicker != prevMusicTicker) {
+                            System.out.println("RUN2");
+                            mc.mcMusicTicker = prevMusicTicker;
+                        }
+
                     }
-                    mc.mcMusicTicker = new PainMusic(mc);
-                    mc.getSoundHandler().stopSounds(); // stop all sounds so we play our own
                 } else {
-                    System.out.println("RUN6");
-                    if (prevMusicTicker == null)
-                    {
-                        System.out.println("RUN1");
+                    System.out.println("RUN5");
+                    if (prevMusicTicker == null) {
+                        System.out.println("RUN3");
                         prevMusicTicker = mc.mcMusicTicker;
-                    }
-                    if (mc.mcMusicTicker != prevMusicTicker)
-                    {
-                        System.out.println("RUN2");
+                    } else if (mc.mcMusicTicker != prevMusicTicker) {
+                        System.out.println("RUN4");
                         mc.mcMusicTicker = prevMusicTicker;
                     }
 
                 }
-            } else {
-                System.out.println("RUN5");
-                if (prevMusicTicker == null)
-                {
-                    System.out.println("RUN3");
-                    prevMusicTicker = mc.mcMusicTicker;
-                }
-                else if (mc.mcMusicTicker != prevMusicTicker)
-                {
-                    System.out.println("RUN4");
-                    mc.mcMusicTicker = prevMusicTicker;
-                }
-
             }
         }
     }
@@ -535,7 +530,7 @@ public class PainEvents {
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void onFov(FOVUpdateEvent updateEvent) {
+    public void fovChanged(FOVUpdateEvent updateEvent) {
         float f = 1.0F;
 
         EntityPlayerSP playerSP = updateEvent.entity;
@@ -586,14 +581,14 @@ public class PainEvents {
             modelBipedMain.bipedRightArm.postRender(0.0625F);
             GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
 
-             if (itemstack1.getItem() == ModItemBlocks.cursedBow) {
-                 f2 = 0.625F;
+
+            f2 = 0.625F;
                  GL11.glTranslatef(0.0F, 0.125F, 0.3125F);
                  GL11.glRotatef(-20.0F, 0.0F, 1.0F, 0.0F);
                  GL11.glScalef(f2, -f2, f2);
                  GL11.glRotatef(-100.0F, 1.0F, 0.0F, 0.0F);
                  GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-             }
+
 
             float f3;
             int k;
