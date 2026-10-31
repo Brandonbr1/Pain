@@ -102,7 +102,7 @@ public class MonsterSpawnerRender implements IItemRenderer {
 
                     GL11.glPushMatrix();
 
-                    GL11.glRotatef(30.0F, 0.0F, 1.0F, 0.0F);
+                    GL11.glRotatef(25.0F, 1.0F, 0.0F, 0.0F);
 
                     GL11.glScalef(f1, f1, f1);
 
