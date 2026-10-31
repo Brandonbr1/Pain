@@ -6,6 +6,7 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jerios.painmod.PainConstants;
@@ -27,25 +28,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldServerMulti;
@@ -62,7 +57,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
@@ -84,7 +78,7 @@ public class PainEvents {
                     if (ws != null)
                     {
                         if (props == null || !props.escapedDim) {
-                            TeleporterHandler.travelToDimension(playerMP, PainConfig.painDimensionID, new PainTeleporter(ws));
+                            TeleporterHandler.travelToDimension(playerMP, PainConfig.painDimensionID, new PainTeleporter(ws, false));
                         }
                     }
                 }
@@ -106,7 +100,7 @@ public class PainEvents {
                if (player instanceof EntityPlayerMP) {
                    EntityPlayerMP playerMP = (EntityPlayerMP) player;
                    WorldServer ws = playerMP.mcServer.worldServerForDimension(dim);
-                   TeleporterHandler.travelToDimension(playerMP, PainConfig.painDimensionID, new PainTeleporter(ws));
+                   TeleporterHandler.travelToDimension(playerMP, PainConfig.painDimensionID, new PainTeleporter(ws, false));
                    player.addChatMessage(new ChatComponentTranslation("painmod.failedEscape"));
                }
            }
@@ -117,16 +111,6 @@ public class PainEvents {
 
 
 
-    @SubscribeEvent
-    public void world(TickEvent.WorldTickEvent tickEvent) {
-
-
-        WorldServerMulti worldserver = (WorldServerMulti) MinecraftServer.getServer().worldServers[PainConfig.painDimensionID];
-        DerivedWorldInfo worldinfo = (DerivedWorldInfo) worldserver.getWorldInfo();
-
-
-        Share.LOG.info("Event Rain Time"  +worldinfo.getRainTime());
-    }
 
     // some mods may not fire the Transport Dimension Event
     @SubscribeEvent
@@ -150,7 +134,7 @@ public class PainEvents {
                                 final int dim = PainConfig.painDimensionID;
                                 EntityPlayerMP playerMP = (EntityPlayerMP) player;
                                 WorldServer ws = playerMP.mcServer.worldServerForDimension(dim);
-                                TeleporterHandler.travelToDimension(playerMP, PainConfig.painDimensionID, new PainTeleporter(ws));
+                                TeleporterHandler.travelToDimension(playerMP, PainConfig.painDimensionID, new PainTeleporter(ws, false));
                                 player.addChatMessage(new ChatComponentTranslation("painmod.failedEscape"));
 
                         }
@@ -422,33 +406,23 @@ public class PainEvents {
         if (load.entity instanceof EntityPlayer) {
             if (load.world.isRemote) {
                 if (load.world.provider.dimensionId == PainConfig.painDimensionID) {
-                    System.out.println("RUN7");
                     if (!(mc.mcMusicTicker instanceof PainMusic)) {
-                        System.out.println("RUN0");
                         if (prevMusicTicker == null) {
                             prevMusicTicker = mc.mcMusicTicker;
                         }
                         mc.mcMusicTicker = new PainMusic(mc);
-                        mc.getSoundHandler().stopSounds(); // stop all sounds so we play our own
+                        mc.getSoundHandler().stopSounds(); // stop all sounds so it is forced to play our own
                     } else {
-                        System.out.println("RUN6");
                         if (prevMusicTicker == null) {
-                            System.out.println("RUN1");
                             prevMusicTicker = mc.mcMusicTicker;
-                        }
-                        if (mc.mcMusicTicker != prevMusicTicker) {
-                            System.out.println("RUN2");
+                        } else if (mc.mcMusicTicker != prevMusicTicker) {
                             mc.mcMusicTicker = prevMusicTicker;
                         }
-
                     }
                 } else {
-                    System.out.println("RUN5");
                     if (prevMusicTicker == null) {
-                        System.out.println("RUN3");
                         prevMusicTicker = mc.mcMusicTicker;
                     } else if (mc.mcMusicTicker != prevMusicTicker) {
-                        System.out.println("RUN4");
                         mc.mcMusicTicker = prevMusicTicker;
                     }
 
@@ -459,13 +433,12 @@ public class PainEvents {
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void disconnect(WorldEvent.Unload unload) {
-        if (unload.world.isRemote) {
+    public void disconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent unload) {
             if (prevMusicTicker != null) {
                 mc.mcMusicTicker = prevMusicTicker;
                 prevMusicTicker = null;
             }
-        }
+
     }
 
     @SideOnly(Side.CLIENT)

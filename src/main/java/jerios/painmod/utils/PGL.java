@@ -86,5 +86,4 @@ public abstract class PGL {
         GL11.glRotated(angle, x,y,z);
     }
 
-
 }

@@ -28,6 +28,7 @@ public class PainTeleporter extends Teleporter {
      * location.
      */
     private final List destinationCoordinateKeys = new ArrayList();
+    boolean spawnPortal = false;
     
     public PainTeleporter(WorldServer worldIn)
     {
@@ -35,6 +36,13 @@ public class PainTeleporter extends Teleporter {
         this.worldServerInstance = worldIn;
         this.random = new Random(worldIn.getSeed());
     }
+
+    public PainTeleporter(WorldServer worldIn, boolean spawnPortal)
+    {
+        this(worldIn);
+        this.spawnPortal = spawnPortal;
+    }
+
 
     /**
      * Place an entity in a nearby portal, creating one if necessary.
@@ -67,7 +75,9 @@ public class PainTeleporter extends Teleporter {
                         int l1 = j + j1;
                         int i2 = k + i1 * b1 - l * b0;
                         boolean flag = j1 < 0;
-                        this.worldServerInstance.setBlock(k1, l1, i2, flag ? ModItemBlocks.corruptedBlock : Blocks.air);
+                        if (spawnPortal) {
+                            this.worldServerInstance.setBlock(k1, l1, i2, flag ? ModItemBlocks.corruptedBlock : Blocks.air);
+                        }
                     }
                 }
             }
@@ -452,7 +462,9 @@ public class PainTeleporter extends Teleporter {
                         i4 = j2 + k3;
                         j4 = k2 + (j3 - 1) * l2 - i3 * l5;
                         flag = k3 < 0;
-                        this.worldServerInstance.setBlock(l3, i4, j4, flag ? ModItemBlocks.corruptedBlock : Blocks.air);
+                        if (spawnPortal) {
+                            this.worldServerInstance.setBlock(l3, i4, j4, flag ? ModItemBlocks.corruptedBlock : Blocks.air);
+                        }
                     }
                 }
             }
@@ -468,7 +480,9 @@ public class PainTeleporter extends Teleporter {
                     i4 = j2 + k3;
                     j4 = k2 + (j3 - 1) * l2;
                     flag = j3 == 0 || j3 == 3 || k3 == -1 || k3 == 3;
-                    this.worldServerInstance.setBlock(l3, i4, j4, (Block)(flag ? ModItemBlocks.corruptedBlock : ModItemBlocks.painPortal), 0, 2);
+                    if (spawnPortal) {
+                        this.worldServerInstance.setBlock(l3, i4, j4, (Block) (flag ? ModItemBlocks.corruptedBlock : ModItemBlocks.painPortal), 0, 2);
+                    }
                 }
             }
 
@@ -479,7 +493,9 @@ public class PainTeleporter extends Teleporter {
                     l3 = k5 + (j3 - 1) * l5;
                     i4 = j2 + k3;
                     j4 = k2 + (j3 - 1) * l2;
-                    this.worldServerInstance.notifyBlocksOfNeighborChange(l3, i4, j4, this.worldServerInstance.getBlock(l3, i4, j4));
+                    if (spawnPortal) {
+                        this.worldServerInstance.notifyBlocksOfNeighborChange(l3, i4, j4, this.worldServerInstance.getBlock(l3, i4, j4));
+                    }
                 }
             }
         }

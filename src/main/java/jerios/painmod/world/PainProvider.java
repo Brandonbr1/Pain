@@ -2,25 +2,17 @@ package jerios.painmod.world;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import jerios.painmod.Share;
 import jerios.painmod.client.world.PainSkyRender;
+import jerios.painmod.client.world.PainWeatherRender;
 import jerios.painmod.config.PainConfig;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldServerMulti;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.DerivedWorldInfo;
-import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.client.IRenderHandler;
-
-import java.util.Random;
 
 //TODO: MAKE THE MOON LOOKS CORRUPTED AND BROKEN IF POSSIBLE
 // MAKE STARS LOOKS CORRUPTED
@@ -46,6 +38,135 @@ public class PainProvider extends WorldProvider {
     }
 
     @Override
+    public int getMoonPhase(long worldTime)
+    {
+        return 5;
+    }
+
+    @Override
+    public void calculateInitialWeather()
+    {
+        calculateInitialWeatherBody();
+    }
+
+    public void calculateInitialWeatherBody()
+    {
+        if (worldObj.getWorldInfo().isRaining())
+        {
+            worldObj.rainingStrength = 1.0F;
+
+            if (worldObj.getWorldInfo().isThundering())
+            {
+                worldObj.thunderingStrength = 1.0F;
+            }
+        }
+    }
+
+    @Override
+    public void updateWeather()
+    {
+        updateWeatherBody();
+    }
+
+    public void updateWeatherBody()
+    {
+
+            if (!worldObj.isRemote)
+            {
+                worldObj.getWorldInfo().setRainTime(9000);
+                worldObj.getWorldInfo().setRaining(true);
+                worldObj.getWorldInfo().setRainTime(9000);
+                worldObj.getWorldInfo().setRaining(true);
+                worldObj.getWorldInfo().setRainTime(9000);
+
+                worldObj.prevRainingStrength = worldObj.rainingStrength;
+                worldObj.rainingStrength = (float)((double)worldObj.rainingStrength + 0.01D);
+
+
+
+                // So something here is bugged.....
+                ///  How, what and why?
+
+                /**
+                int i = worldObj.getWorldInfo().getThunderTime();
+
+                if (i <= 0)
+                {
+                    if (worldObj.getWorldInfo().isThundering())
+                    {
+                        worldObj.getWorldInfo().setThunderTime(worldObj.rand.nextInt(12000) + 3600);
+                    }
+                    else
+                    {
+                        worldObj.getWorldInfo().setThunderTime(worldObj.rand.nextInt(168000) + 12000);
+                    }
+                }
+                else
+                {
+                    --i;
+                    worldObj.getWorldInfo().setThunderTime(i);
+
+                    if (i <= 0)
+                    {
+                        worldObj.getWorldInfo().setThundering(!worldObj.getWorldInfo().isThundering());
+                    }
+                }
+
+                worldObj.prevThunderingStrength = worldObj.thunderingStrength;
+
+                if (worldObj.getWorldInfo().isThundering())
+                {
+                    worldObj.thunderingStrength = (float)((double)worldObj.thunderingStrength + 0.01D);
+                }
+                else
+                {
+                    worldObj.thunderingStrength = (float)((double)worldObj.thunderingStrength - 0.01D);
+                }
+
+                worldObj.thunderingStrength = MathHelper.clamp_float(worldObj.thunderingStrength, 0.0F, 1.0F);
+                int j = worldObj.getWorldInfo().getRainTime();
+
+                if (j <= 0)
+                {
+                    if (worldObj.getWorldInfo().isRaining())
+                    {
+                        worldObj.getWorldInfo().setRainTime(worldObj.rand.nextInt(12000) + 12000);
+                    }
+                    else
+                    {
+                        worldObj.getWorldInfo().setRainTime(worldObj.rand.nextInt(168000) + 12000);
+                    }
+                }
+                else
+                {
+                    --j;
+                    worldObj.getWorldInfo().setRainTime(j);
+
+                    if (j <= 0)
+                    {
+                        worldObj.getWorldInfo().setRaining(!worldObj.getWorldInfo().isRaining());
+                    }
+                }
+
+                worldObj.prevRainingStrength = worldObj.rainingStrength;
+
+                if (worldObj.getWorldInfo().isRaining())
+                {
+                    worldObj.rainingStrength = (float)((double)worldObj.rainingStrength + 0.01D);
+                }
+                else
+                {
+                    worldObj.rainingStrength = (float)((double)worldObj.rainingStrength - 0.01D);
+                }
+
+                worldObj.rainingStrength = MathHelper.clamp_float(worldObj.rainingStrength, 0.0F, 1.0F);
+                 **/
+            }
+
+    }
+
+
+    @Override
     public boolean shouldMapSpin(String entity, double x, double y, double z)
     {
         return true;
@@ -67,6 +188,14 @@ public class PainProvider extends WorldProvider {
         setSkyRenderer(new PainSkyRender());
 
         return super.getSkyRenderer();
+    }
+
+
+    @Override
+    public IRenderHandler getWeatherRenderer() {
+        setWeatherRenderer(new PainWeatherRender());
+
+        return super.getWeatherRenderer();
     }
 
     @Override
@@ -167,124 +296,6 @@ public class PainProvider extends WorldProvider {
     }
 
 
-    @Override
-    public void calculateInitialWeather()
-    {
-        calculateInitialWeatherBody();
-    }
-
-    public void calculateInitialWeatherBody()
-    {
-        if (worldObj.getWorldInfo().isRaining())
-        {
-            worldObj.rainingStrength = 1.0F;
-
-            if (worldObj.getWorldInfo().isThundering())
-            {
-                worldObj.thunderingStrength = 1.0F;
-            }
-        }
-    }
-
-    @Override
-    public void updateWeather()
-    {
-        updateWeatherBody();
-    }
-
-
-
-    public void updateWeatherBody()
-    {
-
-            if (!worldObj.isRemote)
-            {
-
-                WorldServerMulti worldserver = (WorldServerMulti) MinecraftServer.getServer().worldServers[PainConfig.painDimensionID];
-                DerivedWorldInfo worldinfo = (DerivedWorldInfo) worldserver.getWorldInfo();
-
-
-                int i =  worldinfo.getThunderTime();
-
-
-                int sd = ((DerivedWorldInfo)worldserver.getWorldInfo()).getRainTime();
-                Share.LOG.info("IN WORLD TIMER    "+sd);
-
-                // worldinfo.getThunderTime();
-
-                if (i <= 0)
-                {
-                    if (worldinfo.isThundering())
-                    {
-                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setThunderTime(worldserver.rand.nextInt(12000) + 3600);
-                    }
-                    else
-                    {
-                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setThunderTime(worldserver.rand.nextInt(168000) + 12000);
-                    }
-                }
-                else
-                {
-                    --i;
-                    ((DerivedWorldInfo)worldserver.getWorldInfo()).setThunderTime(i);
-
-                    if (i <= 0)
-                    {
-                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setThundering(!((DerivedWorldInfo)worldserver.getWorldInfo()).isThundering());
-                    }
-                }
-
-                worldserver.prevThunderingStrength = worldserver.thunderingStrength;
-
-                if (((DerivedWorldInfo)worldserver.getWorldInfo()).isThundering())
-                {
-                    worldserver.thunderingStrength = (float)((double)worldserver.thunderingStrength + 0.01D);
-                }
-                else
-                {
-                    worldserver.thunderingStrength = (float)((double)worldserver.thunderingStrength - 0.01D);
-                }
-
-                worldserver.thunderingStrength = MathHelper.clamp_float(worldserver.thunderingStrength, 0.0F, 1.0F);
-                int j = ((DerivedWorldInfo)worldserver.getWorldInfo()).getRainTime();
-
-                if (j <= 0)
-                {
-                    if (((DerivedWorldInfo)worldserver.getWorldInfo()).isRaining())
-                    {
-                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setRainTime(worldserver.rand.nextInt(12000) + 12000);
-                    }
-                    else
-                    {
-                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setRainTime(worldserver.rand.nextInt(168000) + 12000);
-                    }
-                }
-                else
-                {
-                    --j;
-                    ((DerivedWorldInfo)worldserver.getWorldInfo()).setRainTime(j);
-
-                    if (j <= 0)
-                    {
-                        ((DerivedWorldInfo)worldserver.getWorldInfo()).setRaining(!((DerivedWorldInfo)worldserver.getWorldInfo()).isRaining());
-                    }
-                }
-
-                worldserver.prevRainingStrength = worldserver.rainingStrength;
-
-                if (((DerivedWorldInfo)worldserver.getWorldInfo()).isRaining())
-                {
-                    worldserver.rainingStrength = (float)((double)worldserver.rainingStrength + 0.01D);
-                }
-                else
-                {
-                    worldserver.rainingStrength = (float)((double)worldserver.rainingStrength - 0.01D);
-                }
-
-                worldserver.rainingStrength = MathHelper.clamp_float(worldserver.rainingStrength, 0.0F, 1.0F);
-            }
-
-    }
 
 
 }

@@ -9,20 +9,25 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
 public class PainWeatherRender extends IRenderHandler {
+
+    //TODO CHANGE
+    private static final ResourceLocation locationSnowPng = new ResourceLocation("painmod:textures/environment/rain.png");
+    private static final ResourceLocation locationRainPng = new ResourceLocation("painmod:textures/environment/rain.png");
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
 
+        renderW(partialTicks, world, mc);
     }
-/**
+
     Minecraft  mc = FMLClientHandler.instance().getClient();
 
-    @Override
-    public void render(float partialTicks, WorldClient world, Minecraft mc)
+    public void renderW(float partialTicks, WorldClient world, Minecraft mc)
     {
 
         // IS this why it does not work, if so, perhaps we need to use worldata? or somehow get the data from the server to the client?
@@ -140,7 +145,7 @@ public class PainWeatherRender extends IRenderHandler {
                                     tessellator.startDrawingQuads();
                                 }
 
-                                f10 = ((float)(renderer.rendererUpdateCount + i1 * i1 * 3121 + i1 * 45238971 + l * l * 418711 + l * 13761 & 31) + partialTicks) / 32.0F * (3.0F + this.random.nextFloat());
+                                f10 = ((float)(renderer.rendererUpdateCount + i1 * i1 * 3121 + i1 * 45238971 + l * l * 418711 + l * 13761 & 31) + partialTicks) / 32.0F * (3.0F + world.rand.nextFloat());
                                 double d3 = (double)((float)i1 + 0.5F) - entitylivingbase.posX;
                                 d4 = (double)((float)l + 0.5F) - entitylivingbase.posZ;
                                 float f12 = MathHelper.sqrt_double(d3 * d3 + d4 * d4) / (float)b0;
@@ -201,5 +206,5 @@ public class PainWeatherRender extends IRenderHandler {
         }
 
     }
-    **/
+
 }
