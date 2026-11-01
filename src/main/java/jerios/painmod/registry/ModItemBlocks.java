@@ -3,6 +3,7 @@ package jerios.painmod.registry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import jerios.painmod.block.BlockCorruptedDarknessBlock;
 import jerios.painmod.block.BlockPainPortal;
+import jerios.painmod.block.BlockPainStone;
 import jerios.painmod.block.PainBlock;
 import jerios.painmod.block.PainGrass;
 import jerios.painmod.block.spawner.BlockPainSpawner;
@@ -24,6 +25,7 @@ public class ModItemBlocks {
     public static Block painPortal;
     public static ItemBow cursedBow;
 
+
     public static Item harmfulEssence;
 
 
@@ -34,6 +36,8 @@ public class ModItemBlocks {
     public static Block painDirt;
 
     public static Block painLogs;
+
+    public static Block painStone;
 
     public static Block spawner;
 
@@ -74,6 +78,9 @@ public class ModItemBlocks {
 
         boneSword = new ItemBoneSword();
         registerItem(boneSword, "bone_sword");
+
+        painStone = new BlockPainStone();
+        registerBlock(painStone, "pain_stone");
 
     }
 

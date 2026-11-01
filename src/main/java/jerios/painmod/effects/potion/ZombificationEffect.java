@@ -1,4 +1,4 @@
 package jerios.painmod.effects.potion;
 
-public class ZombificationEffect {
+public class ZombificationEffect implements IPainnPotion{
 }

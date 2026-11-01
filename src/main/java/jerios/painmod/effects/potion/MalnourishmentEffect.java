@@ -1,9 +1,8 @@
 package jerios.painmod.effects.potion;
 
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.potion.Potion;
 
-public class MalnourishmentEffect extends BasePotion {
+public class MalnourishmentEffect extends PainBasePotion implements IPainnPotion{
     public MalnourishmentEffect(int id, int color) {
         super(id, true, color);
     }

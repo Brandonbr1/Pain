@@ -61,6 +61,9 @@ public class ItemMonsterSpawner extends ItemBlock {
 
         if (!world.isRemote) {
 
+            if (super.onItemUse(stack, player, world,x,y,z, facing, unknown, unknown, unkown2)) {
+
+            }
 
             x += Facing.offsetsXForSide[facing];
             y += Facing.offsetsYForSide[facing];
@@ -85,9 +88,11 @@ public class ItemMonsterSpawner extends ItemBlock {
                 --stack.stackSize;
             }
 
+            return true;
+
         }
 
-        return false;
+        return true;
     }
 
     @Override

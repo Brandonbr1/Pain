@@ -4,7 +4,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 
 // given to by pain spiders if it's a rare version.
-public class DeadlyPoision extends BasePotion {
+public class DeadlyPoision extends PainBasePotion implements IPainnPotion {
 
     public DeadlyPoision(int id, int color) {
         super(id, true, color);

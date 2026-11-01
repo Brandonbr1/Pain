@@ -5,10 +5,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import jerios.painmod.client.world.PainSkyRender;
 import jerios.painmod.client.world.PainWeatherRender;
 import jerios.painmod.config.PainConfig;
+import jerios.painmod.world.data.PainWorldData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.DerivedWorldInfo;
@@ -43,127 +45,6 @@ public class PainProvider extends WorldProvider {
         return 5;
     }
 
-    @Override
-    public void calculateInitialWeather()
-    {
-        calculateInitialWeatherBody();
-    }
-
-    public void calculateInitialWeatherBody()
-    {
-        if (worldObj.getWorldInfo().isRaining())
-        {
-            worldObj.rainingStrength = 1.0F;
-
-            if (worldObj.getWorldInfo().isThundering())
-            {
-                worldObj.thunderingStrength = 1.0F;
-            }
-        }
-    }
-
-    @Override
-    public void updateWeather()
-    {
-        updateWeatherBody();
-    }
-
-    public void updateWeatherBody()
-    {
-
-            if (!worldObj.isRemote)
-            {
-                worldObj.getWorldInfo().setRainTime(9000);
-                worldObj.getWorldInfo().setRaining(true);
-                worldObj.getWorldInfo().setRainTime(9000);
-                worldObj.getWorldInfo().setRaining(true);
-                worldObj.getWorldInfo().setRainTime(9000);
-
-                worldObj.prevRainingStrength = worldObj.rainingStrength;
-                worldObj.rainingStrength = (float)((double)worldObj.rainingStrength + 0.01D);
-
-
-
-                // So something here is bugged.....
-                ///  How, what and why?
-
-                /**
-                int i = worldObj.getWorldInfo().getThunderTime();
-
-                if (i <= 0)
-                {
-                    if (worldObj.getWorldInfo().isThundering())
-                    {
-                        worldObj.getWorldInfo().setThunderTime(worldObj.rand.nextInt(12000) + 3600);
-                    }
-                    else
-                    {
-                        worldObj.getWorldInfo().setThunderTime(worldObj.rand.nextInt(168000) + 12000);
-                    }
-                }
-                else
-                {
-                    --i;
-                    worldObj.getWorldInfo().setThunderTime(i);
-
-                    if (i <= 0)
-                    {
-                        worldObj.getWorldInfo().setThundering(!worldObj.getWorldInfo().isThundering());
-                    }
-                }
-
-                worldObj.prevThunderingStrength = worldObj.thunderingStrength;
-
-                if (worldObj.getWorldInfo().isThundering())
-                {
-                    worldObj.thunderingStrength = (float)((double)worldObj.thunderingStrength + 0.01D);
-                }
-                else
-                {
-                    worldObj.thunderingStrength = (float)((double)worldObj.thunderingStrength - 0.01D);
-                }
-
-                worldObj.thunderingStrength = MathHelper.clamp_float(worldObj.thunderingStrength, 0.0F, 1.0F);
-                int j = worldObj.getWorldInfo().getRainTime();
-
-                if (j <= 0)
-                {
-                    if (worldObj.getWorldInfo().isRaining())
-                    {
-                        worldObj.getWorldInfo().setRainTime(worldObj.rand.nextInt(12000) + 12000);
-                    }
-                    else
-                    {
-                        worldObj.getWorldInfo().setRainTime(worldObj.rand.nextInt(168000) + 12000);
-                    }
-                }
-                else
-                {
-                    --j;
-                    worldObj.getWorldInfo().setRainTime(j);
-
-                    if (j <= 0)
-                    {
-                        worldObj.getWorldInfo().setRaining(!worldObj.getWorldInfo().isRaining());
-                    }
-                }
-
-                worldObj.prevRainingStrength = worldObj.rainingStrength;
-
-                if (worldObj.getWorldInfo().isRaining())
-                {
-                    worldObj.rainingStrength = (float)((double)worldObj.rainingStrength + 0.01D);
-                }
-                else
-                {
-                    worldObj.rainingStrength = (float)((double)worldObj.rainingStrength - 0.01D);
-                }
-
-                worldObj.rainingStrength = MathHelper.clamp_float(worldObj.rainingStrength, 0.0F, 1.0F);
-                 **/
-            }
-
-    }
 
 
     @Override
@@ -295,7 +176,116 @@ public class PainProvider extends WorldProvider {
         return PainConfig.painDimensionID;
     }
 
+    @Override
+    public void calculateInitialWeather()
+    {
+
+            PainWorldData data = PainWorldData.get(worldObj);
+            if (data.isRainingP())
+            {
+                worldObj.rainingStrength = 1.0F;
+
+                if (data.isThundering())
+                {
+                    worldObj.thunderingStrength = 1.0F;
+                }
+            }
 
 
 
+    }
+
+    @Override
+    public void updateWeather()
+    {
+        updateWeatherBody();
+    }
+
+
+    public void updateWeatherBody()
+    {
+
+            if (!worldObj.isRemote)
+            {
+                PainWorldData data = PainWorldData.get(worldObj);
+                int thunderTime = data.getThunderTime();
+
+                if (thunderTime <= 0)
+                {
+                    if (data.isThundering())
+                    {
+                        data.setThunderTime(worldObj.rand.nextInt(12000) + 3600);
+                    }
+                    else
+                    {
+                        data.setThunderTime(worldObj.rand.nextInt(168000) + 12000);
+                    }
+                }
+                else
+                {
+                    --thunderTime;
+                    data.setThunderTime(thunderTime);
+
+                    if (thunderTime <= 0)
+                    {
+                        data.setThundering(!data.isThundering());
+                    }
+                }
+
+                worldObj.prevThunderingStrength = worldObj.thunderingStrength;
+
+                if (data.isThundering())
+                {
+                    worldObj.thunderingStrength = (float)((double)worldObj.thunderingStrength + 0.01D);
+                }
+                else
+                {
+                    worldObj.thunderingStrength = (float)((double)worldObj.thunderingStrength - 0.01D);
+                }
+
+                worldObj.thunderingStrength = MathHelper.clamp_float(worldObj.thunderingStrength, 0.0F, 1.0F);
+                int rainTime = data.getRainTime();
+
+                if (rainTime <= 0)
+                {
+                    if (data.isRainingP())
+                    {
+                        data.setRainTime(worldObj.rand.nextInt(12000) + 12000);
+                    }
+                    else
+                    {
+                        data.setRainTime(worldObj.rand.nextInt(168000) + 12000);
+                    }
+                }
+                else
+                {
+                    --rainTime;
+                    data.setRainTime(rainTime);
+
+                    if (rainTime <= 0)
+                    {
+                        data.setRaining(!data.isRainingP());
+                    }
+                }
+
+                worldObj.prevRainingStrength = worldObj.rainingStrength;
+
+                if (data.isRainingP())
+                {
+                    worldObj.rainingStrength = (float)((double)worldObj.rainingStrength + 0.01D);
+                }
+                else {
+                    worldObj.rainingStrength = (float)((double)worldObj.rainingStrength - 0.01D);
+                }
+
+                worldObj.rainingStrength = MathHelper.clamp_float(worldObj.rainingStrength, 0.0F, 1.0F);
+            }
+
+    }
+
+
+    @Override
+    public String getSaveFolder() {
+        return "PainMod_Dimension";
+    }
 }

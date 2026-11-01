@@ -1,6 +1,7 @@
 package jerios.painmod.command;
 
 import jerios.painmod.config.PainConfig;
+import jerios.painmod.world.data.PainWorldData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandWeather;
 import net.minecraft.command.ICommandSender;
@@ -25,26 +26,25 @@ public class CommandPainWeather extends CommandWeather {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) {
+    public void processCommand(ICommandSender sender, String[] args)
+    {
+        World world = sender.getEntityWorld();
+        if (!world.isRemote) {
+            PainWorldData data = PainWorldData.get(world);
+            data.setRaining(true);
+            data.setRainTime(Integer.MAX_VALUE);
+            data.setRaining(true);
+            data.setRainTime(Integer.MAX_VALUE);
+            data.setRaining(true);
 
-        World world =  sender.getEntityWorld();
-
-       if (world != null )
-       {
-
-           if (!world.isRemote) {
-
-               WorldInfo worldinfo = world.getWorldInfo();
-
-               worldinfo.setRainTime(9000);
-               worldinfo.setRaining(true);
-               worldinfo.setThundering(false);
-
-           }
-
-       }
+            data.setThundering(true);
+            data.setThunderTime(Integer.MAX_VALUE);
+            data.setThundering(true);
+            data.setThunderTime(Integer.MAX_VALUE);
+            data.setThundering(true);
 
 
+        }
     }
 
 

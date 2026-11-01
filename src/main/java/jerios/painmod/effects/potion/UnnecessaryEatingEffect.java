@@ -6,10 +6,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 
-public class UnnecessaryEatingEffect extends BasePotion {
+public class UnnecessaryEatingEffect extends PainBasePotion implements IPainnPotion{
 
     public UnnecessaryEatingEffect(int id, int color) {
         super(id, true, color);

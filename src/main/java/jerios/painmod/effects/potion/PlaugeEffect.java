@@ -2,10 +2,9 @@ package jerios.painmod.effects.potion;
 
 import jerios.painmod.utils.GRUtils;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 
-public class PlaugeEffect extends BasePotion {
+public class PlaugeEffect extends PainBasePotion implements IPainnPotion{
 
     public PlaugeEffect(int id, int color) {
         super(id, true, color);

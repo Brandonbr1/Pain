@@ -4,13 +4,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class JealouslyPotionEffect extends BasePotion {
-    public JealouslyPotionEffect(int id, int color) {
+public class JealouslyPotionEffectPain extends PainBasePotion implements IPainnPotion{
+    public JealouslyPotionEffectPain(int id, int color) {
         super(id, false, color);
     }
 

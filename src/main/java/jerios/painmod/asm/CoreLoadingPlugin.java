@@ -1,13 +1,18 @@
 package jerios.painmod.asm;
 
 
+import com.gtnewhorizon.gtnhmixins.IEarlyMixinLoader;
+import com.gtnewhorizon.gtnhmixins.builders.IMixins;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import jerios.painmod.mixins.MixinsList;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 @IFMLLoadingPlugin.MCVersion("1.7.10")
-public class CoreLoadingPlugin implements IFMLLoadingPlugin /**, IEarlyMixinLoader **/{
+public class CoreLoadingPlugin implements IFMLLoadingPlugin , IEarlyMixinLoader {
 
     @Override
     public String[] getASMTransformerClass() {
@@ -32,7 +37,7 @@ public class CoreLoadingPlugin implements IFMLLoadingPlugin /**, IEarlyMixinLoad
         return null;
     }
 
- /**   @Override
+    @Override
     public String getMixinConfig() {
         return "mixins.painmod.early.json";
     }
@@ -41,6 +46,6 @@ public class CoreLoadingPlugin implements IFMLLoadingPlugin /**, IEarlyMixinLoad
     public List<String> getMixins(Set<String> loadedCoreMods) {
         return IMixins.getEarlyMixins(MixinsList.class, loadedCoreMods);
     }
-    **/
+
 
 }

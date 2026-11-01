@@ -49,6 +49,8 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -59,6 +61,8 @@ import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
+
+import java.util.Objects;
 
 public class PainEvents {
 
@@ -399,51 +403,22 @@ public class PainEvents {
     }
 
 
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public void changeMusicTicker(EntityJoinWorldEvent load) {
-        if (load.entity instanceof EntityPlayer) {
-            if (load.world.isRemote) {
-                if (load.world.provider.dimensionId == PainConfig.painDimensionID) {
-                    if (!(mc.mcMusicTicker instanceof PainMusic)) {
-                        if (prevMusicTicker == null) {
-                            prevMusicTicker = mc.mcMusicTicker;
-                        }
-                        mc.mcMusicTicker = new PainMusic(mc);
-                        mc.getSoundHandler().stopSounds(); // stop all sounds so it is forced to play our own
-                    } else {
-                        if (prevMusicTicker == null) {
-                            prevMusicTicker = mc.mcMusicTicker;
-                        } else if (mc.mcMusicTicker != prevMusicTicker) {
-                            mc.mcMusicTicker = prevMusicTicker;
-                        }
-                    }
-                } else {
-                    if (prevMusicTicker == null) {
-                        prevMusicTicker = mc.mcMusicTicker;
-                    } else if (mc.mcMusicTicker != prevMusicTicker) {
-                        mc.mcMusicTicker = prevMusicTicker;
-                    }
-
-                }
-            }
-        }
-    }
-
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void disconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent unload) {
-            if (prevMusicTicker != null) {
-                mc.mcMusicTicker = prevMusicTicker;
-                prevMusicTicker = null;
+    public void lowerRainVolume(PlaySoundEvent17 soundEvent) {
+        if (inPainDim()) {
+            if (Objects.equals(soundEvent.name, "ambient.weather.rain")) {
+                float vol = soundEvent.sound.getVolume();
+                float pitch = soundEvent.sound.getPitch();
+                if (vol > 0.1F && pitch >= 0.5F) {
+                    soundEvent.result = null;
+                    mc.thePlayer.playSound("ambient.weather.rain", 0.1f, 0.2f);
+                }
+
             }
+        }
 
     }
-
-    @SideOnly(Side.CLIENT)
-    public MusicTicker prevMusicTicker;
-
 
    @SideOnly(Side.CLIENT)
     @SubscribeEvent

@@ -36,7 +36,7 @@ public class BlockPainPortal extends BlockPortal {
         this.setStepSound(soundTypeGlass);
         this.setLightLevel(0.75F);
         this.setBlockName("painPortal");
-        this.setBlockTextureName("painPortal");
+        this.setBlockTextureName("painmod:painPortal");
         setCreativeTab(TabsRegistry.BLOCKS_TAB);
     }
 

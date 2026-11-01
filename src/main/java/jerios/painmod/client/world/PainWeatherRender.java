@@ -17,8 +17,8 @@ import org.lwjgl.opengl.GL11;
 public class PainWeatherRender extends IRenderHandler {
 
     //TODO CHANGE
-    private static final ResourceLocation locationSnowPng = new ResourceLocation("painmod:textures/environment/rain.png");
-    private static final ResourceLocation locationRainPng = new ResourceLocation("painmod:textures/environment/rain.png");
+    private static final ResourceLocation locationSnowPng = new ResourceLocation("painmod:textures/environment/rain2.png");
+    private static final ResourceLocation locationRainPng = new ResourceLocation("painmod:textures/environment/rain2.png");
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
 

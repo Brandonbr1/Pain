@@ -1,8 +1,6 @@
 package jerios.painmod.effects.potion;
 
-import net.minecraft.potion.Potion;
-
-public class RageEffect extends BasePotion {
+public class RageEffect extends PainBasePotion implements IPainnPotion{
 
     public RageEffect(int id, int color) {
         super(id, true, color);

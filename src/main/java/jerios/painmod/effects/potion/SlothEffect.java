@@ -1,17 +1,8 @@
 package jerios.painmod.effects.potion;
 
-import jerios.painmod.registry.ModPotions;
-import jerios.painmod.utils.GRUtils;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 
-import java.util.UUID;
-
-public class SlothEffect extends BasePotion {
+public class SlothEffect extends PainBasePotion implements IPainnPotion{
 
     public SlothEffect(int id, int color) {
         super(id, true, color);
