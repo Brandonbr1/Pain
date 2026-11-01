@@ -7,15 +7,9 @@ import com.gtnewhorizon.gtnhmixins.builders.MixinBuilder;
 import javax.annotation.Nonnull;
 
 public enum MixinsList implements IMixins {
-    MUSIC_TICKER(new MixinBuilder()
-            .setPhase(Phase.EARLY)
-            .addClientMixins("MixinMusicTicker")),
-
     POTION_EFFECTS(new MixinBuilder()
             .setPhase(Phase.EARLY)
             .addClientMixins("MixinEntityLivingBase"))
-
-    ;
 
     ;
 

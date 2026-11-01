@@ -1,6 +1,7 @@
 package jerios.painmod.world;
 
 import cpw.mods.fml.common.eventhandler.Event;
+import jerios.painmod.registry.ModItemBlocks;
 import jerios.painmod.world.features.WorldGenHoles;
 import jerios.painmod.world.mapGen.PainMapGenCaves;
 import jerios.painmod.world.mapGen.PainMapGenRavine;
@@ -114,23 +115,23 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
                 for (int noiseLayer3 = 0; noiseLayer3 < 32; ++noiseLayer3)
                 {
-                    double noiseScaleLayer3 = 0.125D;
+                    double noiseScaleLayer3Scale = 0.125D;
                     double noiseLayer3P1 = this.noiseArray[noiseL2P1 + noiseLayer3];
                     double noiseLayer3P2 = this.noiseArray[noiseL2P2 + noiseLayer3];
                     double noiseLayer3P3 = this.noiseArray[noiseL2P3 + noiseLayer3];
                     double noiseLayer3P4 = this.noiseArray[noiseL2P4 + noiseLayer3];
-                    double noiseLayer3P5 = (this.noiseArray[noiseL2P1 + noiseLayer3 + 1] - noiseLayer3P1) * noiseScaleLayer3;
-                    double noiseLayer3P6 = (this.noiseArray[noiseL2P2 + noiseLayer3 + 1] - noiseLayer3P2) * noiseScaleLayer3;
-                    double noiseLayer3P7 = (this.noiseArray[noiseL2P3 + noiseLayer3 + 1] - noiseLayer3P3) * noiseScaleLayer3;
-                    double noiseLayer3P8 = (this.noiseArray[noiseL2P4 + noiseLayer3 + 1] - noiseLayer3P4) * noiseScaleLayer3;
+                    double noiseLayer3P5 = (this.noiseArray[noiseL2P1 + noiseLayer3 + 1] - noiseLayer3P1) * noiseScaleLayer3Scale;
+                    double noiseLayer3P6 = (this.noiseArray[noiseL2P2 + noiseLayer3 + 1] - noiseLayer3P2) * noiseScaleLayer3Scale;
+                    double noiseLayer3P7 = (this.noiseArray[noiseL2P3 + noiseLayer3 + 1] - noiseLayer3P3) * noiseScaleLayer3Scale;
+                    double noiseLayer3P8 = (this.noiseArray[noiseL2P4 + noiseLayer3 + 1] - noiseLayer3P4) * noiseScaleLayer3Scale;
 
                     for (int noiseLayer4 = 0; noiseLayer4 < 8; ++noiseLayer4)
                     {
-                        double noiseScaleLayer4 = 0.25D;
+                        double noiseScaleLayer4Scale = 0.25D;
                         double noiseLayer4P1 = noiseLayer3P1;
                         double noiseLayer4P2 = noiseLayer3P2;
-                        double noiseLayer4P3 = (noiseLayer3P3 - noiseLayer3P1) * noiseScaleLayer4;
-                        double noiseLayer4P4 = (noiseLayer3P4 - noiseLayer3P2) * noiseScaleLayer4;
+                        double noiseLayer4P3 = (noiseLayer3P3 - noiseLayer3P1) * noiseScaleLayer4Scale;
+                        double noiseLayer4P4 = (noiseLayer3P4 - noiseLayer3P2) * noiseScaleLayer4Scale;
 
                         for (int noiseLayer5 = 0; noiseLayer5 < 4; ++noiseLayer5)
                         {
@@ -145,7 +146,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                             {
                                 if ((noiseLayer5P2 += noiseLayer5P1) > 0.0D)
                                 {
-                                    blocks[depth += maxDepth] = Blocks.stone;
+                                    blocks[depth += maxDepth] = ModItemBlocks.painStone;
                                 }
                                 else if (noiseLayer3 * 8 + noiseLayer4 < oceanHeight)
                                 {
@@ -202,6 +203,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         {
             for (int l = 0; l < 16; ++l)
             {
+                //TODO: REPLACE THIS WITH OUR OWN BLOCKS
                 BiomeGenBase biomegenbase = biomes[l + k * 16];
                 biomegenbase.genTerrainBlocks(this.worldObj, this.rand, blocks, metas, chunkX * 16 + k, chunkZ * 16 + l, this.stoneNoise[l + k * 16]);
             }

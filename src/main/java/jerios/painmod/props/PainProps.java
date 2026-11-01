@@ -18,6 +18,7 @@ public class PainProps implements IExtendedEntityProperties {
     public static final String PROP_NAME = PainMod.MODID + "_EntityData";
 
     public boolean escapedDim = false;
+    public int drinkMilk = 0;
 
     public PainProps() {
     }
@@ -28,6 +29,7 @@ public class PainProps implements IExtendedEntityProperties {
         // Write data to propertyData
 
         propertyData.setBoolean("escapedDim", escapedDim);
+        propertyData.setInteger("drinkMilk", drinkMilk);
 
         compound.setTag(PROP_NAME, propertyData);
     }
@@ -38,7 +40,7 @@ public class PainProps implements IExtendedEntityProperties {
             NBTTagCompound propertyData = compound.getCompoundTag(PROP_NAME);
 
            this.escapedDim = propertyData.getBoolean("escapedDim");
-            // Read data from propertyData
+           this.drinkMilk = propertyData.getInteger("drinkMilk");
         }
 
     }
