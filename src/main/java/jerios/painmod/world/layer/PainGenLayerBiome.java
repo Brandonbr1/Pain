@@ -1,6 +1,7 @@
 package jerios.painmod.world.layer;
 
 import jerios.painmod.registry.ModBiomes;
+import jerios.painmod.world.PainBiomeManager;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -84,18 +85,18 @@ public class PainGenLayerBiome extends PainGenLayer
                     }
                     else
                     {
-                        aint1[j1 + i1 * areaWidth] = ModBiomes.painPlains.biomeID; //getWeightedBiomeEntry(BiomeManager.BiomeType.DESERT).biome.biomeID;
+                        aint1[j1 + i1 * areaWidth] = PainBiomeManager.getRandomDesertBiome( nextInt(  PainBiomeManager.WARM_BIOMES.length       )   ).biomeID; //getWeightedBiomeEntry(BiomeManager.BiomeType.DESERT).biome.biomeID;
                     }
                 }
                 else if (k1 == 2)
                 {
                     if (l1 > 0)
                     {
-                        aint1[j1 + i1 * areaWidth] = BiomeGenBase.jungle.biomeID;
+                        aint1[j1 + i1 * areaWidth] = ModBiomes.painJungles.biomeID;
                     }
                     else
                     {
-                        aint1[j1 + i1 * areaWidth] =  ModBiomes.painPlains.biomeID; //getWeightedBiomeEntry(BiomeManager.BiomeType.WARM).biome.biomeID;
+                        aint1[j1 + i1 * areaWidth] = PainBiomeManager.getRandomWarmBiome(this.nextInt(PainBiomeManager.WARM_BIOMES.length)).biomeID; //getWeightedBiomeEntry(BiomeManager.BiomeType.WARM).biome.biomeID;
                     }
                 }
                 else if (k1 == 3)
@@ -106,7 +107,7 @@ public class PainGenLayerBiome extends PainGenLayer
                     }
                     else
                     {
-                        aint1[j1 + i1 * areaWidth] =  ModBiomes.painPlains.biomeID; //getWeightedBiomeEntry(BiomeManager.BiomeType.COOL).biome.biomeID;
+                        aint1[j1 + i1 * areaWidth] =  PainBiomeManager.getRandomColdBiome(nextInt(   PainBiomeManager.COLD_BIOMES.length    )).biomeID; //getWeightedBiomeEntry(BiomeManager.BiomeType.COOL).biome.biomeID;
                     }
                 }
                 else if (k1 == 4)

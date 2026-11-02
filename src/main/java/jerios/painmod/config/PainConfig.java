@@ -29,9 +29,9 @@ public class PainConfig {
 
      public static int painBiomeID;
     public static int painJungleID;
-
     public static int painDesertID;
-
+    public static int painBeachID;
+    public static int painColdTigaID;
 
      public static boolean spawnInPainDim;
 
@@ -52,6 +52,8 @@ public class PainConfig {
             painBiomeID = con.getInt("Pain Plains Biome ID", BIOME_ID, 80, 0, Integer.MAX_VALUE, "The Biome ID of the pain plains");
             painJungleID = con.getInt("Pain Jungle Biome ID", BIOME_ID, 81, 0, Integer.MAX_VALUE, "The Biome ID of the pain Jungle");
             painDesertID = con.getInt("Pain Desert Biome ID", BIOME_ID, 82, 0, Integer.MAX_VALUE, "The Biome ID of the Pain Desert");
+        painBeachID = con.getInt("Pain Beach Biome ID", BIOME_ID, 83, 0, Integer.MAX_VALUE, "The Biome ID of the Pain Beach");
+        painColdTigaID = con.getInt("Pain Cold Tiga Biome ID", BIOME_ID, 84, 0, Integer.MAX_VALUE, "The Biome ID of the Pain Cold Tiga");
 
 
         spawnInPainDim = con.getBoolean("Spawn in Pain Dim?", "Difficulty", true, "Should the player spawn in the dimension and have to escape it?");

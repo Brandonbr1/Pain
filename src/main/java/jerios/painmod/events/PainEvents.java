@@ -504,47 +504,6 @@ public class PainEvents {
     }
 
 
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public void changeMusicTicker(EntityJoinWorldEvent load) {
-        if (load.entity instanceof EntityPlayer) {
-            if (load.world.isRemote) {
-                if (load.world.provider.dimensionId == PainConfig.painDimensionID) {
-                    if (!(mc.mcMusicTicker instanceof PainMusic)) {
-                        if (prevMusicTicker == null) {
-                            prevMusicTicker = mc.mcMusicTicker;
-                        }
-                        mc.mcMusicTicker = new PainMusic(mc);
-                        mc.getSoundHandler().stopSounds(); // stop all sounds so it is forced to play our own
-                    } else {
-                        if (prevMusicTicker == null) {
-                            prevMusicTicker = mc.mcMusicTicker;
-                        } else if (mc.mcMusicTicker != prevMusicTicker) {
-                            mc.mcMusicTicker = prevMusicTicker;
-                        }
-                    }
-                } else {
-                    if (prevMusicTicker == null) {
-                        prevMusicTicker = mc.mcMusicTicker;
-                    } else if (mc.mcMusicTicker != prevMusicTicker) {
-                        mc.mcMusicTicker = prevMusicTicker;
-                    }
-
-                }
-            }
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void disconntectedFromServerClient(FMLNetworkEvent.ClientDisconnectionFromServerEvent unload) {
-        if (prevMusicTicker != null) {
-            mc.mcMusicTicker = prevMusicTicker;
-            prevMusicTicker = null;
-        }
-
-
-    }
 
     @SideOnly(Side.CLIENT)
     public MusicTicker prevMusicTicker;

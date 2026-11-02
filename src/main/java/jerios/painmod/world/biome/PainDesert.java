@@ -13,7 +13,7 @@ import java.util.Random;
 
 import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.CACTUS;
 
-public class PainDesert extends BiomeGenBase {
+public class PainDesert extends PainBiomeGen {
     public PainDesert(int id) {
         super(id);
         this.setBiomeName("Pain Desert");

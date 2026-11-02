@@ -16,7 +16,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
 
-public class PainJungle extends BiomeGenBase {
+public class PainJungle extends PainBiomeGen {
     public PainJungle(int id) {
         super(id);
     }

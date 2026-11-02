@@ -9,7 +9,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 import java.util.Random;
 
-public class PainPlains extends BiomeGenBase {
+public class PainPlains extends PainBiomeGen {
     boolean sunflower = false;
 
     public PainPlains(int id) {

@@ -1,6 +1,8 @@
 package jerios.painmod.registry;
 
 import jerios.painmod.config.PainConfig;
+import jerios.painmod.world.biome.PainBeach;
+import jerios.painmod.world.biome.PainColdTiga;
 import jerios.painmod.world.biome.PainDesert;
 import jerios.painmod.world.biome.PainJungle;
 import jerios.painmod.world.biome.PainPlains;
@@ -10,7 +12,9 @@ public class ModBiomes {
 
     public static final BiomeGenBase painPlains = new PainPlains(PainConfig.painBiomeID);
     public static final BiomeGenBase painJungles = new PainJungle(PainConfig.painJungleID);
-    public static BiomeGenBase painDesert = new PainDesert(PainConfig.painDesertID);
+    public static final BiomeGenBase painDesert = new PainDesert(PainConfig.painDesertID);
+    public static final BiomeGenBase painBeach = new PainBeach(PainConfig.painBeachID);
+    public static final BiomeGenBase painColdTiga = new PainColdTiga(PainConfig.painColdTigaID, 0);
 
     public static void register() {
     }
