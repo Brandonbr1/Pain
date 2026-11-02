@@ -56,6 +56,7 @@ repositories {
     //You can use maven("reponame", "https://example.com/") as a shortcut for maven repositories.
 
     jitpack()
+    modrinthEX()
     /*
      * Built-in maven repository convenience shortcuts:
      *
@@ -71,6 +72,9 @@ repositories {
 
 dependencies {
     devOnlyNonPublishable(project.files("staticLibs/BaublesExpanded-2.2.1-dev.jar")); // the maven for JSS was not working?? Can redistribute the libs jar file just fine, but it is weird....
+    devOnlyNonPublishable(project.files("staticLibs/alternativechunkloading-1.4.6-dev.jar"))
+    devOnlyNonPublishable(project.files("staticLibs/gtnhlib-0.11.55-dev.jar"))
+    devOnlyNonPublishable(project.files("staticLibs/gtnhextlib-1.0.5-dev.jar"))
     /*
      * Add your dependencies here. Supported configurations:
      *  - api("group:name:version:classifier"): if you use the types from this dependency in the public API of this mod

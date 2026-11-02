@@ -1,5 +1,6 @@
 package jerios.painmod.world.teleport;
 
+import jerios.painmod.integerationHandler.acl.ACLUtils;
 import jerios.painmod.registry.ModItemBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -76,6 +77,7 @@ public class PainTeleporter extends Teleporter {
                         int i2 = k + i1 * b1 - l * b0;
                         boolean flag = j1 < 0;
                         if (spawnPortal) {
+                            ACLUtils.ensureBlockExists(worldServerInstance, k1, l1, i2);
                             this.worldServerInstance.setBlock(k1, l1, i2, flag ? ModItemBlocks.corruptedBlock : Blocks.air);
                         }
                     }
@@ -126,8 +128,10 @@ public class PainTeleporter extends Teleporter {
 
                     for (int i2 = this.worldServerInstance.getActualHeight() - 1; i2 >= 0; --i2)
                     {
+                        ACLUtils.ensureBlockExists(worldServerInstance, l3, i2, l1);
                         if (this.worldServerInstance.getBlock(l3, i2, l1) == ModItemBlocks.painPortal)
                         {
+                            ACLUtils.ensureBlockExists(worldServerInstance, l3, i2 - 1, l1);
                             while (this.worldServerInstance.getBlock(l3, i2 - 1, l1) == ModItemBlocks.painPortal)
                             {
                                 --i2;
@@ -162,21 +166,24 @@ public class PainTeleporter extends Teleporter {
             d7 = (double)k + 0.5D;
             int i4 = -1;
 
+            ACLUtils.ensureBlockExists(worldServerInstance, i - 1, j, k);
             if (this.worldServerInstance.getBlock(i - 1, j, k) == ModItemBlocks.painPortal)
             {
                 i4 = 2;
             }
-
+            ACLUtils.ensureBlockExists(worldServerInstance, i + 1, j, k);
             if (this.worldServerInstance.getBlock(i + 1, j, k) == ModItemBlocks.painPortal)
             {
                 i4 = 0;
             }
 
+            ACLUtils.ensureBlockExists(worldServerInstance, i, j, k - 1);
             if (this.worldServerInstance.getBlock(i, j, k - 1) == ModItemBlocks.painPortal)
             {
                 i4 = 3;
             }
 
+            ACLUtils.ensureBlockExists(worldServerInstance, i, j, k + 1);
             if (this.worldServerInstance.getBlock(i, j, k + 1) == ModItemBlocks.painPortal)
             {
                 i4 = 1;
@@ -191,7 +198,9 @@ public class PainTeleporter extends Teleporter {
                 int i3 = Direction.offsetZ[i4];
                 int j3 = Direction.offsetX[k2];
                 int k3 = Direction.offsetZ[k2];
+                ACLUtils.ensureBlockExists(worldServerInstance, i + l2 + j3, j, k + i3 + k3);        ACLUtils.ensureBlockExists(worldServerInstance, i + l2 + j3, j + 1, k + i3 + k3);
                 boolean flag1 = !this.worldServerInstance.isAirBlock(i + l2 + j3, j, k + i3 + k3) || !this.worldServerInstance.isAirBlock(i + l2 + j3, j + 1, k + i3 + k3);
+                ACLUtils.ensureBlockExists(worldServerInstance,i + l2, j, k + i3);         ACLUtils.ensureBlockExists(worldServerInstance, i + l2, j + 1, k + i3);
                 boolean flag2 = !this.worldServerInstance.isAirBlock(i + l2, j, k + i3) || !this.worldServerInstance.isAirBlock(i + l2, j + 1, k + i3);
 
                 if (flag1 && flag2)
@@ -206,7 +215,9 @@ public class PainTeleporter extends Teleporter {
                     d11 -= (double)j3;
                     int k1 = k - k3;
                     d7 -= (double)k3;
+                            ACLUtils.ensureBlockExists(worldServerInstance, l3 + l2 + j3, j, k1 + i3 + k3);  ACLUtils.ensureBlockExists(worldServerInstance, l3 + l2 + j3, j + 1, k1 + i3 + k3);
                     flag1 = !this.worldServerInstance.isAirBlock(l3 + l2 + j3, j, k1 + i3 + k3) || !this.worldServerInstance.isAirBlock(l3 + l2 + j3, j + 1, k1 + i3 + k3);
+                            ACLUtils.ensureBlockExists(worldServerInstance, l3 + l2, j, k1 + i3); ACLUtils.ensureBlockExists(worldServerInstance, l3 + l2, j + 1, k1 + i3);
                     flag2 = !this.worldServerInstance.isAirBlock(l3 + l2, j, k1 + i3) || !this.worldServerInstance.isAirBlock(l3 + l2, j + 1, k1 + i3);
                 }
 
@@ -313,8 +324,10 @@ public class PainTeleporter extends Teleporter {
 
                 for (i3 = this.worldServerInstance.getActualHeight() - 1; i3 >= 0; --i3)
                 {
+                    ACLUtils.ensureBlockExists(worldServerInstance, i2, i3, k2);
                     if (this.worldServerInstance.isAirBlock(i2, i3, k2))
                     {
+                        ACLUtils.ensureBlockExists(worldServerInstance, i2, i3 - 1, k2);
                         while (i3 > 0 && this.worldServerInstance.isAirBlock(i2, i3 - 1, k2))
                         {
                             --i3;
@@ -341,6 +354,7 @@ public class PainTeleporter extends Teleporter {
                                         i5 = i3 + k4;
                                         int j5 = k2 + (j4 - 1) * l3 - i4 * k3;
 
+                                        ACLUtils.ensureBlockExists(worldServerInstance, l4, i5, j5);
                                         if (k4 < 0 && !this.worldServerInstance.getBlock(l4, i5, j5).getMaterial().isSolid() || k4 >= 0 && !this.worldServerInstance.isAirBlock(l4, i5, j5))
                                         {
                                             continue label274;
@@ -379,8 +393,10 @@ public class PainTeleporter extends Teleporter {
 
                     for (i3 = this.worldServerInstance.getActualHeight() - 1; i3 >= 0; --i3)
                     {
+                        ACLUtils.ensureBlockExists(worldServerInstance,i2, i3, k2);
                         if (this.worldServerInstance.isAirBlock(i2, i3, k2))
                         {
+                            ACLUtils.ensureBlockExists(worldServerInstance,i2, i3 - 1, k2);
                             while (i3 > 0 && this.worldServerInstance.isAirBlock(i2, i3 - 1, k2))
                             {
                                 --i3;
@@ -399,6 +415,8 @@ public class PainTeleporter extends Teleporter {
                                         l4 = i3 + j4;
                                         i5 = k2 + (i4 - 1) * l3;
 
+
+                                        ACLUtils.ensureBlockExists(worldServerInstance,k4, l4, i5);
                                         if (j4 < 0 && !this.worldServerInstance.getBlock(k4, l4, i5).getMaterial().isSolid() || j4 >= 0 && !this.worldServerInstance.isAirBlock(k4, l4, i5))
                                         {
                                             continue label222;
@@ -463,6 +481,7 @@ public class PainTeleporter extends Teleporter {
                         j4 = k2 + (j3 - 1) * l2 - i3 * l5;
                         flag = k3 < 0;
                         if (spawnPortal) {
+                            ACLUtils.ensureBlockExists(worldServerInstance,l3, i4, j4);
                             this.worldServerInstance.setBlock(l3, i4, j4, flag ? ModItemBlocks.corruptedBlock : Blocks.air);
                         }
                     }
