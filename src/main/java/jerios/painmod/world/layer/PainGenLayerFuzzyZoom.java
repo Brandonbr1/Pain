@@ -3,6 +3,8 @@ package jerios.painmod.world.layer;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
+import java.util.Random;
+
 public class PainGenLayerFuzzyZoom extends PainGenLayerZoom{
     public PainGenLayerFuzzyZoom(long par1, GenLayer par3GenLayer) {
         super(par1, par3GenLayer);
@@ -54,12 +56,16 @@ public class PainGenLayerFuzzyZoom extends PainGenLayerZoom{
 
         return aint2;
     }
+    Random rand = new Random(this.baseSeed);
 
     /**
      * randomly choose between the two args
      */
     protected int choose(int par1, int par2)
     {
+        if (rand.nextInt(4) == 0) {
+            return selectRandom(par2, par2);
+        }
         return this.nextInt(2) == 0 ? par1 : par2;
     }
 
@@ -68,6 +74,9 @@ public class PainGenLayerFuzzyZoom extends PainGenLayerZoom{
      */
     protected int choose(int par1, int par2, int par3, int par4)
     {
+        if (rand.nextInt(4) == 0) {
+            return selectModeOrRandom(par2, par2, par3, par4);
+        }
         int i1 = this.nextInt(4);
         return i1 == 0 ? par1 : (i1 == 1 ? par2 : (i1 == 2 ? par3 : par4));
     }

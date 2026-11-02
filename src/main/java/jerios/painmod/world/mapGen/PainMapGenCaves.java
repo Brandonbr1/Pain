@@ -1,5 +1,7 @@
 package jerios.painmod.world.mapGen;
 
+import jerios.painmod.registry.ModBiomes;
+import jerios.painmod.registry.ModItemBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
@@ -247,8 +249,8 @@ public class PainMapGenCaves extends MapGenBase {
     private boolean isExceptionBiome(BiomeGenBase biome)
     {
         if (biome == BiomeGenBase.mushroomIsland) return true;
-        if (biome == BiomeGenBase.beach) return true;
-        if (biome == BiomeGenBase.desert) return true;
+        if (biome == ModBiomes.painBeach) return true;
+        if (biome == ModBiomes.painDesert) return true;
         return false;
     }
 
@@ -278,11 +280,11 @@ public class PainMapGenCaves extends MapGenBase {
     protected void digBlock(Block[] data, int index, int x, int y, int z, int chunkX, int chunkZ, boolean foundTop)
     {
         BiomeGenBase biome = worldObj.getBiomeGenForCoords(x + chunkX * 16, z + chunkZ * 16);
-        Block top    = (isExceptionBiome(biome) ? Blocks.grass : biome.topBlock);
-        Block filler = (isExceptionBiome(biome) ? Blocks.dirt  : biome.fillerBlock);
+        Block top    = (isExceptionBiome(biome) ? ModItemBlocks.painGrass : biome.topBlock);
+        Block filler = (isExceptionBiome(biome) ? ModItemBlocks.painDirt  : biome.fillerBlock);
         Block block  = data[index];
 
-        if (block == Blocks.stone || block == filler || block == top)
+        if (block == ModItemBlocks.painStone || block == filler || block == top)
         {
             if (y < 10)
             {

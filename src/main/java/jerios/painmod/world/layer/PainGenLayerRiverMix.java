@@ -4,12 +4,12 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
-public class PainGenLayerMix extends GenLayer {
+public class PainGenLayerRiverMix extends GenLayer {
 
     private GenLayer biomePatternGeneratorChain;
     private GenLayer riverPatternGeneratorChain;
 
-    public PainGenLayerMix(long par1, GenLayer par3GenLayer, GenLayer par4GenLayer)
+    public PainGenLayerRiverMix(long par1, GenLayer par3GenLayer, GenLayer par4GenLayer)
     {
         super(par1);
         this.biomePatternGeneratorChain = par3GenLayer;

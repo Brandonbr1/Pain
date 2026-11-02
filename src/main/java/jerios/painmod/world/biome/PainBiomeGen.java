@@ -21,13 +21,12 @@ public class PainBiomeGen extends BiomeGenBase {
         super(id, register);
     }
 
-    @Override
-    public void genTerrainBlocks(World world, Random random, Block[] blocks, byte[] metas, int columnX, int columnZ, double noise) {
-        genBiomeTerrain2(world, random, blocks, metas, columnX, columnZ, noise);
+    public void genTerrainBlocks(World world, Random random, Block[] blocks, byte[] metas, int columnX, int columnZ, double noise)
+    {
+        this.genBiomeTerrain2(world, random, blocks, metas, columnX, columnZ, noise);
     }
 
-
-    public void genBiomeTerrain2(World world, Random random, Block[] blocks, byte[] metas, int columnX, int columnZ, double noise)
+    public final void genBiomeTerrain2(World world, Random random, Block[] blocks, byte[] metas, int columnX, int columnZ, double noise)
     {
         boolean flag = true;
         Block block = this.topBlock;
@@ -122,5 +121,6 @@ public class PainBiomeGen extends BiomeGenBase {
             }
         }
     }
+
 
 }

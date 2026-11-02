@@ -10,6 +10,8 @@ public class WorldGenHoles extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
+
+
         for (int i = 0; i < 6; i++)
         {
             int py = y - i;

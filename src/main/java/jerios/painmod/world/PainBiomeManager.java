@@ -13,6 +13,7 @@ public class PainBiomeManager {
 
     public static final BiomeGenBase[] COLD_BIOMES = new BiomeGenBase[]
     {
+            ModBiomes.painColdTiga,
             ModBiomes.painColdTiga
     };
 
@@ -26,7 +27,8 @@ public class PainBiomeManager {
 
     public static final BiomeGenBase[] DESERT_BIOMES = new BiomeGenBase[]
     {
-        ModBiomes.painDesert
+        ModBiomes.painDesert,
+            ModBiomes.painDesert
     };
 
     public static final BiomeGenBase[] ICY_BIOMES = new BiomeGenBase[]
