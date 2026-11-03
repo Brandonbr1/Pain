@@ -79,6 +79,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
     double[] noiseUpper;
     double[] depthNoise;
     double[] erosionNoise;
+    double[] mobSpawnerNoise;
 
     public PainChunkProviderGenerate(World world, long seed, boolean mapFeatures)
     {
@@ -95,6 +96,8 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         this.noiseGenDepth = new NoiseGeneratorOctaves(this.rand, 10);
 
         this.noiseGenErosion = new NoiseGeneratorOctaves(this.rand, 6);
+
+        this.spawnerMobNoise = new NoiseGeneratorPerlin(this.rand, 32);
 
         this.noiseArray = new double[825];
         this.parabolicField = new float[25];
@@ -651,6 +654,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
                                     if (f1 * f1 + f2 * f2 + f3 * f3 <= f * f)
                                     {
+                                        ACLUtils.ensureBlockExists(worldObj, l1, j2,i2);
                                         worldObj.setBlock(l1, j2, i2, Blocks.air, 0, 4);
                                     }
                                 }
@@ -666,34 +670,43 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
                 }
 
-                int yp2 = worldObj.getTopSolidOrLiquidBlock(shiftedX, shiftedZ) - 1;
+                int yp2 = worldObj.getTopSolidOrLiquidBlock(px * 2, pz * 2) - 1;
+                int yp4 = worldObj.getTopSolidOrLiquidBlock(-pxm * 2, -pzm * 2) - 1;
+                int y5 = worldObj.getTopSolidOrLiquidBlock(px * 2, -pzm * 2) - 1;
+                int y6 = worldObj.getTopSolidOrLiquidBlock(-pxm * 2, pz * 2) - 1;
 
-                for (int o = 0; o < 8; o++)
-                {
-                    if (worldObj.getBlock(px * 2, yp2-o, pz * 2) != Blocks.air) {
-
-                    }
-
-                }
 
 
                 Share.LOG.info("/tp PainModDevAccount" + " " + px * 2 + " " + yp2 + " " + pz * 2);
 
                 ACLUtils.ensureBlockExists(worldObj, px * 2, yp2, pz * 2);
 
-                worldObj.setBlock(px * 2, yp2, pz* 2, Blocks.diamond_block, 0 , 2);
+                worldObj.setBlock(px * 2, yp2, pz* 2, Blocks.air, 0 , 2);
 
-                ACLUtils.ensureBlockExists(worldObj, -pxm * 2, yp2, -pzm * 2);
 
-                worldObj.setBlock(-pxm * 2, yp2, -pzm * 2, Blocks.diamond_block, 0 , 2);
 
-                ACLUtils.ensureBlockExists(worldObj, px * 2, yp2, -pzm * 2);
 
-                worldObj.setBlock(px * 2, yp2, -pzm * 2, Blocks.diamond_block, 0 , 2);
+                ACLUtils.ensureBlockExists(worldObj, -pxm * 2, yp4, -pzm * 2);
 
-                ACLUtils.ensureBlockExists(worldObj, -pxm * 2, yp2, pz * 2);
+                worldObj.setBlock(-pxm * 2, yp4, -pzm * 2, Blocks.air, 0 , 2);
 
-                worldObj.setBlock(-pxm * 2, yp2, pz * 2, Blocks.diamond_block, 0 , 2);
+
+
+
+
+
+
+
+                ACLUtils.ensureBlockExists(worldObj, px * 2, y5, -pzm * 2);
+
+                worldObj.setBlock(px * 2, y5, -pzm * 2, Blocks.air, 0 , 2);
+
+
+
+
+                ACLUtils.ensureBlockExists(worldObj, -pxm * 2, y6, pz * 2);
+
+                worldObj.setBlock(-pxm * 2, y6, pz * 2, Blocks.air, 0 , 2);
 
 
             }
@@ -735,12 +748,23 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                         double d9 = d6 * d6 + d7 * d7 + d8 * d8;
 
 
-                        if (d9 <= 1.0) {
+                        if (d9 <= 10.0) {
+                            ACLUtils.ensureBlockExists(worldObj, (int) (x + d6), (int) (y + d7), (int) (z + d8));
                             worldObj.setBlock((int) (x + d6), (int) (y + d7), (int) (z + d8), Blocks.quartz_block, 0, 2);
+
+                            ACLUtils.ensureBlockExists(worldObj,(int) (x + d6), (int) (y + d7), (int) (z - d8));
                             worldObj.setBlock((int) (x + d6), (int) (y + d7), (int) (z - d8), Blocks.quartz_block, 0, 2);
+
+                            ACLUtils.ensureBlockExists(worldObj,(int) (x - d6), (int) (y + d7), (int) (z + d8));
                             worldObj.setBlock((int) (x - d6), (int) (y + d7), (int) (z + d8), Blocks.quartz_block, 0, 2);
+
+                            ACLUtils.ensureBlockExists(worldObj, (int) (x + d6), (int) (y - d7), (int) (z + d8));
                             worldObj.setBlock((int) (x + d6), (int) (y - d7), (int) (z + d8), Blocks.quartz_block, 0, 2);
+
+                            ACLUtils.ensureBlockExists(worldObj, (int) (x + d6), (int) (y - d7), (int) (z - d8));
                             worldObj.setBlock((int) (x + d6), (int) (y - d7), (int) (z - d8), Blocks.quartz_block, 0, 2);
+
+                            ACLUtils.ensureBlockExists(worldObj, (int) (x - d6), (int) (y - d7), (int) (z + d8));
                             worldObj.setBlock((int) (x - d6), (int) (y - d7), (int) (z + d8), Blocks.quartz_block, 0, 2);
                         }
                     }

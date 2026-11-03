@@ -28,111 +28,120 @@ public class PainBiomeGen extends BiomeGenBase {
 
     public final void genBiomeTerrain2(World world, Random random, Block[] blocks, byte[] metas, int columnX, int columnZ, double noise)
     {
-        boolean flag = true;
-        Block top = this.topBlock;
-        byte meta = (byte)(this.field_150604_aj & 255);
-        Block filler = this.fillerBlock;
-        int k = -1;
-        int noiseCalc = (int)(noise / 3.0D + 3.0D + random.nextDouble() * 0.25D);
-        int colXChunk = columnX & 15;
-        int colZChunk = columnZ & 15;
-        int blocksChunk = blocks.length / 256;
+        Block topBlock = this.topBlock;
+        byte metadata = (byte)(this.field_150604_aj & 255);
+        Block fillerBlock = this.fillerBlock;
+        int noiseIndex = -1;
+        int noiseCalculations = (int)(noise / 3.0D + 3.0D + random.nextDouble() * 0.25D);
+        int chunkColumnX = columnX & 15;
+        int chunkColumnZ = columnZ & 15;
+        int blockListChunk = blocks.length / 256;
 
-        for (int l1 = 255; l1 >= 0; --l1)
+        for (int height = 255; height >= 0; --height)
         {
-            int i2 = (colZChunk * 16 + colXChunk) * blocksChunk + l1;
+            int blockInChunk = (chunkColumnZ * 16 + chunkColumnX) * blockListChunk + height;
 
-            if (l1 <= 0 + random.nextInt(5))
+            if (height <= 0 + random.nextInt(5))
             {
-                blocks[i2] = Blocks.bedrock;
+                blocks[blockInChunk] = Blocks.bedrock;
             }
             else
             {
-                Block block2 = blocks[i2];
+                Block blockAboveBedrockSpawning = blocks[blockInChunk];
 
-                if (block2 != null && block2.getMaterial() != Material.air)
+                if (blockAboveBedrockSpawning != null && blockAboveBedrockSpawning.getMaterial() != Material.air)
                 {
-                    if (block2 == ModItemBlocks.painStone)
+                    if (blockAboveBedrockSpawning == ModItemBlocks.painStone)
                     {
-                        if (k == -1)
+                        if (noiseIndex == -1)
                         {
-                            if (noiseCalc <= 0)
+                            if (noiseCalculations <= 0)
                             {
-                                top = null;
-                                meta = 0;
-                                filler = ModItemBlocks.painStone;
+                                topBlock = null;
+                                metadata = 0;
+                                fillerBlock = ModItemBlocks.painStone;
 
                                 if (random.nextInt(9) == 0) {
-                                    filler = Blocks.air;
-                                }
-                            }
-                            else if (l1 >= 59 && l1 <= 64)
-                            {
-                                top = this.topBlock;
-                                meta = (byte)(this.field_150604_aj & 255);
-                                filler = this.fillerBlock;
-
-                                if (random.nextInt(9) == 0) {
-                                    top = Blocks.air;
-                                    filler = Blocks.air;
+                                    fillerBlock = Blocks.air;
                                 }
 
                             }
-
-                            if (l1 < 63 && (top == null || top.getMaterial() == Material.air))
+                            else if (height >= 59 && height <= 64)
                             {
-                                if (this.getFloatTemperature(columnX, l1, columnZ) < 0.15F)
+                                topBlock = this.topBlock;
+                                metadata = (byte)(this.field_150604_aj & 255);
+                                fillerBlock = this.fillerBlock;
+
+                                if (random.nextInt(9) == 0) {
+                                    topBlock = Blocks.air;
+                                    fillerBlock = Blocks.air;
+                                    metadata = 0;
+                                }
+                            }
+
+                            if (height < 63 && (topBlock == null || topBlock.getMaterial() == Material.air))
+                            {
+                                if (this.getFloatTemperature(columnX, height, columnZ) < 0.15F)
                                 {
-                                    top = Blocks.ice;
-                                    meta = 0;
-
+                                    topBlock = Blocks.ice;
                                     if (random.nextInt(9) == 0) {
-                                        top = Blocks.air;
+                                        topBlock = Blocks.air;
                                     }
+                                    metadata = 0;
                                 }
                                 else
                                 {
-                                    top = Blocks.water;
-                                    meta = 0;
-
+                                    topBlock = Blocks.water;
                                     if (random.nextInt(9) == 0) {
-                                        top = Blocks.air;
+                                        topBlock = Blocks.air;
                                     }
+                                    metadata = 0;
                                 }
                             }
 
-                            k = noiseCalc;
+                            noiseIndex = noiseCalculations;
 
-                            if (l1 >= 62)
+                            if (height >= 62)
                             {
-                                blocks[i2] = top;
-                                metas[i2] = meta;
+                                blocks[blockInChunk] = topBlock;
+                                metas[blockInChunk] = metadata;
+
+                                if (random.nextInt(9) == 0) {
+                                    blocks[blockInChunk] = Blocks.air;
+                                    metas[blockInChunk] = 0;
+                                }
                             }
-                            else if (l1 < 56 - noiseCalc)
+                            else if (height < 56 - noiseCalculations)
                             {
-                                top = null;
-                                filler = ModItemBlocks.painStone;
-                                blocks[i2] = Blocks.gravel;
+                                topBlock = null;
+                                fillerBlock = ModItemBlocks.painStone;
+                                blocks[blockInChunk] = Blocks.gravel;
+
+                                if (random.nextInt(9) == 0) {
+                                    fillerBlock = Blocks.air;
+                                    blocks[blockInChunk] = Blocks.air;
+                                }
                             }
                             else
                             {
-                                blocks[i2] = filler;
+                                blocks[blockInChunk] = fillerBlock;
                             }
                         }
-                        else if (k > 0)
+                        else if (noiseIndex > 0)
                         {
-                            --k;
-                            blocks[i2] = filler;
+                            --noiseIndex;
+                            blocks[blockInChunk] = fillerBlock;
 
-                            if (k == 0 && filler == Blocks.sand)
+                            if (noiseIndex == 0 && fillerBlock == Blocks.sand)
                             {
-                                k = random.nextInt(4) + Math.max(0, l1 - 63);
-                                filler = Blocks.sandstone;
+                                noiseIndex = random.nextInt(4) + Math.max(0, height - 63);
+                                fillerBlock = Blocks.sandstone;
 
 
                                 if (random.nextInt(9) == 0) {
-                                    filler = Blocks.air;
+                                    fillerBlock = Blocks.air;
                                 }
+
 
                             }
                         }
@@ -140,7 +149,7 @@ public class PainBiomeGen extends BiomeGenBase {
                 }
                 else
                 {
-                    k = -1;
+                    noiseIndex = -1;
                 }
             }
         }
