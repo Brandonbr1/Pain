@@ -29,18 +29,18 @@ public class PainBiomeGen extends BiomeGenBase {
     public final void genBiomeTerrain2(World world, Random random, Block[] blocks, byte[] metas, int columnX, int columnZ, double noise)
     {
         boolean flag = true;
-        Block block = this.topBlock;
-        byte b0 = (byte)(this.field_150604_aj & 255);
-        Block block1 = this.fillerBlock;
+        Block top = this.topBlock;
+        byte meta = (byte)(this.field_150604_aj & 255);
+        Block filler = this.fillerBlock;
         int k = -1;
-        int l = (int)(noise / 3.0D + 3.0D + random.nextDouble() * 0.25D);
-        int i1 = columnX & 15;
-        int j1 = columnZ & 15;
-        int k1 = blocks.length / 256;
+        int noiseCalc = (int)(noise / 3.0D + 3.0D + random.nextDouble() * 0.25D);
+        int colXChunk = columnX & 15;
+        int colZChunk = columnZ & 15;
+        int blocksChunk = blocks.length / 256;
 
         for (int l1 = 255; l1 >= 0; --l1)
         {
-            int i2 = (j1 * 16 + i1) * k1 + l1;
+            int i2 = (colZChunk * 16 + colXChunk) * blocksChunk + l1;
 
             if (l1 <= 0 + random.nextInt(5))
             {
@@ -56,60 +56,84 @@ public class PainBiomeGen extends BiomeGenBase {
                     {
                         if (k == -1)
                         {
-                            if (l <= 0)
+                            if (noiseCalc <= 0)
                             {
-                                block = null;
-                                b0 = 0;
-                                block1 = ModItemBlocks.painStone;
+                                top = null;
+                                meta = 0;
+                                filler = ModItemBlocks.painStone;
+
+                                if (random.nextInt(9) == 0) {
+                                    filler = Blocks.air;
+                                }
                             }
                             else if (l1 >= 59 && l1 <= 64)
                             {
-                                block = this.topBlock;
-                                b0 = (byte)(this.field_150604_aj & 255);
-                                block1 = this.fillerBlock;
+                                top = this.topBlock;
+                                meta = (byte)(this.field_150604_aj & 255);
+                                filler = this.fillerBlock;
+
+                                if (random.nextInt(9) == 0) {
+                                    top = Blocks.air;
+                                    filler = Blocks.air;
+                                }
+
                             }
 
-                            if (l1 < 63 && (block == null || block.getMaterial() == Material.air))
+                            if (l1 < 63 && (top == null || top.getMaterial() == Material.air))
                             {
                                 if (this.getFloatTemperature(columnX, l1, columnZ) < 0.15F)
                                 {
-                                    block = Blocks.ice;
-                                    b0 = 0;
+                                    top = Blocks.ice;
+                                    meta = 0;
+
+                                    if (random.nextInt(9) == 0) {
+                                        top = Blocks.air;
+                                    }
                                 }
                                 else
                                 {
-                                    block = Blocks.water;
-                                    b0 = 0;
+                                    top = Blocks.water;
+                                    meta = 0;
+
+                                    if (random.nextInt(9) == 0) {
+                                        top = Blocks.air;
+                                    }
                                 }
                             }
 
-                            k = l;
+                            k = noiseCalc;
 
                             if (l1 >= 62)
                             {
-                                blocks[i2] = block;
-                                metas[i2] = b0;
+                                blocks[i2] = top;
+                                metas[i2] = meta;
                             }
-                            else if (l1 < 56 - l)
+                            else if (l1 < 56 - noiseCalc)
                             {
-                                block = null;
-                                block1 = ModItemBlocks.painStone;
+                                top = null;
+                                filler = ModItemBlocks.painStone;
                                 blocks[i2] = Blocks.gravel;
                             }
                             else
                             {
-                                blocks[i2] = block1;
+                                blocks[i2] = filler;
                             }
                         }
                         else if (k > 0)
                         {
                             --k;
-                            blocks[i2] = block1;
+                            blocks[i2] = filler;
 
-                            if (k == 0 && block1 == Blocks.sand)
+                            if (k == 0 && filler == Blocks.sand)
                             {
                                 k = random.nextInt(4) + Math.max(0, l1 - 63);
-                                block1 = Blocks.sandstone;
+                                filler = Blocks.sandstone;
+
+
+                                if (random.nextInt(9) == 0) {
+                                    filler = Blocks.air;
+                                }
+
                             }
                         }
                     }

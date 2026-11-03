@@ -29,6 +29,15 @@ import net.minecraft.world.WorldServer;
  */
 public class ACLUtils {
 
+    public static void ensureBlockExists(World world, int x, int y, int z) {
+      if ( world instanceof WorldServer) {
+          WorldServer s = (WorldServer) world;
+          ensureBlockExists(s,x,y,z);
+      }
+    }
+
+
+
     public static void ensureBlockExists(WorldServer world, int x, int y, int z) {
         if (world != null && !world.blockExists(x, y, z)) {
             world.getChunkProvider().loadChunk(x >> 4, z >> 4);

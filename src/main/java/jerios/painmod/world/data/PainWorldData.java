@@ -14,6 +14,7 @@ public class PainWorldData extends WorldSavedData {
 
     public PainWorldData() {
         super(DATA_NAME);
+        this.randTime = 0;
     }
 
     public PainWorldData(String name) {
@@ -24,13 +25,14 @@ public class PainWorldData extends WorldSavedData {
     private boolean isRaining;
     private boolean isThunder;
     private int thunderTime;
-
+    private int randTime;
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         rainTime = nbt.getInteger("PainRainTime");
         isRaining = nbt.getBoolean("PainIsRaining");
         isThunder = nbt.getBoolean("PainIsThunder");
         thunderTime = nbt.getInteger("thunderTime");
+        randTime= nbt.getInteger("randTime");
     }
 
     @Override
@@ -39,11 +41,21 @@ public class PainWorldData extends WorldSavedData {
         nbt.setBoolean("PainIsRaining", isRaining);
         nbt.setBoolean("PainIsThunder", isThunder);
         nbt.setInteger("thunderTime", thunderTime);
+        nbt.setInteger("randTime", randTime);
     }
 
     public void setRaining(boolean isRaining) {
         this.isRaining = isRaining;
         markDirty();
+    }
+
+    public void setRandTime(int time) {
+        this.randTime =time;
+        markDirty();
+    }
+
+    public int getRandTime() {
+        return randTime;
     }
 
     public boolean isRainingP() {
