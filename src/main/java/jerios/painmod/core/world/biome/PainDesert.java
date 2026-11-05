@@ -41,6 +41,7 @@ public class PainDesert extends PainBiomeGen {
        WorldGenerator cactusGen = new WorldGenCactus();
 
 
+    @Override
     public void decorate(World world, Random random, int x, int z)
     {
         super.decorate(world, random, x, z);
@@ -58,7 +59,7 @@ public class PainDesert extends PainBiomeGen {
         {
            int k =  random.nextInt(16) + 8;
            int l =  random.nextInt(16) + 8;
-           int i1 = random.nextInt(world.getHeightValue(k, l) * 2);
+           int i1 = random.nextInt(Math.abs(world.getHeightValue(k, l)) * 2);
            this.cactusGen.generate(world, random, k, i1, l);
         }
 
@@ -66,9 +67,5 @@ public class PainDesert extends PainBiomeGen {
     }
 
 
-    @Override
-    public void genTerrainBlocks(World world, Random random, Block[] blocks, byte[] metas, int columnX, int columnZ, double noise) {
-        super.genTerrainBlocks(world, random, blocks, metas, columnX, columnZ, noise);
-    }
 
 }

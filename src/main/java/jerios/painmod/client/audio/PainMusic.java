@@ -10,7 +10,10 @@ public class PainMusic {
     @SideOnly(Side.CLIENT)
     public enum MusicType
     {
-        GAME(new ResourceLocation("painmod:music.game"), 300, 900);
+        GAME(new ResourceLocation("painmod:music.game"), 300, 900),
+        ESCAPED(new ResourceLocation("painmod:music.escaped"), 300, 900);
+
+
         private final ResourceLocation location;
         private final int minDelay;
         private final int maxDelay;

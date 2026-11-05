@@ -38,7 +38,6 @@ public class CommandSoftlock extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         final int dim = PainConfig.painDimensionID;
         MinecraftServer server =  MinecraftServer.getServer();
-        WorldServer worldServer = server.worldServers[dim];
         sender.addChatMessage(new ChatComponentText("You have softlocked yourself, running to try and teleport you back to overworld"));
 
 
@@ -47,42 +46,46 @@ public class CommandSoftlock extends CommandBase {
         for (int i = 0; i < p.size(); i++) {
 
             EntityPlayer player = p.get(i);
-            PainProps props = PainProps.get(player);
+
+            if (!player.worldObj.isRemote && !sender.getEntityWorld().isRemote) {
 
 
-            if (player.getCommandSenderName().equals(sender.getCommandSenderName())) {
-
-                if (props != null) {
-                    props.escapedDim = true;
-
-                    if (player instanceof EntityPlayerMP) {
-                        EntityPlayerMP playerMP = (EntityPlayerMP) player;
-                        sender.addChatMessage(new ChatComponentText("Found you... Now trying to unsoftlock you."));
+                PainProps props = PainProps.get(player);
 
 
+                if (player.getCommandSenderName().equals(sender.getCommandSenderName())) {
 
-                        WorldServer ws = worldServer.func_73046_m().worldServerForDimension(dim);
-                        if (ws != null)
-                        {
-                            TeleporterHandler.travelToDimension(playerMP, 0, new PainTeleporter(ws, false));
+                    if (props != null) {
+                        props.escapedDim = true;
+
+                        if (player instanceof EntityPlayerMP) {
+                            EntityPlayerMP playerMP = (EntityPlayerMP) player;
+                            sender.addChatMessage(new ChatComponentText("Found you... Now trying to unsoftlock you."));
+
+
+
+                            WorldServer ws = server.worldServers[dim];
+                            if (ws != null)
+                            {
+                                TeleporterHandler.travelToDimension(playerMP, 0, new PainTeleporter(ws, false));
+
+                            }
+
 
                         }
+
+                    } else {
+                        sender.addChatMessage(new ChatComponentText("Pain Player Props is null..... This is bad... Unable to escape you. Report this bug to an admin or the mod dev(Jerios)"));
 
 
                     }
 
 
-                    break;
-
-                } else {
-                    sender.addChatMessage(new ChatComponentText("Pain Player Props is null..... This is bad... Unable to escape you. Report this bug to an admin or the mod dev(Jerios)"));
-
 
                 }
 
-
-
             }
+
 
 
 

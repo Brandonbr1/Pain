@@ -11,10 +11,6 @@ public enum MixinsList implements IMixins {
             .setPhase(Phase.EARLY)
             .addClientMixins("MixinMusicTicker")),
 
-    MUSIC_INVOKER(new MixinBuilder()
-            .setPhase(Phase.EARLY)
-            .addClientMixins("IMusicTicker")),
-
     POTION_EFFECTS(new MixinBuilder()
             .setPhase(Phase.EARLY)
             .addCommonMixins("MixinEntityLivingBase")),

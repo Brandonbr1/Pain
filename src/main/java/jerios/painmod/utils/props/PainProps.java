@@ -1,6 +1,9 @@
 package jerios.painmod.utils.props;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import jerios.painmod.forge.PainMod;
+import jerios.painmod.forge.PainShare;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -48,6 +51,12 @@ public class PainProps implements IExtendedEntityProperties {
     @Override
     public void init(Entity entity, World world) {
 
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setEscapedDim(boolean escapedDim) {
+        this.escapedDim = escapedDim;
+        PainShare.LOG.info("RUN ON CLIENT PAIN PROPS");
     }
 
     public static PainProps get(Entity p) {

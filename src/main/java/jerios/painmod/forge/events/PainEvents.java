@@ -19,6 +19,7 @@ import jerios.painmod.core.world.teleport.TeleporterHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPortal;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -35,6 +36,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -171,7 +173,7 @@ public class PainEvents {
 
 
 
-    int musicPlayer = 0;
+    boolean musicPlayed = false;
 
     // some mods may not fire the Transport Dimension Event
     @SubscribeEvent
@@ -200,19 +202,6 @@ public class PainEvents {
 
                     }
 
-
-                } else {
-
-                    if (musicPlayer == 0)
-                    {
-                        if (mc.musicTicker != null)  {
-
-
-                            musicPlayer = 1;
-
-                        }
-
-                    }
 
                 }
 

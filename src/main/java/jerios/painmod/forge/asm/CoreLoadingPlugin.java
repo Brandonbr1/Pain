@@ -4,7 +4,7 @@ package jerios.painmod.forge.asm;
 import com.gtnewhorizon.gtnhmixins.IEarlyMixinLoader;
 import com.gtnewhorizon.gtnhmixins.builders.IMixins;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
-import jerios.painmod.forge.asm.mixins.MixinsList;;
+import jerios.painmod.forge.asm.mixins.MixinsList;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,7 @@ public class CoreLoadingPlugin implements IFMLLoadingPlugin , IEarlyMixinLoader 
 
     @Override
     public String[] getASMTransformerClass() {
-        return null;
+        return null; /**new String[]{"jerios.painmod.forge.asm.EntityLivingBaseTransformer"};**/
     }
 
     @Override

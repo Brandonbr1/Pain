@@ -48,9 +48,10 @@
     {"name":"music/conditionalMusic/exploration/ExploringUnkown", "stream":true}
   ]
 },
-  "msuic.escaped":{
+  "music.escaped":{
     "category": "music",
     "sounds":[
+      {"name":"music/conditionalMusic/escaped/biomeFest", "stream":true},
       {"name":"music/conditionalMusic/escaped/biomeFest", "stream":true}
     ]
   },

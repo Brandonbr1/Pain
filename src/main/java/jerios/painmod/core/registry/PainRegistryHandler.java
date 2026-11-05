@@ -13,7 +13,7 @@ import jerios.painmod.forge.integerationHandler.baubbles.registry.BaubblesIntegr
 import jerios.painmod.core.items.registry.ModItems;
 import jerios.painmod.core.items.spawner.ItemPainSpawnEgg;
 import jerios.painmod.core.registry.misc.GameRulesRegistry;
-import jerios.painmod.core.networking.registry.ModPacketHandler;
+import jerios.painmod.core.networking.registry.PainPacketHandler;
 import jerios.painmod.core.achievments.PainAchievements;
 import jerios.painmod.core.world.registry.ModBiomes;
 import jerios.painmod.core.world.registry.ModGenerator;
@@ -34,7 +34,7 @@ public class PainRegistryHandler {
     public static void registerPreInit() {
         ModItems.register();
         ModMobs.register();
-        ModPacketHandler.register();
+        PainPacketHandler.register();
         registerDispenserBehaviour();
         ModGenerator.register();
         ModPotions.register();
