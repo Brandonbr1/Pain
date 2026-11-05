@@ -3,9 +3,9 @@ package jerios.painmod.client.items;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import jerios.painmod.items.ItemPainSpawnEgg;
-import jerios.painmod.items.spawner.ItemMonsterSpawner;
-import jerios.painmod.registry.ModItemBlocks;
+import jerios.painmod.core.items.spawner.ItemPainSpawnEgg;
+import jerios.painmod.core.items.spawner.ItemMonsterSpawner;
+import jerios.painmod.core.items.registry.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -47,7 +47,7 @@ public class MonsterSpawnerRender implements IItemRenderer {
         if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON || type == ItemRenderType.ENTITY
         ) {
             RenderBlocks renderBlocksIr = (RenderBlocks) data[0];
-            if (item.getItem() == Item.getItemFromBlock(ModItemBlocks.spawner)) {
+            if (item.getItem() == Item.getItemFromBlock(ModItems.spawner)) {
 
                 ItemMonsterSpawner spawner = (ItemMonsterSpawner) item.getItem();
 
@@ -82,7 +82,7 @@ public class MonsterSpawnerRender implements IItemRenderer {
 
 
         } else if (type == ItemRenderType.INVENTORY) {
-            if (item.getItem() == Item.getItemFromBlock(ModItemBlocks.spawner))
+            if (item.getItem() == Item.getItemFromBlock(ModItems.spawner))
             {
                 RenderBlocks renderBlocksIr = (RenderBlocks) data[0];
 

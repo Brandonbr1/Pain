@@ -47,5 +47,17 @@
     {"name":"music/conditionalMusic/exploration/timeIsFaster", "stream":true},
     {"name":"music/conditionalMusic/exploration/ExploringUnkown", "stream":true}
   ]
-}
+},
+  "msuic.escaped":{
+    "category": "music",
+    "sounds":[
+      {"name":"music/conditionalMusic/escaped/biomeFest", "stream":true}
+    ]
+  },
+  "jumpscare":{
+    "category": "master",
+    "sounds":[
+      {"name":"cave1", "stream":false}
+    ]
+  }
 }

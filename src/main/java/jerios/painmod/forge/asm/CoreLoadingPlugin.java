@@ -1,0 +1,53 @@
+package jerios.painmod.forge.asm;
+
+
+import com.gtnewhorizon.gtnhmixins.IEarlyMixinLoader;
+import com.gtnewhorizon.gtnhmixins.builders.IMixins;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import jerios.painmod.forge.asm.mixins.MixinsList;;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+
+@IFMLLoadingPlugin.MCVersion("1.7.10")
+@IFMLLoadingPlugin.Name("Pain Mod ASM")
+@IFMLLoadingPlugin.TransformerExclusions({"com.gtnhlib.", "net.minecraft.client.renderer.RenderGlobal"})
+public class CoreLoadingPlugin implements IFMLLoadingPlugin , IEarlyMixinLoader {
+
+    @Override
+    public String[] getASMTransformerClass() {
+        return null;
+    }
+
+    @Override
+    public String getModContainerClass() {
+        return null;
+    }
+
+    @Override
+    public String getSetupClass() {
+        return null;
+    }
+
+    @Override
+    public void injectData(Map<String, Object> data) {}
+
+    @Override
+    public String getAccessTransformerClass() {
+        return null;
+    }
+
+    @Override
+    public String getMixinConfig() {
+        return "mixins.painmod.early.json";
+    }
+
+    @Override
+    public List<String> getMixins(Set<String> loadedCoreMods) {
+        return IMixins.getEarlyMixins(MixinsList.class, loadedCoreMods);
+    }
+
+
+}

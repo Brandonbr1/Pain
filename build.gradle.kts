@@ -31,13 +31,14 @@ minecraft_fp {
     }
 
     mixin {
-        pkg = "mixins"
+        pkg = "forge.asm.mixins"
+        debug = true
        }
 
 
 
     core {
-        coreModClass                   = "asm.CoreLoadingPlugin"
+        coreModClass                   = "forge.asm.CoreLoadingPlugin"
         accessTransformerFile          = "painmod_at.cfg"
     }
 

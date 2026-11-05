@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8.5",
-  "package": "jerios.painmod.mixins.early",
+  "package": "jerios.painmod.forge.asm.mixins.early",
   "refmap": "mixins.painmod.refmap.json",
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8"
