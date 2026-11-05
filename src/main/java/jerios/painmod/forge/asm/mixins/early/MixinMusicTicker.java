@@ -43,7 +43,6 @@ public class MixinMusicTicker {
               //  if (field_147678_c != null) {
                //     field_147678_c = null;
               //  }
-                PainShare.LOG.info("LET THIS SHIT RUN");
                 pain_Mod$playEscapedMusic = true;
                 painmod$runMusicTickerCode2();
                 ci.cancel();
