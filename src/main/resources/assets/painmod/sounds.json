@@ -51,8 +51,8 @@
   "music.escaped":{
     "category": "music",
     "sounds":[
-      {"name":"music/conditionalMusic/escaped/biomeFest", "stream":true},
-      {"name":"music/conditionalMusic/escaped/biomeFest", "stream":true}
+      {"name":"cave1", "stream":true},
+      {"name":"cave1", "stream":true}
     ]
   },
   "jumpscare":{
