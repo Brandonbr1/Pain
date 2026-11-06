@@ -42,7 +42,7 @@ public class PainMod {
         proxy.serverOnly();
         registerForgeEvent(new PainFakePlayerFactory());
         registerBothEvents(new PainEventsServer());
-        registerBothEvents(new PainEventsClient());
+   //     registerBothEvents(new PainEventsClient());
     }
 
     public void registerBothEvents(Object o){

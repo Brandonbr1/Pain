@@ -14,7 +14,6 @@ public class PainWorldData extends WorldSavedData {
 
     public PainWorldData() {
         super(DATA_NAME);
-        this.randTime = 0;
     }
 
     public PainWorldData(String name) {
@@ -25,7 +24,6 @@ public class PainWorldData extends WorldSavedData {
     private boolean isRaining;
     private boolean isThunder;
     private int thunderTime;
-    private int randTime;
     private long skySeed;
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
