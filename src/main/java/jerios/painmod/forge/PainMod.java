@@ -9,18 +9,13 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import jerios.painmod.Tags;
 import jerios.painmod.forge.config.PainConfig;
-import jerios.painmod.vanilla.damageSource.RagePainSource;
-import jerios.painmod.forge.events.PainEvents;
+import jerios.painmod.forge.events.PainEventsClient;
+import jerios.painmod.forge.events.PainEventsServer;
 import jerios.painmod.forge.proxy.IProxy;
 import jerios.painmod.core.registry.PainRegistryHandler;
 import jerios.painmod.utils.fakePlayer.PainFakePlayerFactory;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Mod(modid = Tags.MOD_ID,
         name = Tags.MOD_NAME,
@@ -46,7 +41,8 @@ public class PainMod {
         proxy.clientOnly();
         proxy.serverOnly();
         registerForgeEvent(new PainFakePlayerFactory());
-        registerBothEvents(new PainEvents());
+        registerBothEvents(new PainEventsServer());
+        registerBothEvents(new PainEventsClient());
     }
 
     public void registerBothEvents(Object o){

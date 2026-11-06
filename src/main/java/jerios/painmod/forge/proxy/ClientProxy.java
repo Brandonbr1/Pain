@@ -16,8 +16,8 @@ public class ClientProxy extends CommonProxy implements IProxy{
 
    static Class[][] c = new Class[][] {{MusicTicker.MusicType.class, ResourceLocation.class, int.class, int.class}};
 
-    public static final MusicTicker.MusicType PAIN_MUSIC = EnumHelper.addEnum(c, MusicTicker.MusicType.class,  "PAINGAME", new ResourceLocation("painmod:music.game"), 300, 900);
-    public static final MusicTicker.MusicType ESCAPED_MUSIC = EnumHelper.addEnum(c, MusicTicker.MusicType.class,  "PAINESCAPED", new ResourceLocation("painmod:music.escaped"), 20, 40);
+    public static final MusicTicker.MusicType PAIN_MUSIC = EnumHelper.addEnum(c, MusicTicker.MusicType.class,  "PAIN_MOD_GAME", new ResourceLocation("painmod:music.game"), 300, 900);
+    public static final MusicTicker.MusicType ESCAPED_MUSIC = EnumHelper.addEnum(c, MusicTicker.MusicType.class,  "PAIN_MOD_ESCAPED", new ResourceLocation("painmod:music.escaped"), 2, 3);
 
 
     @Override

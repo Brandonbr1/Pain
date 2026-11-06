@@ -32,7 +32,6 @@ public class PainWeatherRender extends IRenderHandler {
     public void renderW(float partialTicks, WorldClient world, Minecraft mc)
     {
 
-        // IS this why it does not work, if so, perhaps we need to use worldata? or somehow get the data from the server to the client?
         float f1 = this.mc.theWorld.getRainStrength(partialTicks);
 
         EntityRenderer renderer = mc.entityRenderer;

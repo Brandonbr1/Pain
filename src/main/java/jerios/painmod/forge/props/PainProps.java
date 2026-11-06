@@ -18,6 +18,8 @@ public class PainProps implements IExtendedEntityProperties {
     public int drinkMilk = 0;
     public int jumpscareTimer = 0;
     public int requiredJumpscareTimer = 18000;
+    public boolean hasPlayedMusic1 = false;
+    public boolean hasPlayedMusic2 = false;
 
     public PainProps() {
     }
@@ -31,6 +33,9 @@ public class PainProps implements IExtendedEntityProperties {
         propertyData.setInteger("drinkMilk", this.drinkMilk);
         propertyData.setInteger("jumpscareTimer", this.jumpscareTimer);
         propertyData.setInteger("requiredJumpscareTimer", this.requiredJumpscareTimer);
+        propertyData.setBoolean("hasPlayedMusic1", this.hasPlayedMusic1);
+        propertyData.setBoolean("hasPlayedMusic2", this.hasPlayedMusic2);
+
 
         compound.setTag(PROP_NAME, propertyData);
     }
@@ -44,6 +49,8 @@ public class PainProps implements IExtendedEntityProperties {
            this.drinkMilk = propertyData.getInteger("drinkMilk");
             this.jumpscareTimer = propertyData.getInteger("jumpscareTimer");
             this.requiredJumpscareTimer = propertyData.getInteger("requiredJumpscareTimer");
+            this.hasPlayedMusic1 = propertyData.getBoolean("hasPlayedMusic1");
+            this.hasPlayedMusic2 = propertyData.getBoolean("hasPlayedMusic2");
         }
 
     }

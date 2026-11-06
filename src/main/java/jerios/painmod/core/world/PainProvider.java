@@ -15,10 +15,8 @@ import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.IRenderHandler;
 
-//TODO: MAKE THE MOON LOOKS CORRUPTED AND BROKEN IF POSSIBLE
 // MAKE STARS LOOKS CORRUPTED
 // MAKE CLOUDS LOOKS UNCANNY
-// MAKE VOID FOG APPEAR RIGHT NEAR THE SURFACE
 public class PainProvider extends WorldProvider {
 
   //  private IRenderHandler cachedWeatherRenderer = null;
@@ -81,7 +79,7 @@ public class PainProvider extends WorldProvider {
     boolean initWeather = false;
     @Override
     public IRenderHandler getWeatherRenderer() {
-        if (!initWeather ) {
+        if (!initWeather) {
             setWeatherRenderer(new PainWeatherRender());
             initWeather = true;
         }

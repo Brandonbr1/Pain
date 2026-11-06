@@ -4,18 +4,20 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import jerios.painmod.forge.props.PainProps;
 
-public class STC01EscapedDim implements IMessage {
+public class STCEscapedDim implements IMessage {
 
 
-    public STC01EscapedDim() {
+    public STCEscapedDim() {
 
     }
 
     boolean hasEscaped;
-    public STC01EscapedDim(boolean hasEscaped) {
+    public STCEscapedDim(boolean hasEscaped) {
         this.hasEscaped = hasEscaped;
     }
 
@@ -31,19 +33,16 @@ public class STC01EscapedDim implements IMessage {
     }
 
 
-    public static class EscapedDimMessageHandler implements IMessageHandler<STC01EscapedDim, IMessage> {
+    public static class EscapedDimMessageHandler implements IMessageHandler<STCEscapedDim, IMessage> {
 
         @Override
-        public IMessage onMessage(STC01EscapedDim message, MessageContext ctx) {
-
-            //if (ctx.side == Side.CLIENT)
-           // {
+        public IMessage onMessage(STCEscapedDim message, MessageContext ctx) {
+            if (ctx.side == Side.CLIENT)
+            {
 
                 PainProps props = PainProps.get(FMLClientHandler.instance().getClient().thePlayer);
                 props.setEscapedDim(message.hasEscaped);
-
-
-        //    }
+           }
 
 
 

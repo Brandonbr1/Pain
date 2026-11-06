@@ -26,7 +26,7 @@ public class PainSkyRender extends IRenderHandler {
     /** OpenGL sky list 2 */
     public int glSkyList2;
 
-    private static final ResourceLocation locationSunPng = new ResourceLocation("textures/environment/sun.png");
+    private static final ResourceLocation locationSunPng = new ResourceLocation("painmod:textures/environment/moon_phases.png");
 
     private static final ResourceLocation locationMoonPhasesPng = new ResourceLocation("painmod:textures/environment/moon_phases.png");
 
@@ -94,26 +94,14 @@ public class PainSkyRender extends IRenderHandler {
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
 
-        for (int i = 0; i < 3500; ++i) // 1500
+        for (int i = 0; i < 7500; ++i) // 1500
         {
 
 
             double d0 = (double)(random.nextFloat() * 2.0F - 1.0F); // spacing 2
             double d1 = (double)(random.nextFloat() * 1.2 - 1.0F);// spacing 2
             double d2 = (double)(random.nextFloat() * 2.0F - 1.0F);// spacing 2
-            double d3 = (double)(0.15F + random.nextFloat() * 0.1F); // size?
-
-            if (i > 1500) {
-                if (i % 200 == 0) {
-                    scaleF -= 0.1F;
-                    sizeStar -= 2.0D;
-                }
-
-                 d0 = (double)(random.nextFloat() * scaleF - 1.0F); // spacing 2
-                 d2 = (double)(random.nextFloat() * scaleF - 1.0F);// spacing 2
-
-              //  PainShare.LOG.info("SCALEF  "+ scaleF);
-            }
+            double d3 = (double)(0.05F + random.nextFloat() * 0.25F); // size?
 
 
             double d4 = d0 * d0 + d1 * d1 + d2 * d2;
@@ -125,9 +113,9 @@ public class PainSkyRender extends IRenderHandler {
                 d0 *= d4;
                 d1 *= d4;
                 d2 *= d4;
-                double d5 = d0 * sizeStar; // size 100 80 good ?
-                double d6 = d1 * sizeStar; // size 100
-                double d7 = d2 * sizeStar; // size 100
+                double d5 = d0 * 80; // size 100 80 good ?
+                double d6 = d1 * 80; // size 100
+                double d7 = d2 * 80; // size 100
                 double d8 = Math.atan2(d0, d2);
                 double d9 = Math.sin(d8);
                 double d10 = Math.cos(d8);

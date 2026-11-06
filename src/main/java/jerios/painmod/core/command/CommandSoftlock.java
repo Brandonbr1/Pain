@@ -1,6 +1,6 @@
 package jerios.painmod.core.command;
 
-import jerios.painmod.core.networking.packets.serverToClient.STC01EscapedDim;
+import jerios.painmod.core.networking.packets.serverToClient.STCEscapedDim;
 import jerios.painmod.core.networking.registry.PainPacketHandler;
 import jerios.painmod.core.world.teleport.PainTeleporter;
 import jerios.painmod.core.world.teleport.TeleporterHandler;
@@ -60,7 +60,7 @@ public class CommandSoftlock extends CommandBase {
                             props.escapedDim = true;
                             EntityPlayerMP playerMP = (EntityPlayerMP) player;
 
-                            PainPacketHandler.INSTANCE.sendTo(new STC01EscapedDim(true), playerMP);
+                            PainPacketHandler.INSTANCE.sendTo(new STCEscapedDim(true), playerMP);
 
                             TeleporterHandler.travelToDimension(playerMP, 0, new PainTeleporter(ws, false));
 
