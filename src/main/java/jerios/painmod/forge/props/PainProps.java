@@ -1,4 +1,4 @@
-package jerios.painmod.utils.props;
+package jerios.painmod.forge.props;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -27,10 +27,10 @@ public class PainProps implements IExtendedEntityProperties {
         NBTTagCompound propertyData = new NBTTagCompound();
         // Write data to propertyData
 
-        propertyData.setBoolean("escapedDim", escapedDim);
-        propertyData.setInteger("drinkMilk", drinkMilk);
-        propertyData.setInteger("jumpscareTimer", jumpscareTimer);
-        propertyData.setInteger("requiredJumpscareTimer", requiredJumpscareTimer);
+        propertyData.setBoolean("escapedDim", this.escapedDim);
+        propertyData.setInteger("drinkMilk", this.drinkMilk);
+        propertyData.setInteger("jumpscareTimer", this.jumpscareTimer);
+        propertyData.setInteger("requiredJumpscareTimer", this.requiredJumpscareTimer);
 
         compound.setTag(PROP_NAME, propertyData);
     }
@@ -56,7 +56,7 @@ public class PainProps implements IExtendedEntityProperties {
     @SideOnly(Side.CLIENT)
     public void setEscapedDim(boolean escapedDim) {
         this.escapedDim = escapedDim;
-        PainShare.LOG.info("RUN ON CLIENT PAIN PROPS");
+    //    PainShare.LOG.info("RUN ON CLIENT PAIN PROPS");
     }
 
     public static PainProps get(Entity p) {

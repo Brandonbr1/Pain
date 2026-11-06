@@ -606,7 +606,7 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                 int erI = (int) er;
 
 
-                PainShare.LOG.info(erI);
+             //   PainShare.LOG.info(erI);
 
 
 
@@ -615,10 +615,6 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                 int pz = shiftedZ + erI;
                 int pxm = shiftedX - erI;
                 int pzm = shiftedZ - erI;
-
-                //TODO: REPURPOSE WORLDGenLakes Algorithm
-
-
 
 
 
@@ -668,30 +664,30 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
 
 
-                PainShare.LOG.info("/tp PainModDevAccount" + " " + px  + " " + yp2 + " " + pz );
+          //      PainShare.LOG.info("/tp PainModDevAccount" + " " + px  + " " + yp2 + " " + pz );
 
                 ACLUtils.ensureBlockExists(worldObj, px , yp2, pz );
 
-                worldObj.setBlock(px , yp2, pz, Blocks.diamond_block, 0 , 2);
+                worldObj.setBlock(px , yp2, pz, Blocks.air, 0 , 2);
 
 
 
 
                 ACLUtils.ensureBlockExists(worldObj, -pxm , yp2, -pzm);
 
-                worldObj.setBlock(-pxm , yp2, -pzm , Blocks.diamond_block, 0 , 2);
+                worldObj.setBlock(-pxm , yp2, -pzm , Blocks.air, 0 , 2);
 
 
 
 
                 ACLUtils.ensureBlockExists(worldObj, px , yp2, -pzm );
 
-                worldObj.setBlock(px , yp2, -pzm, Blocks.diamond_block, 0 , 2);
+                worldObj.setBlock(px , yp2, -pzm, Blocks.air, 0 , 2);
 
 
                 ACLUtils.ensureBlockExists(worldObj, -pxm , yp2, pz);
 
-                worldObj.setBlock(-pxm, yp2, pz , Blocks.diamond_block, 0 , 2);
+                worldObj.setBlock(-pxm, yp2, pz , Blocks.air, 0 , 2);
 
 
             }

@@ -4,10 +4,8 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
-import jerios.painmod.utils.props.PainProps;
-import net.minecraft.entity.player.EntityPlayer;
+import jerios.painmod.forge.props.PainProps;
 
 public class STC01EscapedDim implements IMessage {
 
@@ -16,7 +14,7 @@ public class STC01EscapedDim implements IMessage {
 
     }
 
-    boolean hasEscaped = false;
+    boolean hasEscaped;
     public STC01EscapedDim(boolean hasEscaped) {
         this.hasEscaped = hasEscaped;
     }
@@ -38,17 +36,14 @@ public class STC01EscapedDim implements IMessage {
         @Override
         public IMessage onMessage(STC01EscapedDim message, MessageContext ctx) {
 
-            if (ctx.side == Side.CLIENT)
-            {
-               EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
+            //if (ctx.side == Side.CLIENT)
+           // {
 
-                PainProps props = PainProps.get(player);
-
-
+                PainProps props = PainProps.get(FMLClientHandler.instance().getClient().thePlayer);
                 props.setEscapedDim(message.hasEscaped);
 
 
-            }
+        //    }
 
 
 

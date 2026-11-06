@@ -4,6 +4,7 @@ import jerios.painmod.core.entity.PainCreeper;
 import jerios.painmod.core.entity.PainSkeleton;
 import jerios.painmod.core.entity.PainSpider;
 import jerios.painmod.core.entity.PainZombie;
+import jerios.painmod.forge.PainShare;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -55,12 +56,12 @@ public class PainDesert extends PainBiomeGen {
         }
 
         int j;
-        for (j = 0; j < 50; ++j)
+        for (j = 0; j < 10; ++j)
         {
            int k =  random.nextInt(16) + 8;
            int l =  random.nextInt(16) + 8;
-           int i1 = random.nextInt(Math.abs(world.getHeightValue(k, l)) * 2);
-           this.cactusGen.generate(world, random, k, i1, l);
+           int height = world.getTopSolidOrLiquidBlock(k, l);
+           this.cactusGen.generate(world, random, k, height, l);
         }
 
 

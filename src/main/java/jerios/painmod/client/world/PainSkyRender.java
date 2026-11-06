@@ -112,7 +112,7 @@ public class PainSkyRender extends IRenderHandler {
                  d0 = (double)(random.nextFloat() * scaleF - 1.0F); // spacing 2
                  d2 = (double)(random.nextFloat() * scaleF - 1.0F);// spacing 2
 
-                PainShare.LOG.info("SCALEF  "+ scaleF);
+              //  PainShare.LOG.info("SCALEF  "+ scaleF);
             }
 
 

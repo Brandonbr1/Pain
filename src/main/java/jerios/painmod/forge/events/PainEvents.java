@@ -7,11 +7,13 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import jerios.painmod.core.entity.PainCreeper;
+import jerios.painmod.core.networking.packets.serverToClient.STC01EscapedDim;
+import jerios.painmod.core.networking.registry.PainPacketHandler;
 import jerios.painmod.forge.PainShare;
 import jerios.painmod.core.block.BlockPainPortal;
 import jerios.painmod.forge.config.PainConfig;
 import jerios.painmod.core.items.weapons.IBow;
-import jerios.painmod.utils.props.PainProps;
+import jerios.painmod.forge.props.PainProps;
 import jerios.painmod.core.effects.registry.ModPotions;
 import jerios.painmod.utils.side.SidedCheckers;
 import jerios.painmod.core.world.teleport.PainTeleporter;
@@ -19,7 +21,6 @@ import jerios.painmod.core.world.teleport.TeleporterHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPortal;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -36,7 +37,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -45,6 +45,7 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
@@ -155,16 +156,15 @@ public class PainEvents {
         } else if (event.fromDim == PainConfig.painDimensionID && event.toDim != PainConfig.painDimensionID) {
            PainProps props = PainProps.get(player);
            if (props != null && props.escapedDim) {
-
-
-
                player.addChatMessage(new ChatComponentTranslation("painmod.ahhFinallyFree"));
            } else {
                if (player instanceof EntityPlayerMP) {
                    EntityPlayerMP playerMP = (EntityPlayerMP) player;
                    WorldServer ws = playerMP.mcServer.worldServerForDimension(dim);
-                   TeleporterHandler.travelToDimension(playerMP, PainConfig.painDimensionID, new PainTeleporter(ws, false));
-                   player.addChatMessage(new ChatComponentTranslation("painmod.failedEscape"));
+                   if (ws != null) {
+                       TeleporterHandler.travelToDimension(playerMP, PainConfig.painDimensionID, new PainTeleporter(ws, false));
+                       player.addChatMessage(new ChatComponentTranslation("painmod.failedEscape"));
+                   }
                }
            }
         }
@@ -218,13 +218,13 @@ public class PainEvents {
 
     @SubscribeEvent
     public void onBlockPlaced(BlockEvent.PlaceEvent placeEvent) {
-        Block block = placeEvent.placedBlock;
         World world=placeEvent.world;
         EntityPlayer player = placeEvent.player;
         if (!world.isRemote && player.dimension == PainConfig.painDimensionID) {
+            Block block = placeEvent.placedBlock;
             if (block instanceof BlockPortal && !(block instanceof BlockPainPortal)) {
                 placeEvent.setCanceled(true);
-                player.timeUntilPortal = 80;
+                player.timeUntilPortal = 900;
             }
         }
 
@@ -379,6 +379,32 @@ public class PainEvents {
             PainProps.get(e.original).saveNBTData(compound);
             PainProps.get(e.entityPlayer).loadNBTData(compound);
     }
+
+
+    @SubscribeEvent
+    public void entityJoinWorld(EntityJoinWorldEvent e) {
+        if (e.entity instanceof EntityPlayerMP) {
+            EntityPlayerMP playerMP = (EntityPlayerMP) e.entity;
+            PainProps data = PainProps.get(e.entity);
+            if (data != null) {
+                PainPacketHandler.INSTANCE.sendTo(new STC01EscapedDim(data.escapedDim), playerMP);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void playerStartedTracking(net.minecraftforge.event.entity.player.PlayerEvent.StartTracking e) {
+        if (e.entityPlayer instanceof EntityPlayerMP) {
+            EntityPlayerMP playerMP = (EntityPlayerMP) e.entityPlayer;
+            PainProps data = PainProps.get(e.entityPlayer);
+            if (data != null) {
+                PainPacketHandler.INSTANCE.sendTo(new STC01EscapedDim(data.escapedDim), playerMP);
+            }
+        }
+
+    }
+
+
 
     /**
      *
