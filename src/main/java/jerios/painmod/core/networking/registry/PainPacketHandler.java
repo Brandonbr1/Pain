@@ -8,6 +8,8 @@ import cpw.mods.fml.relauncher.Side;
 import jerios.painmod.Tags;
 import jerios.painmod.core.networking.packets.clientToServer.CTSPacketMusic;
 import jerios.painmod.core.networking.packets.serverToClient.STCEscapedDim;
+import jerios.painmod.core.networking.packets.serverToClient.STCPacketMusic;
+import jerios.painmod.core.networking.packets.serverToClient.STCStarRandom;
 
 public class PainPacketHandler {
 
@@ -17,6 +19,8 @@ public class PainPacketHandler {
     public static void register() {
         registerMessage(STCEscapedDim.EscapedDimMessageHandler.class, STCEscapedDim.class, Side.CLIENT);
         registerMessage(CTSPacketMusic.PacketMusicHandler.class, CTSPacketMusic.class, Side.SERVER);
+        registerMessage(STCStarRandom.HandlerRandom.class, STCStarRandom.class, Side.CLIENT);
+        registerMessage(STCPacketMusic.PacketMusicHandler.class, STCPacketMusic.class, Side.CLIENT);
     }
 
     static int discriminatorID = 1;

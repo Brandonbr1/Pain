@@ -24,7 +24,7 @@ public class PainWorldData extends WorldSavedData {
     private boolean isRaining;
     private boolean isThunder;
     private int thunderTime;
-    private long skySeed;
+    private long skySeed = 10842L;
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         rainTime = nbt.getInteger("PainRainTime");

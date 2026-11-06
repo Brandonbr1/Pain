@@ -58,6 +58,8 @@ repositories {
 
     jitpack()
     modrinthEX()
+    mavenpattern()
+    mega()
     /*
      * Built-in maven repository convenience shortcuts:
      *
@@ -71,11 +73,21 @@ repositories {
      */
 }
 
+val vfxStack = true;
+
 dependencies {
     devOnlyNonPublishable(project.files("staticLibs/BaublesExpanded-2.2.1-dev.jar")); // the maven for JSS was not working?? Can redistribute the libs jar file just fine, but it is weird....
     devOnlyNonPublishable(project.files("staticLibs/alternativechunkloading-1.4.6-dev.jar"))
     devOnlyNonPublishable(project.files("staticLibs/gtnhlib-0.11.55-dev.jar"))
     devOnlyNonPublishable(project.files("staticLibs/gtnhextlib-1.0.5-dev.jar"))
+    // TODO THIS SEARCHES FALSEPATTERN REPO... WE **DON'T** WANT THAT
+ //   devOnlyNonPublishable("com.github.GTNewHorizons:GTNHExtLib:1.1.0-dev");
+    if (vfxStack) {
+        devOnlyNonPublishable("com.falsepattern:falsetweaks-mc1.7.10:4.4.5")
+    } else {
+
+    }
+
     /*
      * Add your dependencies here. Supported configurations:
      *  - api("group:name:version:classifier"): if you use the types from this dependency in the public API of this mod

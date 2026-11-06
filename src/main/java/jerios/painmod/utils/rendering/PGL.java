@@ -1,8 +1,11 @@
 package jerios.painmod.utils.rendering;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
+@SideOnly(Side.CLIENT)
 public abstract class PGL {
 
     public static void fog(int par, float dist) {
@@ -10,7 +13,43 @@ public abstract class PGL {
     }
 
     public static void fogLinear() {
-        fog(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
+        fog(GL_FOG_MODE, GL_LINEAR);
+    }
+
+    public static void colorMask(boolean r,boolean g,boolean b, boolean a) {
+        GL11.glColorMask(r,g,b,a);
+    }
+
+    public static void disableCull() {
+        disable(GL_CULL_FACE);
+    }
+
+    public static void normal3(float nx,
+                                  float ny,
+                                  float nz) {
+        GL11.glNormal3f(nx,ny,nz);
+
+    }
+
+    public static void enableCull() {
+        enable(GL_CULL_FACE);
+    }
+
+
+    public static void diableBlend() {
+        disable(GL_BLEND);
+    }
+
+    public static void alphaFunc(int func, float ref) {
+        GL11.glAlphaFunc(func, ref);
+    }
+
+    public static void alphaFuncGreater(float ref) {
+        alphaFunc(GL_GREATER, ref);
+    }
+
+    public static void enableBlend() {
+        enable(GL_BLEND);
     }
 
     public static void fogStart(float dist){
@@ -123,7 +162,10 @@ public abstract class PGL {
             GL_LINEAR = GL11.GL_LINEAR,
             GL_FOG_START =GL11.GL_FOG_START,
             GL_FOG_MODE = GL11.GL_FOG_MODE,
-            GL_FOG_END = GL11.GL_FOG_END;
+            GL_BLEND = GL11.GL_BLEND,
+            GL_FOG_END = GL11.GL_FOG_END,
+            GL_GREATER = GL11.GL_GREATER,
+            GL_CULL_FACE = GL11.GL_CULL_FACE;
 
 
 

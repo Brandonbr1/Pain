@@ -1,6 +1,8 @@
 package jerios.painmod.forge.asm.mixins.early;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import jerios.painmod.core.networking.packets.clientToServer.CTSPacketMusic;
+import jerios.painmod.core.networking.registry.PainPacketHandler;
 import jerios.painmod.forge.config.PainConfig;
 import jerios.painmod.forge.props.PainProps;
 import jerios.painmod.forge.proxy.ClientProxy;
@@ -35,11 +37,13 @@ public class MixinMusicTicker {
                     if (field_147678_c.getPositionedSoundLocation().equals(new ResourceLocation("painmod:music.escaped"))) {
                         if (!props.hasPlayedMusic1 && field_147677_b.getSoundHandler().isSoundPlaying(field_147678_c)) {
                             props.hasPlayedMusic1 = true;
+                            PainPacketHandler.INSTANCE.sendToServer(new CTSPacketMusic(true, false));
 
                         }
 
                         if (props.hasPlayedMusic1 && !field_147677_b.getSoundHandler().isSoundPlaying(field_147678_c)) {
                             props.hasPlayedMusic2 = true;
+                            PainPacketHandler.INSTANCE.sendToServer(new CTSPacketMusic(true, true));
                         }
 
                     }

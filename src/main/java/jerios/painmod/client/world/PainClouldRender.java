@@ -1,8 +1,8 @@
 package jerios.painmod.client.world;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import jerios.painmod.utils.rendering.PGL;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -12,7 +12,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IRenderHandler;
-import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class PainClouldRender extends IRenderHandler {
@@ -33,7 +32,7 @@ public class PainClouldRender extends IRenderHandler {
     // is there a mod that changes cloulds?
     public void renderCloudsFancy(float tickDelta, WorldClient theWorld, Minecraft mc)
     {
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        PGL.disableCull();
         float playerPost = (float)(mc.renderViewEntity.lastTickPosY + (mc.renderViewEntity.posY - mc.renderViewEntity.lastTickPosY) * (double)tickDelta);
         Tessellator tessellator = Tessellator.instance;
         float f2 = 12.0F;
@@ -48,7 +47,7 @@ public class PainClouldRender extends IRenderHandler {
         d2 -= (double)(j * 2048);
         mc.renderEngine.bindTexture(locationCloudsPng);
         // disable blending leads to non-transparent cloud
-        GL11.glEnable(GL11.GL_BLEND);
+        PGL.diableBlend();
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         Vec3 vec3 = theWorld.getCloudColour(tickDelta);
         float f5 = (float)vec3.xCoord;
@@ -78,21 +77,21 @@ public class PainClouldRender extends IRenderHandler {
         byte b0 = 8;
         byte b1 = 4;
         float f13 = 9.765625E-4F;
-        GL11.glScalef(f2, 1.0F, f2);
+        PGL.scale(f2, 1.0F, f2);
 
         for (int k = 0; k < 2; ++k)
         {
             if (k == 0)
             {
-                GL11.glColorMask(false, false, false, false);
+                PGL.colorMask(false, false, false, false);
             } else if (mc.gameSettings.anaglyph) {
                 if (EntityRenderer.anaglyphField == 0){
-                    GL11.glColorMask(false, true, true, true);
+                    PGL.colorMask(false, true, true, true);
                 }else{
-                    GL11.glColorMask(true, false, false, true);
+                    PGL.colorMask(true, false, false, true);
                 }
             }else {
-                GL11.glColorMask(true, true, true, true);
+                PGL.colorMask(true, true, true, true);
             }
 
             for (int l = -b1 + 1; l <= b1; ++l)
@@ -187,9 +186,9 @@ public class PainClouldRender extends IRenderHandler {
             }
         }
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_CULL_FACE);
+        PGL.color(1.0F, 1.0F, 1.0F, 1.0F);
+        PGL.diableBlend();
+        PGL.enableCull();
     }
 
 

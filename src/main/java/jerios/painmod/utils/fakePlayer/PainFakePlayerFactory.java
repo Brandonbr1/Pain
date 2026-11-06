@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class PainFakePlayerFactory {
 
-    private static final Map<GameProfile, PainFakePlayer> fakePlayers = Maps.newHashMap();
+    public static final Map<GameProfile, PainFakePlayer> fakePlayers = Maps.newHashMap();
 
 
     public static PainFakePlayer get(EntityLiving wrappedEntity, WorldServer world, GameProfile username)
@@ -25,24 +25,4 @@ public class PainFakePlayerFactory {
         return fakePlayers.get(username);
     }
 
-
-
-    @SubscribeEvent
-    public void unloadWorld(WorldEvent.Unload event)
-    {
-        if (event.world instanceof WorldServer) {
-               WorldServer world = (WorldServer) event.world;
-              Iterator<Map.Entry<GameProfile, PainFakePlayer>> itr = fakePlayers.entrySet().iterator();
-              while (itr.hasNext())
-              {
-               Map.Entry<GameProfile, PainFakePlayer> entry = itr.next();
-              if (entry.getValue().worldObj == world)
-               {
-             itr.remove();
-
-            }
-             }
-        }
-
-    }
 }

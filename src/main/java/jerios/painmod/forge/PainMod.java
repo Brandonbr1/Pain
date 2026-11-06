@@ -9,8 +9,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import jerios.painmod.Tags;
 import jerios.painmod.forge.config.PainConfig;
-import jerios.painmod.forge.events.PainEventsClient;
-import jerios.painmod.forge.events.PainEventsServer;
+import jerios.painmod.forge.events.PainEvents;
 import jerios.painmod.forge.proxy.IProxy;
 import jerios.painmod.core.registry.PainRegistryHandler;
 import jerios.painmod.utils.fakePlayer.PainFakePlayerFactory;
@@ -40,9 +39,7 @@ public class PainMod {
         PainRegistryHandler.registerPreInit();
         proxy.clientOnly();
         proxy.serverOnly();
-        registerForgeEvent(new PainFakePlayerFactory());
-        registerBothEvents(new PainEventsServer());
-   //     registerBothEvents(new PainEventsClient());
+        registerBothEvents(new PainEvents());
     }
 
     public void registerBothEvents(Object o){

@@ -3,9 +3,11 @@ package jerios.painmod.core.networking.packets.clientToServer;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import jerios.painmod.core.networking.packets.serverToClient.STCEscapedDim;
 import jerios.painmod.forge.props.PainProps;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 public class CTSPacketMusic implements IMessage {
@@ -42,13 +44,15 @@ public class CTSPacketMusic implements IMessage {
         @Override
         public IMessage onMessage(CTSPacketMusic message, MessageContext ctx) {
 
-            EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
+            if (ctx.side == Side.SERVER) {
+                EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
 
-            PainProps props = PainProps.get(playerEntity);
+                PainProps props = PainProps.get(playerEntity);
 
-            if (props != null) {
-                props.hasPlayedMusic1 = message.musicPlayed1;
-                props.hasPlayedMusic2 = message.musicPlayed2;
+                if (props != null) {
+                    props.hasPlayedMusic1 = message.musicPlayed1;
+                    props.hasPlayedMusic2 = message.musicPlayed2;
+                }
             }
 
 

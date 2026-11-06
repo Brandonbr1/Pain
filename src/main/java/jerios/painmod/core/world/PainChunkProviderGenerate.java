@@ -10,6 +10,7 @@ import jerios.painmod.core.world.features.WorldGenHoles;
 import jerios.painmod.core.world.mapGen.PainMapGenCaves;
 import jerios.painmod.core.world.mapGen.PainMapGenRavine;
 import jerios.painmod.core.world.spawners.PainSpawner;
+import jerios.painmod.utils.profiler.Time;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -117,6 +118,9 @@ public class PainChunkProviderGenerate implements IChunkProvider {
         this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, x * 4 - 2, z * 4 - 2, 10, 10);
         this.generateInitalNoiseXZStack(x * 4, 0, z * 4, x, z);
 
+
+        int randomNumber = rand.nextInt(128);
+        int randomNumber2 = unpredictableRandom.nextInt(158);
         for (int noiseLayer1 = 0; noiseLayer1 < 4; ++noiseLayer1)
         {
             int noiseL1P1 = noiseLayer1 * 5;
@@ -132,6 +136,9 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                 for (int noiseLayer3 = 0; noiseLayer3 < 32; ++noiseLayer3)
                 {
                     double noiseScaleLayer3 = 0.125D;
+                    if (randomNumber == 1 || randomNumber2 == 1) {
+                        noiseScaleLayer3 = 0.925D; // makes it all flat and stuff
+                    }
                     double noiseLayer3P1 = this.noiseArray[noiseL2P1 + noiseLayer3];
                     double noiseLayer3P2 = this.noiseArray[noiseL2P2 + noiseLayer3];
                     double noiseLayer3P3 = this.noiseArray[noiseL2P3 + noiseLayer3];
@@ -144,6 +151,9 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                     for (int noiseLayer4 = 0; noiseLayer4 < 8; ++noiseLayer4)
                     {
                         double noiseScaleLayer4 = 0.25D;
+                        if (randomNumber == 0 || randomNumber2 == 0) {
+                            noiseScaleLayer4 = 0.95D;
+                        }
                         double noiseLayer4P1 = noiseLayer3P1;
                         double noiseLayer4P2 = noiseLayer3P2;
                         double noiseLayer4P3 = (noiseLayer3P3 - noiseLayer3P1) * noiseScaleLayer4;
@@ -154,7 +164,10 @@ public class PainChunkProviderGenerate implements IChunkProvider {
                             int depth = noiseLayer5 + noiseLayer1 * 4 << 12 | 0 + noiseLayer2 * 4 << 8 | noiseLayer3 * 8 + noiseLayer4;
                             short maxDepth = 256;
                             depth -= maxDepth;
-                            double noiseScaleLayer5 = 0.25D;
+                           double noiseScaleLayer5 = 0.25D;
+                            if (randomNumber == 5 || randomNumber2 == 5) {
+                                noiseScaleLayer5 = 0.95D; // spiky terrain gen
+                            }
                             double noiseLayer5P1 = (noiseLayer4P2 - noiseLayer4P1) * noiseScaleLayer5;
                             double noiseLayer5P2 = noiseLayer4P1 - noiseLayer5P1;
 
@@ -388,16 +401,21 @@ public class PainChunkProviderGenerate implements IChunkProvider {
 
                     double scaleFactor = 12.0D;
 
-                    if (chunkX > 1200 || chunkZ > 1200) {
-                        scaleFactor = 2.0D;
-                    } else if (chunkX > 1000 || chunkZ > 1000) {
-                        scaleFactor = 4.0D;
-                    } else if (chunkX > 850 || chunkZ > 850) {
-                        scaleFactor = 6.0D;
-                    } else if (chunkX > 650 || chunkZ > 650) {
-                        scaleFactor = 8.0D;
-                    } else if (chunkX > 450 || chunkZ > 450) {
-                        scaleFactor =10.0D;
+                    if (chunkX > 500 || chunkZ > 500){
+                        scaleFactor = 8.50D;
+                    }
+                    else if (chunkX > 400 || chunkZ > 400) {
+                        scaleFactor = 9.00D;
+                    }else if (chunkX > 350 || chunkZ > 350) {
+                        scaleFactor = 9.50D;
+                    } else if (chunkX > 250 || chunkZ > 250) {
+                        scaleFactor = 10.00D;
+                    } else if (chunkX > 200 || chunkZ > 200) {
+                        scaleFactor = 10.50D;
+                    } else if (chunkX > 100 || chunkZ > 100) {
+                        scaleFactor = 11.00D;
+                    } else if (chunkX > 50 || chunkZ > 50) {
+                        scaleFactor =11.50D;
                     }
 
                     // reduce randomly perhaps?

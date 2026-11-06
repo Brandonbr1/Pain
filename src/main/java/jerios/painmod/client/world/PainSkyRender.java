@@ -1,7 +1,9 @@
 package jerios.painmod.client.world;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import jerios.painmod.core.world.data.PainWorldData;
 import jerios.painmod.forge.PainShare;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -86,15 +88,15 @@ public class PainSkyRender extends IRenderHandler {
 
     float scaleF = 2.0F;
     double sizeStar = 65.0D;
-    Random random = new Random(10842L); // world seed
+
     private void renderStars()
     {
-
+        Random random = new Random(FMLClientHandler.instance().getWorldClient().getSeed());
 
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
 
-        for (int i = 0; i < 7500; ++i) // 1500
+        for (int i = 0; i < 1500; ++i) // 1500
         {
 
 
@@ -113,9 +115,9 @@ public class PainSkyRender extends IRenderHandler {
                 d0 *= d4;
                 d1 *= d4;
                 d2 *= d4;
-                double d5 = d0 * 80; // size 100 80 good ?
-                double d6 = d1 * 80; // size 100
-                double d7 = d2 * 80; // size 100
+                double d5 = d0 * 100; // size 100 80 good ?
+                double d6 = d1 * 100; // size 100
+                double d7 = d2 * 100; // size 100
                 double d8 = Math.atan2(d0, d2);
                 double d9 = Math.sin(d8);
                 double d10 = Math.cos(d8);

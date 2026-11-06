@@ -3,6 +3,7 @@ package jerios.painmod.client.world;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import jerios.painmod.utils.rendering.PGL;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -24,12 +25,12 @@ public class PainWeatherRender extends IRenderHandler {
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
 
-        renderW(partialTicks, world, mc);
+        renderWeather(partialTicks, world, mc);
     }
 
     Minecraft  mc = FMLClientHandler.instance().getClient();
 
-    public void renderW(float partialTicks, WorldClient world, Minecraft mc)
+    public void renderWeather(float partialTicks, WorldClient world, Minecraft mc)
     {
 
         float f1 = this.mc.theWorld.getRainStrength(partialTicks);
@@ -64,11 +65,11 @@ public class PainWeatherRender extends IRenderHandler {
             int l2 = MathHelper.floor_double(entitylivingbase.posY);
             int i3 = MathHelper.floor_double(entitylivingbase.posZ);
             Tessellator tessellator = Tessellator.instance;
-            GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-            GL11.glEnable(GL11.GL_BLEND);
+            PGL.disableCull();
+            PGL.normal3(0.0F, 1.0F, 0.0F);
+            PGL.enableBlend();
             OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+            PGL.alphaFuncGreater(0.1F);
             double d0 = entitylivingbase.lastTickPosX + (entitylivingbase.posX - entitylivingbase.lastTickPosX) * (double)partialTicks;
             double d1 = entitylivingbase.lastTickPosY + (entitylivingbase.posY - entitylivingbase.lastTickPosY) * (double)partialTicks;
             double d2 = entitylivingbase.lastTickPosZ + (entitylivingbase.posZ - entitylivingbase.lastTickPosZ) * (double)partialTicks;
@@ -89,7 +90,7 @@ public class PainWeatherRender extends IRenderHandler {
                 b0 = 10;
             }
 
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            PGL.color(1.0F, 1.0F, 1.0F, 1.0F);
             flag = false;
 
             for (int l = i3 - b0; l <= i3 + b0; ++l)
@@ -200,9 +201,9 @@ public class PainWeatherRender extends IRenderHandler {
                 tessellator.draw();
             }
 
-            GL11.glEnable(GL11.GL_CULL_FACE);
-            GL11.glDisable(GL11.GL_BLEND);
-            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+            PGL.enableCull();
+            PGL.diableBlend();
+            PGL.alphaFuncGreater(0.1F);
             renderer.disableLightmap((double)partialTicks);
         }
 
