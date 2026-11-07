@@ -28,6 +28,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.shader.ShaderGroup;
+import net.minecraft.client.util.JsonException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -41,6 +43,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -439,19 +442,6 @@ public class PainEvents {
             }
         }
 
-    }
-
-
-    @SideOnly(Side.CLIENT)
-    private Minecraft mc = FMLClientHandler.instance().getClient();
-
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onTickWorldRenderEvent(RenderWorldLastEvent event) {
-        //leftClickCounter
-        // rightClickTimer set high when we have the potion effect active
-
         if (mc.theWorld != null) {
             if (inPainDim()) {
                 if (mc.gameSettings != null && mc.gameSettings.gammaSetting >= PainConfig.maxBrightnessInDim) {
@@ -460,6 +450,75 @@ public class PainEvents {
             }
 
         }
+
+    }
+
+
+    @SideOnly(Side.CLIENT)
+    private Minecraft mc = FMLClientHandler.instance().getClient();
+
+
+
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onTickWorldRenderEvent(TickEvent.RenderTickEvent event) {
+        //leftClickCounter
+        // rightClickTimer set high when we have the potion effect active
+
+        String shader = "painmod:shaders/post/painShaders.json";
+
+        if (mc.isGamePaused()) return;
+
+        if (event.phase == TickEvent.Phase.START) return;
+
+        if (event.side == Side.SERVER) return;
+
+       // try {
+
+            if (mc != null && mc.entityRenderer != null) {
+
+                if (inPainDim()) {
+
+
+                    if (!mc.entityRenderer.isShaderActive()) {
+                        if (mc.entityRenderer.theShaderGroup != null) {
+                            mc.entityRenderer.theShaderGroup.deleteShaderGroup();
+                            mc.entityRenderer.theShaderGroup = null;
+                        }
+
+                        try {
+                            mc.entityRenderer.theShaderGroup = new ShaderGroup(this.mc.getTextureManager(), mc.getResourceManager(), this.mc.getFramebuffer(), new ResourceLocation(shader));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        mc.entityRenderer.theShaderGroup.createBindFramebuffers(this.mc.displayWidth, this.mc.displayHeight);
+                    } else if (mc.entityRenderer.theShaderGroup != null) {
+
+                        if (!mc.entityRenderer.theShaderGroup.getShaderGroupName().equals(shader)) {
+
+                            mc.entityRenderer.theShaderGroup.deleteShaderGroup();
+                            mc.entityRenderer.theShaderGroup = null;
+
+                            try {
+                                mc.entityRenderer.theShaderGroup = new ShaderGroup(this.mc.getTextureManager(), mc.getResourceManager(), this.mc.getFramebuffer(), new ResourceLocation(shader));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            mc.entityRenderer.theShaderGroup.createBindFramebuffers(this.mc.displayWidth, this.mc.displayHeight);
+
+                        }
+
+
+                    }
+                }
+            }
+
+
+       // } catch (Exception e) {
+       //     PainShare.LOG.info("Failed to load shaders temp");
+
+       // }
 
 
     }

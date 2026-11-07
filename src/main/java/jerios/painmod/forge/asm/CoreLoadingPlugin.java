@@ -13,7 +13,6 @@ import java.util.Set;
 
 @IFMLLoadingPlugin.MCVersion("1.7.10")
 @IFMLLoadingPlugin.Name("Pain Mod ASM")
-@IFMLLoadingPlugin.TransformerExclusions({"com.gtnhlib.", "net.minecraft.client.renderer.RenderGlobal"})
 public class CoreLoadingPlugin implements IFMLLoadingPlugin , IEarlyMixinLoader {
 
     @Override

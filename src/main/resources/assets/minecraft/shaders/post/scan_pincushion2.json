@@ -4,15 +4,9 @@
     ],
     "passes": [
         {
-            "name": "color_convolve",
+            "name": "scan_pincushion2",
             "intarget": "minecraft:main",
-            "outtarget": "swap",
-            "uniforms": [
-                {
-                    "name": "Saturation",
-                    "values": [ 0.2 ]
-                }
-            ]
+            "outtarget": "swap"
         },
         {
             "name": "blit",

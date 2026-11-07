@@ -19,6 +19,8 @@ import jerios.painmod.core.world.registry.ModBiomes;
 import jerios.painmod.core.world.registry.ModGenerator;
 import jerios.painmod.core.world.teleport.PainTeleporter;
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
@@ -27,7 +29,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldServer;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class PainRegistryHandler {
 
@@ -50,6 +54,13 @@ public class PainRegistryHandler {
     }
 
     public static void postInit() {
+
+        ResourceLocation[] resourceLocation = EntityRenderer.shaderResourceLocations;
+    //    ResourceLocation[] myPath = new ResourceLocation[]{new ResourceLocation("painmod:shaders/post/painShaders.json")};
+        ResourceLocation[] merged =  ArrayUtils.add(resourceLocation, new ResourceLocation("painmod:shaders/post/painShaders.json"));
+
+        EntityRenderer.shaderResourceLocations = merged;
+
         for (int i = 0; i < Potion.potionTypes.length; i++) {
             Potion potion = Potion.potionTypes[i];
 

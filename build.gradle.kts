@@ -32,7 +32,7 @@ minecraft_fp {
 
     mixin {
         pkg = "forge.asm.mixins"
-        debug = true
+    //    debug = true
        }
 
 

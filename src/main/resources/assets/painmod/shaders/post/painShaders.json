@@ -1,0 +1,33 @@
+{
+    "targets": [
+        "swap",
+        "swap2",
+        "swap3"
+    ],
+    "passes": [
+        {
+            "name": "color_convolve",
+            "intarget": "minecraft:main",
+            "outtarget": "swap",
+            "uniforms": [
+                { "name": "Saturation", "values": [ 0.85 ] }
+            ]
+        },
+        {
+            "name": "deconverge",
+            "intarget": "swap",
+            "outtarget": "swap2"
+        },
+        {
+            "name": "scan_pincushion2",
+            "intarget": "swap2",
+            "outtarget": "swap3"
+        },
+
+        {
+            "name": "blit",
+            "intarget": "swap3",
+            "outtarget": "minecraft:main"
+        }
+    ]
+}
