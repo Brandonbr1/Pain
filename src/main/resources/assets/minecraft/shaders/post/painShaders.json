@@ -2,42 +2,32 @@
     "targets": [
         "swap",
         "swap2",
-        "swap3",
-        "swap4",
-        "swap5"
+        "swap3"
     ],
     "passes": [
         {
-            "name": "color_convolve",
+            "name": "deconverge",
             "intarget": "minecraft:main",
-            "outtarget": "swap",
-            "uniforms": [
-                { "name": "Saturation", "values": [ 0.85 ] }
-            ]
+            "outtarget": "swap"
         },
         {
-            "name": "deconverge",
+            "name": "color_convolve",
             "intarget": "swap",
-            "outtarget": "swap2"
+            "outtarget": "swap2",
+            "uniforms": [
+                { "name": "Saturation", "values": [ 0.58 ] }
+            ]
         },
+
         {
             "name": "pain_scan_pincushion",
             "intarget": "swap2",
             "outtarget": "swap3"
         },
-        {
-            "name": "paintonemapping",
-            "intarget": "swap3",
-            "outtarget": "swap4"
-        },
-        {
-            "name": "painnoise",
-            "intarget": "swap4",
-            "outtarget": "swap5"
-        },
+
         {
             "name": "blit",
-            "intarget": "swap5",
+            "intarget": "swap3",
             "outtarget": "minecraft:main"
         }
     ]

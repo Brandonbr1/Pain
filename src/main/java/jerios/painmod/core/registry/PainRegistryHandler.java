@@ -45,6 +45,15 @@ public class PainRegistryHandler {
         PainAchievements.register();
         ModBiomes.register();
         ModFluidRegistry.register();
+        ResourceLocation[] resourceLocation = EntityRenderer.shaderResourceLocations;
+        //    ResourceLocation[] myPath = new ResourceLocation[]{new ResourceLocation("painmod:shaders/post/painShaders.json")};
+        ResourceLocation[] merged =  ArrayUtils.add(resourceLocation, new ResourceLocation("minecraft:shaders/post/painShaders.json"));
+
+        EntityRenderer.shaderResourceLocations = merged;
+
+        EntityRenderer.shaderCount = EntityRenderer.shaderResourceLocations.length;
+
+
     }
 
     public static void registerInit() {
@@ -54,15 +63,6 @@ public class PainRegistryHandler {
     }
 
     public static void postInit() {
-
-        ResourceLocation[] resourceLocation = EntityRenderer.shaderResourceLocations;
-    //    ResourceLocation[] myPath = new ResourceLocation[]{new ResourceLocation("painmod:shaders/post/painShaders.json")};
-        ResourceLocation[] merged =  ArrayUtils.add(resourceLocation, new ResourceLocation("minecraft:shaders/post/painShaders.json"));
-
-        EntityRenderer.shaderResourceLocations = merged;
-
-        EntityRenderer.shaderCount = EntityRenderer.shaderResourceLocations.length;
-
 
         for (int i = 0; i < Potion.potionTypes.length; i++) {
             Potion potion = Potion.potionTypes[i];

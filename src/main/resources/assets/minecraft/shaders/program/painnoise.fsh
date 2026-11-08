@@ -6,9 +6,11 @@ uniform sampler2D DiffuseSampler;
 
 varying vec2 texCoord;
 
+    float couter = 90;
 
   float noise(vec2 uv) {
-        return fract(sin(dot(uv, vec2(12.9898, 78.233))) * mod(9, 24.0) * 240.0);
+        couter = couter + 1;
+        return fract(sin(dot(uv, vec2(12.9898, 78.233))) * mod(couter, 24.0) * 240.0);
     }
 
     vec3 filmGrain(vec3 color, float grainIntensity, vec2 uv) {
@@ -16,10 +18,6 @@ varying vec2 texCoord;
         grain = (grain - 0.5) * 2.0;
         return color + grain * grainIntensity;
     }
-
-
-
-
 
 
 void main(){
