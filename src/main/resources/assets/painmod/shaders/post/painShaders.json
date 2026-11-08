@@ -2,7 +2,8 @@
     "targets": [
         "swap",
         "swap2",
-        "swap3"
+        "swap3",
+        "swap4"
     ],
     "passes": [
         {
@@ -18,16 +19,19 @@
                 { "name": "Saturation", "values": [ 0.58 ] }
             ]
         },
-
         {
-            "name": "pain_scan_pincushion",
+            "name": "paintonemapping",
             "intarget": "swap2",
             "outtarget": "swap3"
         },
-
+        {
+            "name": "pain_scan_pincushion",
+            "intarget": "swap3",
+            "outtarget": "swap4"
+        },
         {
             "name": "blit",
-            "intarget": "swap3",
+            "intarget": "swap4",
             "outtarget": "minecraft:main"
         }
     ]

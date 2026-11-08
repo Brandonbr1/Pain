@@ -9,7 +9,6 @@ varying vec2 texCoord;
     float couter = 90;
 
   float noise(vec2 uv) {
-        couter = couter + 1;
         return fract(sin(dot(uv, vec2(12.9898, 78.233))) * mod(couter, 24.0) * 240.0);
     }
 
@@ -23,7 +22,7 @@ varying vec2 texCoord;
 void main(){
     vec4 Color = texture2D(DiffuseSampler, texCoord);
 
-    Color.rgb = filmGrain(Color.rgb, 0.045, texCoord);
+    Color.rgb = filmGrain(Color.rgb, 0.015, texCoord);
 
     gl_FragColor = vec4(Color.rgb, Color.a); //texture2D(Color.rgb, 0.1);
 }

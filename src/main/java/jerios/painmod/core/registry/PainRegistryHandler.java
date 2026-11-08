@@ -47,7 +47,7 @@ public class PainRegistryHandler {
         ModFluidRegistry.register();
         ResourceLocation[] resourceLocation = EntityRenderer.shaderResourceLocations;
         //    ResourceLocation[] myPath = new ResourceLocation[]{new ResourceLocation("painmod:shaders/post/painShaders.json")};
-        ResourceLocation[] merged =  ArrayUtils.add(resourceLocation, new ResourceLocation("minecraft:shaders/post/painShaders.json"));
+        ResourceLocation[] merged =  ArrayUtils.add(resourceLocation, new ResourceLocation("painmod:shaders/post/painShaders.json"));
 
         EntityRenderer.shaderResourceLocations = merged;
 

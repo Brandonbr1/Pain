@@ -461,18 +461,23 @@ public class PainEvents {
     @SideOnly(Side.CLIENT)
     private Minecraft mc = FMLClientHandler.instance().getClient();
 
+    // this loads too early...?
 
    // @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onTickWorldRenderEvent(RenderWorldLastEvent event) {
+        //         this.renderWorld(tickDelta, 0L);
+        // has valueable code to see
         //leftClickCounter
         // rightClickTimer set high when we have the potion effect active
 
-        String shader = "minecraft:shaders/post/painShaders.json";
+        String shader = "painmod:shaders/post/painShaders.json";
 
 
-        if (mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null)
+
+        if (mc.currentScreen != null  && mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null)
         {
+
 
             if (mc.entityRenderer.theShaderGroup == null) {
                 for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {

@@ -32,16 +32,16 @@ void main() {
     vec2 PincushionCurve = PinUnitCoord * PincushionAmount * PincushionR2;
     vec2 ScanCoord = texCoord;
     
-    ScanCoord *= One.xy - PincushionAmount * 0.2;
-    ScanCoord += PincushionAmount * 0.1;
-    ScanCoord += PincushionCurve;
+  //  ScanCoord *= One.xy - PincushionAmount * 0.2; //  IMPORTANT?
+  //  ScanCoord += PincushionAmount * 0.1;//  IMPORTANT?
+  //  ScanCoord += PincushionCurve;//  IMPORTANT?
 
-    vec2 CurvatureClipCurve = PinUnitCoord * CurvatureAmount * PincushionR2;
-    vec2 ScreenClipCoord = texCoord;
-    ScreenClipCoord -= Half.xy;
-    ScreenClipCoord *= One.xy - CurvatureAmount * 0.2;
-    ScreenClipCoord += Half.xy;
-    ScreenClipCoord += CurvatureClipCurve;
+  //  vec2 CurvatureClipCurve = PinUnitCoord * CurvatureAmount * PincushionR2;
+  //  vec2 ScreenClipCoord = texCoord;
+ //   ScreenClipCoord -= Half.xy;
+ //   ScreenClipCoord *= One.xy - CurvatureAmount * 0.2;
+ //   ScreenClipCoord += Half.xy;
+  //  ScreenClipCoord += CurvatureClipCurve;
 
     // -- Alpha Clipping --
   //  if (ScanCoord.x < 0.0) discard;
