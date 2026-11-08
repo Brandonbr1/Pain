@@ -1,5 +1,6 @@
 package jerios.painmod.forge.events;
 
+import com.google.gson.JsonSyntaxException;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -27,6 +28,8 @@ import net.minecraft.block.BlockPortal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.client.util.JsonException;
@@ -59,6 +62,7 @@ import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class PainEvents {
@@ -459,10 +463,11 @@ public class PainEvents {
 
 
 
+    int index;
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void onTickWorldRenderEvent(TickEvent.RenderTickEvent event) {
+    public void onTickWorldRenderEvent(RenderWorldLastEvent event) {
         //leftClickCounter
         // rightClickTimer set high when we have the potion effect active
 
@@ -470,59 +475,74 @@ public class PainEvents {
 
         if (mc.isGamePaused()) return;
 
-        if (event.phase == TickEvent.Phase.START) return;
+        if (mc.entityRenderer.theShaderGroup == null) {
+            for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {
+                ResourceLocation location = EntityRenderer.shaderResourceLocations[i];
 
-        if (event.side == Side.SERVER) return;
-
-       // try {
-
-            if (mc != null && mc.entityRenderer != null) {
-
-                if (inPainDim()) {
-
-
-                    if (!mc.entityRenderer.isShaderActive()) {
-                        if (mc.entityRenderer.theShaderGroup != null) {
-                            mc.entityRenderer.theShaderGroup.deleteShaderGroup();
-                            mc.entityRenderer.theShaderGroup = null;
-                        }
-
-                        try {
-                            mc.entityRenderer.theShaderGroup = new ShaderGroup(this.mc.getTextureManager(), mc.getResourceManager(), this.mc.getFramebuffer(), new ResourceLocation(shader));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        mc.entityRenderer.theShaderGroup.createBindFramebuffers(this.mc.displayWidth, this.mc.displayHeight);
-                    } else if (mc.entityRenderer.theShaderGroup != null) {
-
-                        if (!mc.entityRenderer.theShaderGroup.getShaderGroupName().equals(shader)) {
-
-                            mc.entityRenderer.theShaderGroup.deleteShaderGroup();
-                            mc.entityRenderer.theShaderGroup = null;
-
-                            try {
-                                mc.entityRenderer.theShaderGroup = new ShaderGroup(this.mc.getTextureManager(), mc.getResourceManager(), this.mc.getFramebuffer(), new ResourceLocation(shader));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            mc.entityRenderer.theShaderGroup.createBindFramebuffers(this.mc.displayWidth, this.mc.displayHeight);
-
-                        }
-
-
-                    }
+                if (location.toString().equals(shader)) {
+                    activateNextShader(i);
+                    break;
                 }
+
             }
+        } else {
+            if (!mc.entityRenderer.theShaderGroup.getShaderGroupName().equals(shader))
+            {
+                for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {
+                    ResourceLocation location = EntityRenderer.shaderResourceLocations[i];
+
+                    if (location.toString().equals(shader)) {
+                        activateNextShader(i);
+                        break;
+                    }
+
+                }
 
 
-       // } catch (Exception e) {
-       //     PainShare.LOG.info("Failed to load shaders temp");
-
-       // }
+            }
+        }
 
 
     }
 
+    public void activateNextShader(int index)
+    {
+        if (OpenGlHelper.shadersSupported)
+        {
+            if (mc.entityRenderer.theShaderGroup != null)
+            {
+                mc.entityRenderer.theShaderGroup.deleteShaderGroup();
+            }
+
+            mc.entityRenderer.shaderIndex =index;
+
+            if (mc.entityRenderer.shaderIndex != EntityRenderer.shaderCount)
+            {
+                try
+                {
+                    PainShare.LOG.info("Selecting effect " + EntityRenderer.shaderResourceLocations[mc.entityRenderer.shaderIndex]);
+                    mc.entityRenderer.theShaderGroup = new ShaderGroup(this.mc.getTextureManager(), mc.getResourceManager(), this.mc.getFramebuffer(), EntityRenderer.shaderResourceLocations[mc.entityRenderer.shaderIndex]);
+
+                    mc.entityRenderer.theShaderGroup.createBindFramebuffers(this.mc.displayWidth, this.mc.displayHeight);
+                }
+                catch (IOException ioexception)
+                {
+                    PainShare.LOG.warn("Failed to load shader: " + EntityRenderer.shaderResourceLocations[mc.entityRenderer.shaderIndex], ioexception);
+                    mc.entityRenderer.shaderIndex = EntityRenderer.shaderCount;
+                }
+                catch (JsonSyntaxException jsonsyntaxexception)
+                {
+                    PainShare.LOG.warn("Failed to load shader: " + EntityRenderer.shaderResourceLocations[mc.entityRenderer.shaderIndex], jsonsyntaxexception);
+                    mc.entityRenderer.shaderIndex = EntityRenderer.shaderCount;
+                }
+            }
+            else
+            {
+                mc.entityRenderer.theShaderGroup = null;
+                PainShare.LOG.info("No effect selected");
+            }
+        }
+    }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent

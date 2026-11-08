@@ -19,7 +19,7 @@
             "outtarget": "swap2"
         },
         {
-            "name": "scan_pincushion2",
+            "name": "pain_scan_pincushion",
             "intarget": "swap2",
             "outtarget": "swap3"
         },
