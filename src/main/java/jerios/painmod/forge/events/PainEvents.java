@@ -465,7 +465,7 @@ public class PainEvents {
 
    // @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void onTickWorldRenderEvent(RenderWorldLastEvent event) {
+    public void onTickWorldRenderEvent(TickEvent.RenderTickEvent event) {
         //         this.renderWorld(tickDelta, 0L);
         // has valueable code to see
         //leftClickCounter
@@ -475,7 +475,7 @@ public class PainEvents {
 
 
 
-        if (mc.currentScreen != null  && mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null)
+        if (event.phase == TickEvent.Phase.END && event.side == Side.CLIENT &&mc.currentScreen != null && mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null && mc.getFramebuffer() != null)
         {
 
 

@@ -26,28 +26,9 @@ const vec3 Power = vec3(0.8, 0.8, 0.8);
 
 void main() {
     vec4 InTexel = texture2D(DiffuseSampler, texCoord);
-    
-    vec2 PinUnitCoord = texCoord * Two.xy - One.xy;
-    float PincushionR2 = pow(length(PinUnitCoord), 2.0);
-    vec2 PincushionCurve = PinUnitCoord * PincushionAmount * PincushionR2;
+
+
     vec2 ScanCoord = texCoord;
-    
-  //  ScanCoord *= One.xy - PincushionAmount * 0.2; //  IMPORTANT?
-  //  ScanCoord += PincushionAmount * 0.1;//  IMPORTANT?
-  //  ScanCoord += PincushionCurve;//  IMPORTANT?
-
-  //  vec2 CurvatureClipCurve = PinUnitCoord * CurvatureAmount * PincushionR2;
-  //  vec2 ScreenClipCoord = texCoord;
- //   ScreenClipCoord -= Half.xy;
- //   ScreenClipCoord *= One.xy - CurvatureAmount * 0.2;
- //   ScreenClipCoord += Half.xy;
-  //  ScreenClipCoord += CurvatureClipCurve;
-
-    // -- Alpha Clipping --
-  //  if (ScanCoord.x < 0.0) discard;
-  //  if (ScanCoord.y < 0.0) discard;
- //   if (ScanCoord.x > 1.0) discard;
- //   if (ScanCoord.y > 1.0) discard;
 
     // -- Scanline Simulation --
     float InnerSine = ScanCoord.y * InSize.y * ScanlineScale * 0.25;
