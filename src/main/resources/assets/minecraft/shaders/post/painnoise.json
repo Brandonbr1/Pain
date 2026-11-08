@@ -4,7 +4,7 @@
     ],
     "passes": [
         {
-            "name": "noise",
+            "name": "painnoise",
             "intarget": "minecraft:main",
             "outtarget": "swap"
         },

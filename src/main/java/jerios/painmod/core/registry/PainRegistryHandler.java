@@ -57,9 +57,12 @@ public class PainRegistryHandler {
 
         ResourceLocation[] resourceLocation = EntityRenderer.shaderResourceLocations;
     //    ResourceLocation[] myPath = new ResourceLocation[]{new ResourceLocation("painmod:shaders/post/painShaders.json")};
-        ResourceLocation[] merged =  ArrayUtils.add(resourceLocation, new ResourceLocation("painmod:shaders/post/painShaders.json"));
+        ResourceLocation[] merged =  ArrayUtils.add(resourceLocation, new ResourceLocation("minecraft:shaders/post/painShaders.json"));
 
         EntityRenderer.shaderResourceLocations = merged;
+
+        EntityRenderer.shaderCount = EntityRenderer.shaderResourceLocations.length;
+
 
         for (int i = 0; i < Potion.potionTypes.length; i++) {
             Potion potion = Potion.potionTypes[i];

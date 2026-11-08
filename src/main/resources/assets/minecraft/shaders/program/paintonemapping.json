@@ -5,7 +5,7 @@
         "dstrgb": "zero"
     },
     "vertex": "sobel",
-    "fragment": "noise",
+    "fragment": "paintonemapping",
     "attributes": [ "Position" ],
     "samplers": [
         { "name": "DiffuseSampler" }

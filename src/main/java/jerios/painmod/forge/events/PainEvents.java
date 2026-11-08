@@ -462,32 +462,19 @@ public class PainEvents {
     private Minecraft mc = FMLClientHandler.instance().getClient();
 
 
-
-    int index;
-
-    @SideOnly(Side.CLIENT)
+   // @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onTickWorldRenderEvent(RenderWorldLastEvent event) {
         //leftClickCounter
         // rightClickTimer set high when we have the potion effect active
 
-        String shader = "painmod:shaders/post/painShaders.json";
+        String shader = "minecraft:shaders/post/painShaders.json";
 
-        if (mc.isGamePaused()) return;
 
-        if (mc.entityRenderer.theShaderGroup == null) {
-            for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {
-                ResourceLocation location = EntityRenderer.shaderResourceLocations[i];
+        if (mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null)
+        {
 
-                if (location.toString().equals(shader)) {
-                    activateNextShader(i);
-                    break;
-                }
-
-            }
-        } else {
-            if (!mc.entityRenderer.theShaderGroup.getShaderGroupName().equals(shader))
-            {
+            if (mc.entityRenderer.theShaderGroup == null) {
                 for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {
                     ResourceLocation location = EntityRenderer.shaderResourceLocations[i];
 
@@ -497,10 +484,27 @@ public class PainEvents {
                     }
 
                 }
+            } else {
+                if (!mc.entityRenderer.theShaderGroup.getShaderGroupName().equals(shader))
+                {
+                    for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {
+                        ResourceLocation location = EntityRenderer.shaderResourceLocations[i];
+
+                        if (location.toString().equals(shader)) {
+                            activateNextShader(i);
+                            break;
+                        }
+
+                    }
 
 
+                }
             }
+
         }
+
+
+
 
 
     }
@@ -514,7 +518,7 @@ public class PainEvents {
                 mc.entityRenderer.theShaderGroup.deleteShaderGroup();
             }
 
-            mc.entityRenderer.shaderIndex =index;
+            mc.entityRenderer.shaderIndex = index;
 
             if (mc.entityRenderer.shaderIndex != EntityRenderer.shaderCount)
             {
@@ -536,8 +540,7 @@ public class PainEvents {
                     mc.entityRenderer.shaderIndex = EntityRenderer.shaderCount;
                 }
             }
-            else
-            {
+            else {
                 mc.entityRenderer.theShaderGroup = null;
                 PainShare.LOG.info("No effect selected");
             }

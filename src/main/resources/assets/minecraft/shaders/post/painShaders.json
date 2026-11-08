@@ -2,7 +2,9 @@
     "targets": [
         "swap",
         "swap2",
-        "swap3"
+        "swap3",
+        "swap4",
+        "swap5"
     ],
     "passes": [
         {
@@ -23,10 +25,19 @@
             "intarget": "swap2",
             "outtarget": "swap3"
         },
-
+        {
+            "name": "paintonemapping",
+            "intarget": "swap3",
+            "outtarget": "swap4"
+        },
+        {
+            "name": "painnoise",
+            "intarget": "swap4",
+            "outtarget": "swap5"
+        },
         {
             "name": "blit",
-            "intarget": "swap3",
+            "intarget": "swap5",
             "outtarget": "minecraft:main"
         }
     ]
