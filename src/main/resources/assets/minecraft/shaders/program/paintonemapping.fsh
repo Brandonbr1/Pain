@@ -43,7 +43,9 @@ vec3 reinhardJodie(vec3 x) {
   return mix(x / (1.0 + l), tv, tv);
 }
 
-    float couter = 90;
+// TODO: RECREATE FRAMETIMER
+// https://godotshaders.com/shader/fears-to-fathom-shader/
+float couter = 90;
 
   float noise(vec2 uv) {
         return fract(sin(dot(uv, vec2(12.9898, 78.233))) * mod(couter, 24.0) * 240.0);
@@ -60,8 +62,7 @@ void main(){
     vec4 Color = texture2D (DiffuseSampler, texCoord);
 
      Color.rgb = reinhardJodie(Color.rgb);
-
-                                        // 0.015
+                                      // 0.015
      Color.rgb = filmGrain(Color.rgb, 0.015, texCoord);
 
      gl_FragColor = vec4(Color.rgb, Color.a);

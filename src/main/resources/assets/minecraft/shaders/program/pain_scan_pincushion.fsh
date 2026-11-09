@@ -44,10 +44,11 @@ vec3 reinhardJodie05(vec3 x) {
 void main() {
     vec4 InTexel = texture2D(DiffuseSampler, texCoord);
 
-
     vec2 ScanCoord = texCoord;
 
     // -- Scanline Simulation --
+    //TODO: MAKE SCANLINE SHIFT
+    // https://godotshaders.com/shader/fears-to-fathom-shader/
     float InnerSine = ScanCoord.y * InSize.y * ScanlineScale * 0.25;
     float ScanBrightMod = sin(InnerSine * Pi + ScanlineOffset * InSize.y * 0.25);
     float ScanBrightness = mix(1.0, (pow(ScanBrightMod * ScanBrightMod, ScanlineHeight) * ScanlineBrightScale + 1.0) * 0.5, ScanlineAmount);

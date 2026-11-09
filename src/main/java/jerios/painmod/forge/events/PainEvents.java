@@ -463,9 +463,11 @@ public class PainEvents {
 
     // this loads too early...?
 
+    int failCompile;
+
    // @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void onTickWorldRenderEvent(TickEvent.ClientTickEvent event) {
+    public void onTickWorldRenderEvent(TickEvent.PlayerTickEvent event) {
         //         this.renderWorld(tickDelta, 0L);
         // has valueable code to see
         //leftClickCounter
@@ -475,7 +477,7 @@ public class PainEvents {
 
 
 
-        if (event.phase == TickEvent.Phase.END && event.side == Side.CLIENT && mc.inGameHasFocus && mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null && mc.getFramebuffer() != null) {
+        if (event.phase == TickEvent.Phase.END && event.side == Side.CLIENT && mc.inGameHasFocus && mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null && mc.getFramebuffer() != null && mc.currentScreen == null) {
 
 
             if (inPainDim()) {
@@ -533,6 +535,11 @@ public class PainEvents {
     {
         if (OpenGlHelper.shadersSupported)
         {
+            if (failCompile > 5) {
+                throw new RuntimeException("Pain Mod was unable to compile shaders. Please report bug.");
+            }
+
+
             if (mc.entityRenderer.theShaderGroup != null)
             {
                 mc.entityRenderer.theShaderGroup.deleteShaderGroup();
@@ -551,11 +558,13 @@ public class PainEvents {
                 }
                 catch (IOException ioexception)
                 {
+                    failCompile++;
                     PainShare.LOG.warn("Failed to load shader: " + EntityRenderer.shaderResourceLocations[mc.entityRenderer.shaderIndex], ioexception);
                     mc.entityRenderer.shaderIndex = EntityRenderer.shaderCount;
                 }
                 catch (JsonSyntaxException jsonsyntaxexception)
                 {
+                    failCompile++;
                     PainShare.LOG.warn("Failed to load shader: " + EntityRenderer.shaderResourceLocations[mc.entityRenderer.shaderIndex], jsonsyntaxexception);
                     mc.entityRenderer.shaderIndex = EntityRenderer.shaderCount;
                 }
