@@ -7,7 +7,7 @@
     ],
     "passes": [
         {
-            "name": "deconverge",
+            "name": "paindeconverge",
             "intarget": "minecraft:main",
             "outtarget": "swap"
         },

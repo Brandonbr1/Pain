@@ -56,7 +56,7 @@ void main() {
     // -- Color Compression (increasing the floor of the signal without affecting the ceiling) --
     ScanlineTexel = Floor + (One.xyz - Floor) * ScanlineTexel;
     
-    ScanlineTexel.rgb = reinhard(ScanlineTexel.rgb); //pow(ScanlineTexel.rgb, Power);
+    ScanlineTexel.rgb = reinhardJodie05(ScanlineTexel.rgb); //pow(ScanlineTexel.rgb, Power);
 
     gl_FragColor = vec4(ScanlineTexel.rgb, InTexel.a);
 }
