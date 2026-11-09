@@ -480,7 +480,7 @@ public class PainEvents {
         if (event.phase == TickEvent.Phase.END && event.side == Side.CLIENT && mc.inGameHasFocus && mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null && mc.getFramebuffer() != null && mc.currentScreen == null) {
 
 
-            if (inPainDim()) {
+            if (true) {
                 if (mc.entityRenderer.theShaderGroup == null) {
                     for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {
                         ResourceLocation location = EntityRenderer.shaderResourceLocations[i];

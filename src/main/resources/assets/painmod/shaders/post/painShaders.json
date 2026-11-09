@@ -21,17 +21,17 @@
             ]
         },
         {
-            "name": "paintonemapping",
+            "name": "blur",
             "intarget": "swap2",
             "outtarget": "swap3"
         },
         {
-            "name": "pain_scan_pincushion",
+            "name": "paintonemapping",
             "intarget": "swap3",
             "outtarget": "swap4"
         },
         {
-            "name": "blur",
+            "name": "pain_scan_pincushion",
             "intarget": "swap4",
             "outtarget": "swap5"
         },
