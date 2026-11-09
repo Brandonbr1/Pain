@@ -477,10 +477,10 @@ public class PainEvents {
 
 
 
-        if (event.phase == TickEvent.Phase.END && event.side == Side.CLIENT && mc.inGameHasFocus && mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null && mc.getFramebuffer() != null && mc.currentScreen == null) {
+        if (PainConfig.runShaders && event.phase == TickEvent.Phase.END && event.side == Side.CLIENT && mc.inGameHasFocus && mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null && mc.getFramebuffer() != null && mc.currentScreen == null) {
 
 
-            if (true) {
+            if (inPainDim()) {
                 if (mc.entityRenderer.theShaderGroup == null) {
                     for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {
                         ResourceLocation location = EntityRenderer.shaderResourceLocations[i];
@@ -536,7 +536,10 @@ public class PainEvents {
         if (OpenGlHelper.shadersSupported)
         {
             if (failCompile > 5) {
-                throw new RuntimeException("Pain Mod was unable to compile shaders. Please report bug.");
+                for (int i = 0; i < 15; i++) {
+                    PainShare.LOG.error("Pain Mod was unable to compile shaders. Please PLEASE report bug.");
+                }
+                throw new RuntimeException("Pain Mod was unable to compile shaders. Please PLEASE report bug.");
             }
 
 

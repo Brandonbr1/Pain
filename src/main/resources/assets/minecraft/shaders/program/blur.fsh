@@ -3,7 +3,7 @@
 uniform sampler2D DiffuseSampler;
 
 varying vec2 texCoord;
-const int Quality = 1;
+const float Quality = 1;
 
 void main(){
 
@@ -11,12 +11,12 @@ void main(){
 
 vec4 Color;
     float v;
-    for( float i=0.0;i<1.1;i+=1.0/float(Quality) )
+    for( float i=0.0;i<0.5;i+=0.25/Quality )
     {
             v = 0.9+i*0.1;//convert "i" to the 0.9 to 1 range
             Color += texture2D( DiffuseSampler, texCoord*v+0.5-0.5*v);
     }
-    Color /= float(Quality);
+    Color /= Quality;
 
 
 gl_FragColor = vec4(Color.rgb, Color.a);

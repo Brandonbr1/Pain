@@ -34,6 +34,7 @@ public class PainConfig {
     public static int painColdTigaID;
 
      public static boolean spawnInPainDim;
+     public static boolean runShaders;
 
     public static void syncConfig(Configuration con) {
             glutID = potionConfig(con, "Gluttony ", 24);
@@ -61,6 +62,8 @@ public class PainConfig {
             maxBrightnessInDim = con.getFloat("Max Brightness in Dim", "Visuals", 40.0F, 0.0F, 100.0F, "Max Brightness allowed when in Pain Dim");
 
         fogDensity = con.getFloat("Fog Density in Pain Dim", "Visuals", 1.0f, 0.0f, 10.0f, "Max Density of the fog in Pain Dim");
+
+        runShaders = con.getBoolean("Run Shaders In Pain Dim", "Visuals", true, "Should a custom shader be ran when in the dimension?");
 
         fogDensityEnd = con.getFloat("Fog Density End in Pain Dim", "Visuals", 0.8f, 0.0f, 10.0f, "Max Density of the fog in Pain Dim End parameter");
         fogDensityStart =  con.getFloat("Fog Density Start in Pain Dim", "Visuals", 0.1f, 0.0f, 10.0f, "Max Density of the fog in Pain Dim Start parameter");
