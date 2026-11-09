@@ -475,23 +475,11 @@ public class PainEvents {
 
 
 
-        if (event.phase == TickEvent.Phase.END && event.side == Side.CLIENT && mc.inGameHasFocus && mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null && mc.getFramebuffer() != null)
-        {
+        if (event.phase == TickEvent.Phase.END && event.side == Side.CLIENT && mc.inGameHasFocus && mc.entityRenderer != null && !mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null && mc.renderViewEntity != null && mc.renderGlobal != null && mc.renderEngine != null && mc.ingameGUI != null && mc.getFramebuffer() != null) {
 
 
-            if (mc.entityRenderer.theShaderGroup == null) {
-                for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {
-                    ResourceLocation location = EntityRenderer.shaderResourceLocations[i];
-
-                    if (location.toString().equals(shader)) {
-                        activateNextShader(i);
-                        break;
-                    }
-
-                }
-            } else {
-                if (!mc.entityRenderer.theShaderGroup.getShaderGroupName().equals(shader))
-                {
+            if (inPainDim()) {
+                if (mc.entityRenderer.theShaderGroup == null) {
                     for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {
                         ResourceLocation location = EntityRenderer.shaderResourceLocations[i];
 
@@ -501,11 +489,38 @@ public class PainEvents {
                         }
 
                     }
+                } else {
+                    if (!mc.entityRenderer.theShaderGroup.getShaderGroupName().equals(shader)) {
+                        for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {
+                            ResourceLocation location = EntityRenderer.shaderResourceLocations[i];
+
+                            if (location.toString().equals(shader)) {
+                                activateNextShader(i);
+                                break;
+                            }
+
+                        }
 
 
+                    }
                 }
-            }
 
+            } else {
+
+                if (mc.entityRenderer.theShaderGroup != null) {
+                    for (int i = 0; i < EntityRenderer.shaderResourceLocations.length; i++) {
+                        ResourceLocation location = EntityRenderer.shaderResourceLocations[i];
+
+                        if (location.toString().equals(shader)) {
+                            mc.entityRenderer.deactivateShader();
+                            break;
+                        }
+
+                    }
+                }
+
+
+            }
         }
 
 
