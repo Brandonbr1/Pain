@@ -59,7 +59,7 @@ void main(){
 
     vec4 Color = texture2D (DiffuseSampler, texCoord);
 
-     Color.rgb = reinhard1(Color.rgb);
+     Color.rgb = reinhardJodie(Color.rgb);
 
                                         // 0.015
      Color.rgb = filmGrain(Color.rgb, 0.015, texCoord);

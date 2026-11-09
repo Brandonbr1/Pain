@@ -28,6 +28,19 @@ vec3 reinhard(vec3 x) {
   return x / (0.5 + x);
 }
 
+vec3 reinhard1(vec3 x) {
+  return x / (1.0 + x);
+}
+
+vec3 reinhardJodie05(vec3 x) {
+  const vec3 lw = vec3(0.2126, 0.7152, 0.0722);
+
+  float l = dot(x, lw);
+  vec3 tv = x / (0.5 + x);
+
+  return mix(x / (0.5 + l), tv, tv);
+}
+
 void main() {
     vec4 InTexel = texture2D(DiffuseSampler, texCoord);
 
