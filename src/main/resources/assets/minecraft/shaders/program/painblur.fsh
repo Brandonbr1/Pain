@@ -11,7 +11,8 @@ void main(){
 
 vec4 Color;
     float v;
-    for( float i=0.0;i<0.5;i+=0.25/Quality )
+    // perhaps adjust more?
+    for( float i=0.0;i<0.30;i+=0.15/Quality )
     {
             v = 0.9+i*0.1;//convert "i" to the 0.9 to 1 range
             Color += texture2D( DiffuseSampler, texCoord*v+0.5-0.5*v);

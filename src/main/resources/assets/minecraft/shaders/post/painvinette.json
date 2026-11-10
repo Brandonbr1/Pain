@@ -1,0 +1,17 @@
+{
+    "targets": [
+        "swap"
+    ],
+    "passes": [
+        {
+            "name": "painvinette",
+            "intarget": "minecraft:main",
+            "outtarget": "swap"
+        },
+        {
+            "name": "painvinette",
+            "intarget": "painblur",
+            "outtarget": "minecraft:main"
+        }
+    ]
+}

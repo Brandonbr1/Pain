@@ -8,7 +8,7 @@
     ],
     "passes": [
         {
-            "name": "blur",
+            "name": "painblur",
             "intarget": "minecraft:main",
             "outtarget": "swap"
         },
