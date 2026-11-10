@@ -59,7 +59,9 @@ float couter = 90;
 
 void main(){
 
-    vec4 Color = texture2D (DiffuseSampler, texCoord);
+    vec4 Color = texture2D(DiffuseSampler, texCoord);
+
+
 
      Color.rgb = reinhardJodie(Color.rgb);
                                       // 0.015

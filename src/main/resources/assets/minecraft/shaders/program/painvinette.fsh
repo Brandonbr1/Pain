@@ -10,11 +10,11 @@ void main(){
     vec4 Color = texture2D(DiffuseSampler, texCoord);
 
 
-     vec3 col = vec3(Color.r, Color.g, Color.b);
+     vec4 col = vec4(Color.r, Color.g, Color.b, Color.a);
 
-    float dist = distance(texCoord, vec2(0.5));
-        float vignette = smoothstep(0.6, 0.9, dist);
-        col *= mix(1.0, 1.0 - vignette, vignette_strength);
+    float dist = distance(texCoord, vec2(0.5)); // this returns the center
+     float vignette = smoothstep(0.3, 0.6, dist);
+     col *= mix(1.0, 1.0 - clamp(vignette * 1.07, 0.0, 1.0), vignette_strength);
 
 
 

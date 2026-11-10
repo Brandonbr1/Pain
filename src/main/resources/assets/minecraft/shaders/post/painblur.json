@@ -9,8 +9,8 @@
             "outtarget": "swap"
         },
         {
-            "name": "painblur",
-            "intarget": "painblur",
+            "name": "blit",
+            "intarget": "swap",
             "outtarget": "minecraft:main"
         }
     ]

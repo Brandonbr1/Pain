@@ -4,7 +4,8 @@
         "swap2",
         "swap3",
         "swap4",
-        "swap5"
+        "swap5",
+        "swap6"
     ],
     "passes": [
         {
@@ -36,8 +37,13 @@
             "outtarget": "swap5"
         },
         {
-            "name": "blit",
+            "name": "painvinette",
             "intarget": "swap5",
+            "outtarget": "swap6"
+        },
+        {
+            "name": "blit",
+            "intarget": "swap6",
             "outtarget": "minecraft:main"
         }
     ]
