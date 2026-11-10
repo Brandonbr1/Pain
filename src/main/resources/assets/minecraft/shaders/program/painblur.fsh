@@ -4,7 +4,7 @@ uniform sampler2D DiffuseSampler;
 
 varying vec2 texCoord;
 
-const int Quality = 1;
+const int Quality = 3;
 
 void main(){
 
