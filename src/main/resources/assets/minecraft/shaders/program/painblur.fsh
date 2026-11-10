@@ -3,25 +3,25 @@
 uniform sampler2D DiffuseSampler;
 
 varying vec2 texCoord;
-const float Quality = 1;
+
+const int Quality = 1;
 
 void main(){
 
-// https://xorshaders.weebly.com/tutorials/blur-shaders-5-part-1
+    vec2 texCoordCentered = texCoord - 0.5; // Move texcoord into the range [-0.5, +0.5]
+    vec4 Color = vec4(0.0);
+    int iterations = Quality * 2; // Do 2 iterations per quality level
 
-    vec4 Color = vec4(0.0, 0.0, 0.0, 0.0);
-    float v = 0;
-    // perhaps adjust more?
-    for(float i=0.0;i<0.30;i+=0.15/Quality )
+    for (int i = 0; i < iterations; i++)
     {
-            v = 0.9+i*0.1;//convert "i" to the 0.9 to 1 range
-            Color += texture2D( DiffuseSampler, texCoord*v+0.5-0.5*v);
+        // Shrink texcoord each iteration to radially blur the image
+        float v = 1.0 - (0.01 * float(i) / float(iterations));
+
+        // Multiply by v, and add 0.5 to move texCoord back into the [0.0, 1.0] range
+        Color += texture2D(DiffuseSampler, texCoordCentered * v + 0.5);
     }
-    Color *= pow(texture2D(DiffuseSampler, texCoord).rgba, vec4(v));
-    Color /= Quality;
+    Color /= float(iterations);
 
-
-gl_FragColor = vec4(Color.rgb, Color.a);
-
+    gl_FragColor = Color;
 
 }
