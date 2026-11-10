@@ -7,21 +7,13 @@ varying vec2 oneTexel;
 
 uniform vec2 InSize;
 
-uniform vec3 ConvergeX = vec3(-1.0,  0.0, 0.5);
-uniform vec3 ConvergeY = vec3( 0.0, -1.0, 0.5);
-uniform vec3 RadialConvergeX = vec3(1.0, 1.0, 1.0);
-uniform vec3 RadialConvergeY = vec3(1.0, 1.0, 1.0);
+const float DivergeX = 8.0;
 
 void main() {
-   vec3 CoordX = texCoord.x * RadialConvergeX;
-   vec3 CoordY = texCoord.y * RadialConvergeY;
 
-    CoordX += (ConvergeX * oneTexel.x - (RadialConvergeX - 1.0) * 0.5) * 1.28;
-    CoordY += (ConvergeY * oneTexel.y - (RadialConvergeY - 1.0) * 0.5) * 1.28;
-
-    float RedValue   = texture2D(DiffuseSampler, vec2(CoordX.x, CoordY.x)).r;
-    float GreenValue = texture2D(DiffuseSampler, vec2(CoordX.y, CoordY.y)).g;
-    float BlueValue  = texture2D(DiffuseSampler, vec2(CoordX.z, CoordY.z)).b;
+    float RedValue   = texture2D(DiffuseSampler, texCoord + vec2(DivergeX * -oneTexel.x, 0.0)).r;
+    float GreenValue = texture2D(DiffuseSampler, texCoord + vec2(0.0, 0.0)).g;
+    float BlueValue  = texture2D(DiffuseSampler, texCoord + vec2(DivergeX *  oneTexel.x, 0.0)).b;
     float AlphaValue  = texture2D(DiffuseSampler, texCoord).a;
 
     gl_FragColor = vec4(RedValue, GreenValue, BlueValue, AlphaValue);

@@ -9,14 +9,15 @@ void main(){
 
 // https://xorshaders.weebly.com/tutorials/blur-shaders-5-part-1
 
-vec4 Color;
-    float v;
+    vec4 Color = vec4(0.0, 0.0, 0.0, 0.0);
+    float v = 0;
     // perhaps adjust more?
-    for( float i=0.0;i<0.30;i+=0.15/Quality )
+    for(float i=0.0;i<0.30;i+=0.15/Quality )
     {
             v = 0.9+i*0.1;//convert "i" to the 0.9 to 1 range
             Color += texture2D( DiffuseSampler, texCoord*v+0.5-0.5*v);
     }
+    Color *= pow(texture2D(DiffuseSampler, texCoord).rgba, vec4(v));
     Color /= Quality;
 
 
